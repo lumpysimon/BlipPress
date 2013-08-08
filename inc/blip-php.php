@@ -9,7 +9,7 @@ http://gbradley.co.uk/projects/BlipPHP
 
 
 
-class BlipPHP {
+class blip_php {
 
 
 
@@ -388,7 +388,7 @@ class BlipPHP {
 	private function raise_error( $e, $apie = null ) {
 
 		if ( $this->fatal )
-			throw new Exception( BlipPHP::$errors[$e] . ( $apie ? ' ' . $apie : '' ) );
+			throw new Exception( blip_php::$errors[$e] . ( $apie ? ' ' . $apie : '' ) );
 
 		return false;
 
@@ -397,7 +397,3 @@ class BlipPHP {
 
 
 } // class
-
-
-
-?>

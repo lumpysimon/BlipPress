@@ -2,7 +2,7 @@
 
 
 
-class blipPressPost {
+class blipfoto_post {
 
 
 
@@ -39,7 +39,7 @@ class blipPressPost {
 		} else {
 
 			$this->notice['type'] = 'updated';
-			$this->notice['message'] = '<p><a href="' . wp_nonce_url( admin_url( '?page=blippress&action=blip&post_id=' . $post->ID ), 'blippress-create-nonce' ) . '">Create a Blip from this post</a></p>';
+			$this->notice['message'] = '<p><a href="' . wp_nonce_url( admin_url( '?page=blipfoto&action=blip&post_id=' . $post->ID ), 'blipfoto-create-nonce' ) . '">Create a Blip from this post</a></p>';
 
 		}
 
@@ -53,7 +53,7 @@ class blipPressPost {
 			return;
 
 		add_meta_box(
-			'blippress',
+			'blipfoto',
 			'Blipped!',
 			array( $this, 'meta_box' ),
 			$post_type,
@@ -96,7 +96,7 @@ class blipPressPost {
 		if ( $id = get_post_thumbnail_id( $post_id ) ) {
 			if ( $meta = wp_get_attachment_metadata( $id ) ) {
 				if ( $image_date = $meta['image_meta']['created_timestamp'] ) {
-					update_post_meta( $post_id, 'blippress-image-date', absint( $image_date ) );
+					update_post_meta( $post_id, 'blipfoto-image-date', absint( $image_date ) );
 				}
 			}
 		}
@@ -110,7 +110,7 @@ class blipPressPost {
 		if ( !current_user_can( 'edit_posts' ) or !check_blip_options() or !isset( $this->notice ) or empty( $this->notice ) )
 			return;
 
-		echo '<div class="' . $this->notice['type'] . '" id="blippress-notice">' . $this->notice['message'] . '</div>';
+		echo '<div class="' . $this->notice['type'] . '" id="blipfoto-notice">' . $this->notice['message'] . '</div>';
 
 	}
 
@@ -120,8 +120,4 @@ class blipPressPost {
 
 
 
-$blippress_post = new blipPressPost;
-
-
-
-?>
+$blipfoto_post = new blipfoto_post;

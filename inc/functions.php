@@ -17,7 +17,9 @@ function get_blip_url( $id ) {
 
 
 function blip_url( $id ) {
+
 	echo get_blip_url( $id );
+
 }
 
 
@@ -30,27 +32,31 @@ function get_blip_id( $post_id = null ) {
 		$post_id = $post->ID;
 	}
 
-	return get_post_meta( $post_id, 'blippress-id', true );
+	return get_post_meta( $post_id, 'blipfoto-id', true );
 
 }
 
 
 
 function blip_id( $post_id = null ) {
+
 	echo get_blip_id( $post_id );
+
 }
 
 
 
 function is_blipped( $post_id = null ) {
+
 	return get_blip_id( $post_id ) ? true : false;
+
 }
 
 
 
 function check_blip_permission() {
 
-	$opts = get_option( 'blippress' );
+	$opts = get_option( 'blipfoto' );
 
 	if ( !isset( $opts['token'] ) or !$opts['token'] or !isset( $opts['username'] ) or !$opts['username'] )
 		return false;
@@ -63,7 +69,7 @@ function check_blip_permission() {
 
 function check_blip_options() {
 
-	$opts = get_option( 'blippress' );
+	$opts = get_option( 'blipfoto' );
 
 	if ( !isset( $opts['post-types'] ) or !$opts['post-types'] )
 		return false;
@@ -76,7 +82,7 @@ function check_blip_options() {
 
 function blip_option( $opt ) {
 
-	$opts = get_option( 'blippress' );
+	$opts = get_option( 'blipfoto' );
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
@@ -101,7 +107,3 @@ function is_blip_post_type( $type = null ) {
 	return false;
 
 }
-
-
-
-?>

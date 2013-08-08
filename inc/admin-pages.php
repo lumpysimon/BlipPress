@@ -17,12 +17,12 @@ class blipfoto_admin {
 	function add() {
 
 		add_submenu_page(
-			'blippress',
-			'BlipPress Options',
+			'blipfoto',
+			'Blipfoto Options',
 			'Settings',
 			'manage_options',
-			'blippress-options',
-			array( 'blipPressOptions', 'page' )
+			'blipfoto-options',
+			array( 'blipfoto_options', 'page' )
 			);
 
 	}
@@ -33,5 +33,4 @@ class blipfoto_admin {
 
 
 
-// let's go!
 $blipfoto_admin = new blipfoto_admin;

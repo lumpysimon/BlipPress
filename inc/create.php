@@ -2,7 +2,7 @@
 
 
 
-class blipPressCreate {
+class blipfoto_create {
 
 
 
@@ -61,18 +61,18 @@ class blipPressCreate {
 
 		if ( is_blipped( $post_id ) ) {
 			$this->error = sprintf(
-								'Already blipped! <a href="%s" target="_blank">%s</a>.',
-								get_blip_url( get_blip_id() )
-								);
+				'Already blipped! <a href="%s" target="_blank">%s</a>.',
+				get_blip_url( get_blip_id() )
+				);
 			return;
 		}
 
 		if ( ! has_post_thumbnail( $post_id ) ) {
 			$this->error = sprintf(
-								'Post %s does not have a featured image. Please <a href="%s">edit the post</a> and set one, then try again.',
-								$post_id,
-								get_edit_post_link( $post_id )
-								);
+				'Post %s does not have a featured image. Please <a href="%s">edit the post</a> and set one, then try again.',
+				$post_id,
+				get_edit_post_link( $post_id )
+				);
 			return;
 		}
 
@@ -80,26 +80,32 @@ class blipPressCreate {
 
 		if ( ! $meta = wp_get_attachment_metadata( $id ) ) {
 			$this->error = sprintf(
-								'The featured image does not have any EXIF data. Please <a href="%s">edit the post</a> and try a different image.',
-								$post_id,
-								get_edit_post_link( $post_id )
-								);
+				'The featured image does not have any EXIF data. Please <a href="%s">edit the post</a> and try a different image.',
+				$post_id,
+				get_edit_post_link( $post_id )
+				);
 			return;
 		}
 
 		if ( ! isset( $meta['image_meta']['created_timestamp'] ) ) {
 			$this->error = sprintf(
-								'The featured image does not have the date in its EXIF data. Please <a href="%s">edit the post</a> and try a different image.',
-								$post_id,
-								get_edit_post_link( $post_id )
-								);
+				'The featured image does not have the date in its EXIF data. Please <a href="%s">edit the post</a> and try a different image.',
+				$post_id,
+				get_edit_post_link( $post_id )
+				);
 			return;
 		}
 
 		$opts = get_option( 'blippress' );
 
 		// everything looks ok so far, so let's get started...
-		$blip = new BlipPHP( $blippress->key, $opts['access-code'], array( 'id_token' => $opts['token'], 'test' => true ) );
+		$blip = new blip_php(
+			$blippress->key,
+			$opts['access-code'],
+			array( 'id_token' => $opts['token'],
+				'test' => true
+				)
+			);
 
 		$postdata = array();
 
@@ -108,8 +114,6 @@ class blipPressCreate {
 
 		// check if the user is allowed to post on that date
 		$response = $blip->get_date_validation( $postdata['date'] );
-
-print_r($response);
 
 		$postdata['title']       = get_the_title( $post_id );
 		$postdata['description'] = $this->prepare_content( $post->post_content );
@@ -156,10 +160,10 @@ print_r($response);
 	function add_page() {
 
 		add_menu_page(
-			'BlipPress',
-			'BlipPress',
+			'Blipfoto',
+			'Blipfoto',
 			'edit_posts',
-			'blippress',
+			'blipfoto',
 			array( $this, 'page' )
 			);
 
@@ -173,7 +177,7 @@ print_r($response);
 
 		<div class="wrap">
 
-			<h2>BlipPress</h2>
+			<h2>Blipfoto</h2>
 
 			<?php if ( $this->error ) {
 				printf( '<p>ERROR! %s</p>', $this->error );
@@ -191,8 +195,4 @@ print_r($response);
 
 
 
-$blippress_create = new blipPressCreate;
-
-
-
-?>
+$blipfoto_create = new blipfoto_create;

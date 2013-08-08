@@ -72,13 +72,14 @@ class blipfoto {
 	var $me          = 'lumpysimon';
 	var $default_num = 12;
 	var $key         = '60fe44de7bdc715a972a578e3c7eb7e5';
+
 	var $exif        = array(
-						'aperture' => 'Aperture',
-						'exposure' => 'Exposure',
-						'focal'    => 'Focal length',
-						'iso'      => 'ISO',
-						'model'    => 'Camera'
-						);
+		'aperture' => 'Aperture',
+		'exposure' => 'Exposure',
+		'focal'    => 'Focal length',
+		'iso'      => 'ISO',
+		'model'    => 'Camera'
+		);
 
 
 
@@ -95,13 +96,13 @@ class blipfoto {
 
 		// if the options are not set, then set the defaults
 
-		$opts = get_option( 'blippress' );
+		$opts = get_option( 'blipfoto' );
 
 		$defaults = array(
-						'access-code' => '3f3102407026a35b7f1b1bcefb924c0e',
-						'num'        => $this->default_num,
-						'post-types' => array( 'post' ) // here in case of future ability to choose post type
-						);
+			'access-code' => '3f3102407026a35b7f1b1bcefb924c0e',
+			'num'         => $this->default_num,
+			'post-types'  => array( 'post' ) // here in case of future ability to choose post type
+			);
 
 		if ( false === $opts ) {
 			$new = $defaults;
@@ -109,7 +110,7 @@ class blipfoto {
 			$new = array_merge( $defaults, $opts );
 		}
 
-		update_option( 'blippress', $new );
+		update_option( 'blipfoto', $new );
 
 	}
 

@@ -2,7 +2,7 @@
 
 
 
-class blipPressShortcodes {
+class blipfoto_hortcodes {
 
 
 
@@ -19,7 +19,7 @@ class blipPressShortcodes {
 
 	function single_id( $atts ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		if ( ! check_blip_options() )
 			return;
@@ -31,7 +31,7 @@ class blipPressShortcodes {
 
 		$id       = absint( $id );
 		$out      = '';
-		$blip     = new BlipPHP( $blippress->key );
+		$blip     = new blip_php( $blipfoto->key );
 		$response = $blip->get_entry_by_id( $id );
 
 		if ( $response and $response['data'] and count( $response['data'] ) ) {
@@ -50,7 +50,7 @@ class blipPressShortcodes {
 
 	function single_date( $atts ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		if ( ! check_blip_options() )
 			return;
@@ -78,7 +78,7 @@ class blipPressShortcodes {
 		$date = sprintf( '%s-%s-%s', $year, $month, $day );
 
 		$out      = '';
-		$blip     = new BlipPHP( $blippress->key );
+		$blip     = new blip_php( $blipfoto->key );
 		$response = $blip->get_entry_by_date( $user, $date );
 
 		if ( $response and $response['data'] and count( $response['data'] ) ) {
@@ -99,7 +99,7 @@ class blipPressShortcodes {
 
 	function single_latest( $atts ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		if ( ! check_blip_options() )
 			return;
@@ -114,7 +114,7 @@ class blipPressShortcodes {
 			);
 
 		$out      = '';
-		$blip     = new BlipPHP( $blippress->key );
+		$blip     = new blip_php( $blipfoto->key );
 		$response = $blip->get_latest_entry_by_user( $user );
 
 		if ( $response and $response['data'] and count( $response['data'] ) ) {
@@ -133,7 +133,7 @@ class blipPressShortcodes {
 
 	function multi_latest( $atts ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		if ( ! check_blip_options() )
 			return;
@@ -151,11 +151,11 @@ class blipPressShortcodes {
 		$num = absint( $num );
 
 		if ( ! $num ) {
-			$num = $blippress->default_num;
+			$num = $blipfoto->default_num;
 		}
 
 		$out      = '';
-		$blip     = new BlipPHP( $blippress->key );
+		$blip     = new blip_php( $blipfoto->key );
 		$response = $blip->get_latest_entries_by_user( $user, $num );
 
 		if ( $response and $response['data'] and count( $response['data'] ) ) {
@@ -172,7 +172,7 @@ class blipPressShortcodes {
 
 	private function build_single_blip( $data ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		$out .= '<div class="blip">';
 		$out .= '<h2>' . $data['title'] . '</h2>';
@@ -182,7 +182,7 @@ class blipPressShortcodes {
 		if ( isset( $data['exif'] ) and count( $data['exif'] ) ) {
 			$exif_data = array();
 			foreach ( $data['exif'] as $key => $value ) {
-				if ( $value and array_key_exists( $key, $blippress->exif ) ) {
+				if ( $value and array_key_exists( $key, $blipfoto->exif ) ) {
 					switch ( $key ) {
 						case 'aperture' :
 							$value = 'f/' . $value;
@@ -194,7 +194,7 @@ class blipPressShortcodes {
 							$value .= 'mm';
 						break;
 					}
-					$exif_data[] = $blippress->exif[$key] . ': ' . $value;
+					$exif_data[] = $blipfoto->exif[$key] . ': ' . $value;
 				}
 			}
 			if ( count( $exif_data ) ) {
@@ -212,7 +212,7 @@ class blipPressShortcodes {
 
 	private function build_multi_blips( $data ) {
 
-		global $blippress;
+		global $blipfoto;
 
 		$out .= '<div class="blipgallery">';
 
@@ -238,8 +238,4 @@ class blipPressShortcodes {
 
 
 
-$blippress_shortcodes = new blipPressShortcodes;
-
-
-
-?>
+$blipfoto_shortcodes = new blipfoto_hortcodes;
