@@ -9,6 +9,7 @@ class blipfoto_create {
 	var $notice = array();
 	var $ok     = true;
 	var $error  = false;
+	var $slug   = 'blipfoto-create';
 
 
 
@@ -99,7 +100,7 @@ class blipfoto_create {
 		$opts = get_option( 'blippress' );
 
 		// everything looks ok so far, so let's get started...
-		$blip = new blip_php(
+		$blip = new blip(
 			$blippress->key,
 			$opts['access-code'],
 			array( 'id_token' => $opts['token'],
@@ -159,19 +160,20 @@ class blipfoto_create {
 
 	function add_page() {
 
-		add_menu_page(
-			'Blipfoto',
-			'Blipfoto',
-			'edit_posts',
+		add_submenu_page(
 			'blipfoto',
-			array( $this, 'page' )
+			'Create a blip',
+			'Create a blip',
+			'edit_posts',
+			$this->slug,
+			array( $this, 'render_page' )
 			);
 
 	}
 
 
 
-	function page() {
+	function render_page() {
 
 		?>
 
