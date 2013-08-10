@@ -2,7 +2,7 @@
 
 
 
-class blipfoto_hortcodes {
+class blipfoto_shortcodes {
 
 
 
@@ -21,25 +21,27 @@ class blipfoto_hortcodes {
 
 		global $blipfoto;
 
-		if ( ! check_blip_options() )
+		if ( ! check_blip_permission() )
 			return;
 
-		extract( shortcode_atts( array( 'id' => null ), $atts ) );
+		extract(
+			shortcode_atts(
+				array(
+					'id' => null
+					),
+				$atts
+				)
+			);
 
 		if ( !$id or !is_numeric( $id ) )
 			return;
 
-		$id       = absint( $id );
-		$out      = '';
-		$blip     = new blip_php( $blipfoto->key );
-		$response = $blip->get_entry_by_id( $id );
+		$id   = absint( $id );
+		$out  = '';
+		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
 
-		if ( $response and $response['data'] and count( $response['data'] ) ) {
-
-			$data = array_shift( $response['data'] );
-
-			$out = self::build_single_blip( $data );
-
+		if ( $data = $blip->get_entry_by_id( $id ) ) {
+			$out = $this->build_single_blip( $data );
 		}
 
 		return $out;
@@ -52,14 +54,14 @@ class blipfoto_hortcodes {
 
 		global $blipfoto;
 
-		if ( ! check_blip_options() )
+		if ( ! check_blip_permission() )
 			return;
 
 		extract(
 			shortcode_atts(
 				array(
 					'user' => blip_option( 'username' ),
-					'date' => date( 'Y-m-d' )
+					'date' => date( 'd-m-Y' )
 					),
 				$atts
 				)
@@ -68,25 +70,20 @@ class blipfoto_hortcodes {
 		if ( 10 != strlen( $date ) )
 			return;
 
-		$month = substr( $date, 5, 2 );
-		$day   = substr( $date, -2 );
-		$year  = substr( $date, 0, 4 );
+		$day   = substr( $date, 0, 2 );
+		$month = substr( $date, 3, 2 );
+		$year  = substr( $date, -4 );
 
 		if ( ! checkdate( $month, $day, $year ) )
 			return;
 
-		$date = sprintf( '%s-%s-%s', $year, $month, $day );
+		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
-		$out      = '';
-		$blip     = new blip_php( $blipfoto->key );
-		$response = $blip->get_entry_by_date( $user, $date );
+		$out  = '';
+		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
 
-		if ( $response and $response['data'] and count( $response['data'] ) ) {
-
-			$data = array_shift( $response['data'] );
-
-			$out = self::build_single_blip( $data );
-
+		if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
+			$out = $this->build_single_blip( $data );
 		} else {
 			$out = '<p>Whoops! Couldn\'t retrieve ' . $user . '\'s blip for ' . date( get_option( 'date_format' ), strtotime( $date ) ) . '</p>';
 		}
@@ -101,7 +98,7 @@ class blipfoto_hortcodes {
 
 		global $blipfoto;
 
-		if ( ! check_blip_options() )
+		if ( ! check_blip_permission() )
 			return;
 
 		extract(
@@ -114,15 +111,11 @@ class blipfoto_hortcodes {
 			);
 
 		$out      = '';
-		$blip     = new blip_php( $blipfoto->key );
-		$response = $blip->get_latest_entry_by_user( $user );
-
-		if ( $response and $response['data'] and count( $response['data'] ) ) {
-
-			$data = array_shift( $response['data'] );
-
+		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
 			$out = self::build_single_blip( $data );
-
+		} else {
+			$out = '<p>Couldn\'t retrieve latest entry for ' . $user . '</p>';
 		}
 
 		return $out;
@@ -135,33 +128,29 @@ class blipfoto_hortcodes {
 
 		global $blipfoto;
 
-		if ( ! check_blip_options() )
+		if ( ! check_blip_permission() )
 			return;
 
 		extract(
 			shortcode_atts(
 				array(
 					'user' => blip_option( 'username' ),
-					'num'  => $opts['num']
+					'num'  => $blipfoto->default_num
 					),
 				$atts
 				)
 			);
 
-		$num = absint( $num );
-
-		if ( ! $num ) {
+		if ( ! $num = absint( $num ) ) {
 			$num = $blipfoto->default_num;
 		}
 
 		$out      = '';
-		$blip     = new blip_php( $blipfoto->key );
-		$response = $blip->get_latest_entries_by_user( $user, $num );
-
-		if ( $response and $response['data'] and count( $response['data'] ) ) {
-
-			$out = self::build_multi_blips( $response['data'] );
-
+		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		if ( $data = $blip->get_latest_entries_by_user( $user, $num ) ) {
+			$out = self::build_multi_blips( $data );
+		} else {
+			$out = '<p>It\'s all gone tits up</p>';
 		}
 
 		return $out;
@@ -172,33 +161,36 @@ class blipfoto_hortcodes {
 
 	private function build_single_blip( $data ) {
 
-		global $blipfoto;
-
 		$out .= '<div class="blip">';
-		$out .= '<h2>' . $data['title'] . '</h2>';
-		$out .= '<img src="' . $data['image'] . '" height="' . $data['image_height'] . '" width="' . $data['image_width'] . '">';
-		$out .= '<p>Taken on:' . date( get_option( 'date_format' ), strtotime( $data['date'] ) ) . '</p>';
+		$out .= '<h2>' . $data->title . '</h2>';
+		$out .= '<img src="' . $data->image . '" height="' . $data->image_height . '" width="' . $data->image_width . '">';
+		$out .= '<p>Taken on ' . date( get_option( 'date_format' ), strtotime( $data->date ) ) . '</p>';
 
-		if ( isset( $data['exif'] ) and count( $data['exif'] ) ) {
-			$exif_data = array();
-			foreach ( $data['exif'] as $key => $value ) {
-				if ( $value and array_key_exists( $key, $blipfoto->exif ) ) {
-					switch ( $key ) {
-						case 'aperture' :
+		if ( isset( $data->exif ) ) {
+			$fields = array( 'Model', 'FNumber', 'ExposureTime', 'FocalLength', 'ISO' );
+			$values = array();
+			foreach ( $fields as $field ) {
+				if ( $value = $data->exif->$field ) {
+					switch ( $field ) {
+						case 'FNumber' :
 							$value = 'f/' . $value;
 						break;
-						case 'exposure' :
-							$value .= '&quot;';
+						case 'ExposureTime' :
+							$value .= 's';
 						break;
-						case 'focal' :
+						case 'FocalLength' :
 							$value .= 'mm';
 						break;
 					}
-					$exif_data[] = $blipfoto->exif[$key] . ': ' . $value;
+					$values[$field] = $value;
 				}
 			}
-			if ( count( $exif_data ) ) {
-				$out .= '<p>' . implode( '<br>', $exif_data ) . '</p>';
+			if ( !empty( $values ) ) {
+				$out .= '<ul>';
+				foreach ( $values as $k => $v ) {
+					$out .= '<li>' . $k . ': ' . $v . '</li>';
+				}
+				$out .= '</ul>';
 			}
 		}
 
@@ -214,14 +206,12 @@ class blipfoto_hortcodes {
 
 		global $blipfoto;
 
-		$out .= '<div class="blipgallery">';
+		$out = '<div class="blipgallery">';
 
-		foreach ( $data as $i => $entry ) {
+		foreach ( $data as $entry ) {
 
-			$out .= '<div class="blip-thumb" id="blip-thumb-' . $entry['entry_id'] . '" style="float:left;margin:0 20px 20px 0;">';
-			$out .= '<h3>' . $entry['title'] . '</h3>';
-			$out .= '<img src="' . $entry['thumbnail'] . '" height="124" width="124">';
-			$out .= '<p>' . date( get_option( 'date_format' ), strtotime( $entry['date'] ) ) . '</p>';
+			$out .= '<div class="blip-thumb" id="blip-thumb-' . $entry->entry_id . '">';
+			$out .= '<a href="' . $entry->url . '" title="View &quot;' . $entry->title . '&quot; (' . date( get_option( 'date_format' ), strtotime( $entry->date ) ) . ') on Blipfoto"><img src="' . $entry->thumbnail . '"></a>';
 			$out .= '</div>';
 
 		}
@@ -238,4 +228,4 @@ class blipfoto_hortcodes {
 
 
 
-$blipfoto_shortcodes = new blipfoto_hortcodes;
+$blipfoto_shortcodes = new blipfoto_shortcodes;

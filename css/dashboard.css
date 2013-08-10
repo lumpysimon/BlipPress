@@ -1,0 +1,17 @@
+.blip-thumb {
+	float: left;
+	margin: 0 20px 20px 0;
+}
+
+.admin-color-mp6 .blip-thumb a {
+	border: 4px dashed #eee;
+	display: block;
+}
+
+.admin-color-mp6 .blip-thumb a:hover {
+	border-color: #333;
+}
+
+.blip-thumb img {
+	display: block;
+}

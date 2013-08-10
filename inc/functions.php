@@ -2,6 +2,23 @@
 
 
 
+function blipfoto_bliplatest( $args = array() ) {
+
+	global $blipfoto, $blipfoto_shortcodes;
+
+	$defaults = array(
+		'user' => blip_option( 'username' ),
+		'num'  => $blipfoto->default_num
+		);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	echo $blipfoto_shortcodes->multi_latest( $args );
+
+}
+
+
+
 function get_blip_url( $id ) {
 
 	if ( ! is_numeric( $id ) )
@@ -58,7 +75,7 @@ function check_blip_permission() {
 
 	$opts = get_option( 'blipfoto' );
 
-	if ( !isset( $opts['token'] ) or !$opts['token'] or !isset( $opts['username'] ) or !$opts['username'] )
+	if ( !isset( $opts['username'] ) or !$opts['username'] or !isset( $opts['token'] ) or !$opts['token'] or !isset( $opts['secret'] ) or !$opts['secret'] )
 		return false;
 
 	return true;
@@ -67,7 +84,11 @@ function check_blip_permission() {
 
 
 
+// @TODO@
+// what is this?
 function check_blip_options() {
+
+return true;
 
 	$opts = get_option( 'blipfoto' );
 

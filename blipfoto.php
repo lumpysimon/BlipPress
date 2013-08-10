@@ -9,13 +9,6 @@ Author URI:  https://twitter.com/lumpysimon
 
 
 
------
-To Do
-
-singularisation
-
-
-
 -----------
 Description
 
@@ -53,13 +46,25 @@ See the GNU General Public License for more details.
 
 
 
-require 'inc/blip-php.php';
+defined( 'ABSPATH' ) or die();
+
+
+
+if ( ! defined( 'BLIPFOTO_PLUGIN_PATH' ) )
+	define( 'BLIPFOTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+
+if ( ! defined( 'BLIPFOTO_PLUGIN_DIR' ) )
+	define( 'BLIPFOTO_PLUGIN_DIR', plugin_dir_url( __FILE__ ) );
+
+
+
+require 'inc/api.php';
+require 'inc/dashboard.php';
+require 'inc/authentication.php';
+require 'inc/create.php';
 require 'inc/functions.php';
-require 'inc/options.php';
 require 'inc/shortcodes.php';
 require 'inc/post.php';
-require 'inc/create.php';
-require 'inc/admin-pages.php';
 
 
 
@@ -68,12 +73,14 @@ class blipfoto {
 
 
 	var $plugin_page = 'http://wordpress.org/extend/plugins/blipfoto';
-	var $api_version = 2;
-	var $me          = 'lumpysimon';
-	var $default_num = 12;
-	var $key         = '60fe44de7bdc715a972a578e3c7eb7e5';
 
-	var $exif        = array(
+	var $me             = 'lumpysimon';
+	var $permissions_id = '139459';
+	var $key            = '46a9df14f768a45619a5c0eb312d51a3';
+	var $secret         = 'd96e00ecb17c1fd33e37b73a0c483fef';
+	var $default_num    = 16;
+
+	var $exif = array(
 		'aperture' => 'Aperture',
 		'exposure' => 'Exposure',
 		'focal'    => 'Focal length',
