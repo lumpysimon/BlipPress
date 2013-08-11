@@ -85,12 +85,9 @@ class blipfoto_post {
 
 		} else {
 
-			$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ) );
+			$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
 
-			$thumb_id   = get_post_thumbnail_id( $post_id );
-			$thumb_src  = wp_get_attachment_image_src( $thumb_id, 'full' );
-			$url        = $thumb_src[0];
-			$attachment = get_post( $thumb_id );
+			$meta = $this->metadata( array( 'post_id' => get_post_thumbnail_id( $post_id ), 'image_meta' => false ) );
 
 			if ( 1 != 1 ) {
 			// @TODO@
@@ -104,17 +101,33 @@ class blipfoto_post {
 			} else {
 
 				$postdata = array(
-					'image_url'   => $url,
-					'title'       => $attachment->post_title,
-					'description' => $attachment->post_content
+					'image_url'   => $meta['url'],
+					'title'       => $meta['title'],
+					'description' => $meta['description']
 					);
 
 				$json = $blip->post_entry( $postdata );
 
-				$response = array(
-					'result'  => 'error',
-					'message' => 'log time'
-				);
+				if ( isset( $json->data ) ) {
+
+					// error_log(print_r($json->data,true));
+
+					$response = array(
+						'result'  => 'success',
+						'message' => 'Success! The entry has been published',
+						'data'    => array( 'entry_id' => $json->data->entry_id )
+					);
+
+					update_post_meta( $post_id, $this->postmeta, $json->data->entry_id );
+
+				} else {
+
+					$response = array(
+						'result'  => 'error',
+						'message' => $json->error->message
+					);
+
+				}
 
 			}
 
@@ -189,11 +202,97 @@ class blipfoto_post {
 					);
 		} else {
 			if ( has_post_thumbnail() ) {
+				echo $this->details();
 				echo '<p><a id="blip-this" class="button" data-post="' . $post->ID . '" href="#">Blip this post</a><span id="' . $this->nonce . '" class="hidden">' . wp_create_nonce( $this->nonce ) . '</span></p>';
 			} else {
 				echo '<p>You must set a featured image before you can blip this post</p>';
 			}
 		}
+
+	}
+
+
+
+	function thumb() {
+
+		the_post_thumbnail( array( 124, 124 ) );
+
+	}
+
+
+
+	function details() {
+
+		global $post;
+
+		$thumb    = get_the_post_thumbnail( $post->ID, array( 100, 100 ) );
+		$metadata = $this->metadata();
+
+		echo '<div class="blip-this-details">';
+		echo '<div class="blip-this-thumb">';
+		echo $thumb;
+		echo '</div>';
+		echo '<div class="blip-this-meta">';
+		echo '<ul>';
+		foreach ( $metadata as $k => $v ) {
+			echo '<li>' . $k . ': ' . $v . '</li>';
+		}
+		echo '</ul>';
+		echo '</div>';
+		echo '</div>';
+
+	}
+
+
+
+	function metadata( $args = array() ) {
+
+		global $post;
+
+		$defaults = array(
+			'post_id'    => null,
+			'image_meta' => true
+			);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		extract( $args, EXTR_SKIP );
+
+		if ( ! $post_id ) {
+			$post_id   = get_post_thumbnail_id( $post->ID );
+		}
+
+		if ( ! $post_id )
+			return;
+
+		$thumb_src       = wp_get_attachment_image_src( $post_id, 'full' );
+		$url             = $thumb_src[0];
+		$attachment      = get_post( $post_id );
+		$attachment_meta = wp_get_attachment_metadata( $post_id );
+
+		$image_fields = array(
+			'aperture',
+			'camera',
+			'focal_length',
+			'iso',
+			'shutter_speed'
+			);
+
+		$meta                = array();
+		// $meta['url']         = $url;
+		$meta['url']         = 'http://lumpysimon.net/bliptest/2013-08-09-meldon-rocks-again.jpg';
+		$meta['title']       = $attachment->post_title;
+		$meta['description'] = $attachment->post_content;
+
+		if ( $image_meta and isset( $attachment_meta['image_meta'] ) and is_array( $attachment_meta['image_meta'] ) ) {
+			foreach ( $image_fields as $field ) {
+				if ( isset( $attachment_meta['image_meta'][$field] ) ) {
+					$meta[$field] = $attachment_meta['image_meta'][$field];
+				}
+			}
+		}
+
+		return $meta;
 
 	}
 

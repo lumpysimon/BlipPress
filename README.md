@@ -16,10 +16,8 @@ A WordPress plugin for posting to Blipfoto and for displaying blips on your Word
 * - admin
 * - front-end
 * options:
-* - number of pics to show in gallery
 * - show desc
 * - show exif
-* - use styles
 * - encrypt token?
 * http://en.blog.wordpress.com/2012/10/04/tiled-image-galleries/
 * dashboard sidebar

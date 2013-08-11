@@ -15,17 +15,13 @@ jQuery(function($){
 				'post_id' : post_id
 			}, function(r){
 
-				if ( 'error' == r.result ) {
-					text = r.message;
-				} else if ( 'success' == r.result ) {
-					text = '<div id="cont-book-cover"><img src="' + r.data.img + '"></div><div id="cont-book-title-and-author">&quot;' + r.data.title + '&quot; by ' + r.data.author + '</div>';
-					$('#cont-title').val( r.data.title );
-					$('#cont-authors').val( r.data.authors.join(',') );
-					$('#cont-cover').val( r.data.img );
-					$('#cont-book-details').html( text ).show();
-				} else {
-					text = 'major shit going down.';
+				text = r.message;
+				status = r.result
+				text = '<div class="blip-status blip-'+status+'">'+text;
+				if ( 'success' == r.result ) {
+					text = text + ' <a href="http://blipfoto.com/entry/' + r.data.entry_id + '" target="_blank">View</a>';
 				}
+				text = text + '</div>';
 
 				$('#blip-this-info').html( text );
 

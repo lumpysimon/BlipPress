@@ -1,3 +1,32 @@
 #blip-this-spinner {
 	float: left;
 }
+
+.blip-this-details {
+	overflow: hidden;
+}
+
+.blip-this-thumb {
+	float: left;
+	margin-right: 20px;
+	padding-top: 10px;
+}
+
+.blip-status {
+	color: white;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.blip-status a {
+	color: white;
+}
+
+.blip-success {
+	background-color: green;
+}
+
+.blip-error {
+	background-color: red;
+}
+

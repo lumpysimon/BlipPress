@@ -37,6 +37,8 @@ class blip {
 		$this->secret  = $s;
 		$this->token   = ( isset( $conf['token'] ) ? $conf['token'] : '' );
 
+error_log('token: '.$this->token);
+
 	}
 
 
@@ -185,27 +187,14 @@ class blip {
 
 
 
-	// post an entry
 	function post_entry( $postdata ) {
 
-		$args = array(
-			'api_key' => false
-			);
+		$url      = $this->url( 'entry', array( 'auth_sig' => false ) );
+		$sig      = $this->signature( true );
+		$postdata = array_merge( $postdata, $sig );
+		$json     = $this->request( $url, 'post', $postdata );
 
-		$url = $this->url( 'entry', $args );
-
-		$sig                 = $this->signature( false );
-		$postdata['api_key'] = $this->api_key;
-
-		$json = $this->request( $url, 'post', $postdata );
-
-		error_log(print_r($url,true));
-		error_log(print_r($postdata,true));
-		error_log(print_r($json,true));
-
-		if ( $data = $json->data ) {
-			return $data;
-		}
+		return $json;
 
 	}
 
@@ -323,13 +312,14 @@ class blip {
 				$response = wp_remote_get( $url, array( 'sslverify' => false ) );
 			break;
 			case 'post' :
+				$data = array(
+					'sslverify' => false,
+					'timeout'   => 60,
+					'body'      => $postdata
+					);
 				$response = wp_remote_post(
 					$url,
-					array(
-						'sslverify' => false,
-						'timeout'   => 60,
-						'body'      => $postdata
-						)
+					$data
 					);
 			break;
 		}
