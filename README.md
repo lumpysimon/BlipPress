@@ -26,3 +26,6 @@ A WordPress plugin for posting to Blipfoto and for displaying blips on your Word
 * description
 * license
 * changelog
+* shortcode generator on dashboard
+* search feature on dashboard
+* filter hooks

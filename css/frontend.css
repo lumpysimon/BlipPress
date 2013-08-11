@@ -1,0 +1,12 @@
+.blip-thumb {
+	float: left;
+	margin: 0 20px 20px 0;
+}
+
+.blip-thumb a {
+	display: block;
+}
+
+.blip-thumb img {
+	display: block;
+}

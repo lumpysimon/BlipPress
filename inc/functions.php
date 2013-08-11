@@ -7,7 +7,7 @@ function blipfoto_bliplatest( $args = array() ) {
 	global $blipfoto, $blipfoto_shortcodes;
 
 	$defaults = array(
-		'user' => blip_option( 'username' ),
+		'user' => blip_auth_option( 'username' ),
 		'num'  => $blipfoto->default_num
 		);
 
@@ -43,13 +43,13 @@ function blip_url( $id ) {
 
 function get_blip_id( $post_id = null ) {
 
-	global $post;
+	global $post, $blipfoto_post;
 
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
 
-	return get_post_meta( $post_id, 'blipfoto-id', true );
+	return get_post_meta( $post_id, $blipfoto_post->postmeta, true );
 
 }
 
@@ -65,7 +65,7 @@ function blip_id( $post_id = null ) {
 
 function is_blipped( $post_id = null ) {
 
-	return get_blip_id( $post_id ) ? true : false;
+	return get_blip_id( $post_id );
 
 }
 
@@ -73,9 +73,7 @@ function is_blipped( $post_id = null ) {
 
 function check_blip_permission() {
 
-	$opts = get_option( 'blipfoto' );
-
-	if ( !isset( $opts['username'] ) or !$opts['username'] or !isset( $opts['token'] ) or !$opts['token'] or !isset( $opts['secret'] ) or !$opts['secret'] )
+	if ( !blip_auth_option( 'username' ) or !blip_auth_option( 'token' ) or !blip_auth_option( 'secret' ) )
 		return false;
 
 	return true;
@@ -84,18 +82,11 @@ function check_blip_permission() {
 
 
 
-// @TODO@
-// what is this?
-function check_blip_options() {
+function blipfoto_authenticate_message( $text = '' ) {
 
-return true;
+	global $blipfoto_authentication;
 
-	$opts = get_option( 'blipfoto' );
-
-	if ( !isset( $opts['post-types'] ) or !$opts['post-types'] )
-		return false;
-
-	return true;
+	return 'Please <a href="' . $blipfoto_authentication->page_url() . '">authenticate your Blipfoto account</a>' . $text;
 
 }
 
@@ -103,10 +94,27 @@ return true;
 
 function blip_option( $opt ) {
 
-	$opts = get_option( 'blipfoto' );
+	global $blipfoto_settings;
+
+	$opts = $blipfoto_settings->get();
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
+
+	return false;
+
+}
+
+
+
+function blip_post_types() {
+
+	global $blipfoto_settings;
+
+	$opts = $blipfoto_settings->get();
+
+	if ( isset( $opts['post-types'] ) and is_array( $opts['post-types'] ) )
+		return array_keys( $opts['post-types'] );
 
 	return false;
 
@@ -119,11 +127,29 @@ function is_blip_post_type( $type = null ) {
 	global $post;
 
 	if ( ! $type ) {
-		$type = $post->post_type;
+		if ( ! $type = $post->post_type ) {
+			return false;
+		}
 	}
 
-	if ( $type and $types = blip_option( 'post-types' ) and in_array( $type, $types ) )
-		return true;
+	if ( $types = blip_option( 'post-types' ) ) {
+		return array_key_exists( $type, $types );
+	}
+
+	return false;
+
+}
+
+
+
+function blip_auth_option( $opt ) {
+
+	global $blipfoto_authentication;
+
+	$opts = $blipfoto_authentication->get_option();
+
+	if ( isset( $opts[$opt] ) )
+		return $opts[$opt];
 
 	return false;
 

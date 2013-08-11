@@ -82,6 +82,8 @@ class blipfoto_dashboard {
 
 	function render_page() {
 
+		global $blipfoto;
+
 		$opts = get_option( 'blipfoto' );
 
 		?>
@@ -92,9 +94,15 @@ class blipfoto_dashboard {
 
 			<div class="postbox-container" style="width:65%;">
 
-				<h3>Your recent blips</h3>
+				<?php if ( check_blip_permission() ) { ?>
 
-				<?php echo blipfoto_bliplatest( array( 'num' => 30, 'css' => false ) ); ?>
+					<h3>Your recent blips</h3>
+
+					<?php echo blipfoto_bliplatest( array( 'num' => 30 ) ); ?>
+
+				<?php } else {
+					echo blipfoto_authenticate_message( ' to show this page.' );
+				} ?>
 
 			</div>
 

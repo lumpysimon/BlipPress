@@ -29,18 +29,12 @@ class blip {
 	protected $api_key;
 	protected $secret;
 
-	private $auth = array( 'justme', 'subscribed' );
 
 
-
-	// @@TODO@@
-	// sort this out
 	function __construct( $a, $s = '', $conf = array() ) {
 
 		$this->api_key = $a;
 		$this->secret  = $s;
-		$this->test    = ( isset( $conf['test'] ) and $conf['test'] );
-		$this->fatal   = ( isset( $conf['fatal'] ) and $conf['fatal'] );
 		$this->token   = ( isset( $conf['token'] ) ? $conf['token'] : '' );
 
 	}
@@ -66,7 +60,11 @@ class blip {
 
 		$url = $this->url( 'token', $args );
 
-		return $this->request( $url );
+		$json = $this->request( $url );
+
+		if ( $data = $json->data ) {
+			return $data;
+		}
 
 	}
 
@@ -81,15 +79,20 @@ class blip {
 
 		$args = array(
 			'params' => array(
-				'entry_id'        => $id,
-				'return_location' => 1,
-				'return_exif'     => 1
+				'entry_id'          => $id,
+				'return_location'   => 1,
+				'return_exif'       => 1,
+				'return_dimensions' => 1
 				)
 			);
 
 		$url = $this->url( 'entry', $args );
 
-		return $this->request( $url );
+		$json = $this->request( $url );
+
+		if ( $data = $json->data ) {
+			return $data;
+		}
 
 	}
 
@@ -106,7 +109,9 @@ class blip {
 
 		$url = $this->url( 'search', $args );
 
-		if ( $data = $this->request( $url ) and is_array( $data ) ) {
+		$json = $this->request( $url );
+
+		if ( $data = $json->data and is_array( $data ) ) {
 			return $this->get_entry_by_id( $data[0]->entry_id );
 		}
 
@@ -118,15 +123,20 @@ class blip {
 
 		$args = array(
 			'params' => array(
-				'display_name' => $user,
-				'return_location' => 1,
-				'return_exif'     => 1
+				'display_name'      => $user,
+				'return_location'   => 1,
+				'return_exif'       => 1,
+				'return_dimensions' => 1
 				)
 			);
 
 		$url = $this->url( 'entry', $args );
 
-		return $this->request( $url );
+		$json = $this->request( $url );
+
+		if ( $data = $json->data ) {
+			return $data;
+		}
 
 	}
 
@@ -143,7 +153,9 @@ class blip {
 
 		$url = $this->url( 'search', $args );
 
-		if ( $data = $this->request( $url ) and is_array( $data ) ) {
+		$json = $this->request( $url );
+
+		if ( $data = $json->data and is_array( $data ) ) {
 			return $data;
 		}
 
@@ -151,20 +163,23 @@ class blip {
 
 
 
-	// @@TODO@@
-	// nothing from here on down to 'internal functions' has been used yet...
+	function validate_date( $date ) {
 
-	// check if user is allowed to post
-	function get_date_validation( $date ) {
+		$args = array(
+			'params' => array(
+				'date' => $date
+				)
+			);
 
-		$params   = $this->get_params( $this->token );
-		$params[] = 'entry_date=' . $date;
+		$url = $this->url( 'datevalidation', $args );
 
-		return $this->request(
-						'get',
-						'datevalidation/',
-						$params
-						);
+		$json = $this->request( $url );
+
+		if ( isset( $json->message ) ) {
+			return true;
+		}
+
+		return false;
 
 	}
 
@@ -173,33 +188,24 @@ class blip {
 	// post an entry
 	function post_entry( $postdata ) {
 
-		$params = $this->get_params( $this->token );
+		$args = array(
+			'api_key' => false
+			);
 
-		return $this->request(
-						'post',
-						'entry/',
-						$params,
-						$postdata
-						);
+		$url = $this->url( 'entry', $args );
 
-	}
+		$sig                 = $this->signature( false );
+		$postdata['api_key'] = $this->api_key;
 
+		$json = $this->request( $url, 'post', $postdata );
 
+		error_log(print_r($url,true));
+		error_log(print_r($postdata,true));
+		error_log(print_r($json,true));
 
-	// post a comment
-	function post_comment( $entry_id, $comment ) {
-
-		$params = $this->get_params( $this->token );
-
-		return $this->request(
-						'post',
-						'comment/',
-						$params,
-						array(
-							'entry_id' => $entry_id,
-							'comment'  => $comment
-							)
-						);
+		if ( $data = $json->data ) {
+			return $data;
+		}
 
 	}
 
@@ -214,6 +220,7 @@ class blip {
 	private function url( $resource, $args = array() ) {
 
 		$defaults = array(
+			'api_key'   => true,
 			'format'    => 'json',
 			'params'    => null,
 			'user_auth' => false,
@@ -229,7 +236,9 @@ class blip {
 		$url .= '://api.blipfoto.com/v' . $this->api_version . '/';
 		$url .= $resource . '.' . $format;
 
-		$url = add_query_arg( array( 'api_key' => $this->api_key ), $url );
+		if ( $api_key ) {
+			$url = add_query_arg( array( 'api_key' => $this->api_key ), $url );
+		}
 
 		if ( is_array( $params ) and !empty( $params ) ) {
 			$url = add_query_arg( $params, $url );
@@ -237,22 +246,13 @@ class blip {
 
 		if ( $auth_sig ) {
 
-			$timestamp  = $this->create_time_stamp();
-			$nonce = md5( uniqid( rand(), true ) );
-			$token = '';
-
-			if ( $user_auth ) {
-				$token = $this->token;
-			}
-
-			$signature = md5( $timestamp . $nonce . $token . $this->secret );
-
+			$sig = $this->signature( $user_auth );
 			$url = add_query_arg(
 				array(
-					'timestamp' => $timestamp,
-					'nonce'     => $nonce,
-					'token'     => $token,
-					'signature' => $signature
+					'timestamp' => $sig['timestamp'],
+					'nonce'     => $sig['nonce'],
+					'token'     => $sig['token'],
+					'signature' => $sig['signature']
 					),
 				$url
 				);
@@ -260,6 +260,26 @@ class blip {
 		}
 
 		return $url;
+
+	}
+
+
+
+	private function signature( $user_auth ) {
+
+		$sig = array();
+
+		$sig['timestamp']  = $this->create_time_stamp();
+		$sig['nonce'] = md5( uniqid( rand(), true ) );
+		$sig['token'] = '';
+
+		if ( $user_auth ) {
+			$sig['token'] = $this->token;
+		}
+
+		$sig['signature'] = md5( $sig['timestamp'] . $sig['nonce'] . $sig['token'] . $this->secret );
+
+		return $sig;
 
 	}
 
@@ -275,8 +295,10 @@ class blip {
 
 			$url = $this->url( 'time', array( 'auth_sig' => false ) );
 
-			if ( $response = $this->request( $url ) ) {
-				$diff = intval( $response->timestamp ) - $now;
+			$json = $this->request( $url );
+
+			if ( isset( $json->data->timestamp) ) {
+				$diff = intval( $json->data->timestamp ) - $now;
 				// if ( defined( 'WP_LOCAL_DEV' ) and WP_LOCAL_DEV ) {
 				// 	$timeout = 10;
 				// }
@@ -293,23 +315,27 @@ class blip {
 
 	private function request( $url, $method = 'get', $postdata = null ) {
 
+		if ( 'post' == $method and ! is_array( $postdata ) )
+			return false;
+
 		switch ( $method ) {
 			case 'get' :
 				$response = wp_remote_get( $url, array( 'sslverify' => false ) );
 			break;
 			case 'post' :
-				if ( in_array( 'image_upload', array_keys( $postdata ) ) ) {
-					$postdata['image_upload'] = '@' . $postdata['image_upload'];
-				}
-				$response = wp_remote_post( $url, array( 'sslverify' => false ) );
+				$response = wp_remote_post(
+					$url,
+					array(
+						'sslverify' => false,
+						'timeout'   => 60,
+						'body'      => $postdata
+						)
+					);
 			break;
 		}
 
 		if ( !is_wp_error( $response ) and isset( $response['body'] ) and $response['body'] ) {
-			$json = json_decode( $response['body'] );
-			if ( $data = $json->data ) {
-				return $data;
-			}
+			return json_decode( $response['body'] );
 		}
 
 		return false;

@@ -28,7 +28,7 @@ class blipfoto_create {
 		if ( 'blippress' != $_GET['page'] )
 			return;
 
-		if ( !check_blip_permission() or !check_blip_options() ) {
+		if ( !check_blip_permission() ) {
 			$this->error = 'You cannot create a Blip until you have configured BlipPress';
 			return;
 		}
@@ -49,8 +49,8 @@ class blipfoto_create {
 
 		global $blippress;
 
-		if ( !check_blip_permission() or !check_blip_options() ) {
-			$this->error = 'You cannot create a Blip until you have configured BlipPress.';
+		if ( !check_blip_permission() ) {
+			$this->error = 'You cannot create a Blip until you have authenticated your Blipfoto account.';
 		}
 
 		$post = get_post( $post_id );
@@ -149,7 +149,7 @@ class blipfoto_create {
 
 	function notice() {
 
-		if ( !current_user_can( 'edit_posts' ) or !check_blip_options() or !isset( $this->notice ) or empty( $this->notice ) )
+		if ( !current_user_can( 'edit_posts' ) or !isset( $this->notice ) or empty( $this->notice ) )
 			return;
 
 		echo '<div class="' . $this->notice['type'] . '" id="blippress-notice">' . $this->notice['message'] . '</div>';
@@ -179,7 +179,15 @@ class blipfoto_create {
 
 		<div class="wrap">
 
-			<h2>Blipfoto</h2>
+			<h2>Create a blip</h2>
+
+			<?php if ( check_blip_permission() ) { ?>
+
+				<h3>Something</h3>
+
+			<?php } else {
+				echo blipfoto_authenticate_message( ' to create a blip.' );
+			} ?>
 
 			<?php if ( $this->error ) {
 				printf( '<p>ERROR! %s</p>', $this->error );

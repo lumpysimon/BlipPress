@@ -59,9 +59,11 @@ if ( ! defined( 'BLIPFOTO_PLUGIN_DIR' ) )
 
 
 require 'inc/api.php';
+require 'inc/frontend.php';
+require 'inc/settings.php';
 require 'inc/dashboard.php';
 require 'inc/authentication.php';
-require 'inc/create.php';
+// require 'inc/create.php';
 require 'inc/functions.php';
 require 'inc/shortcodes.php';
 require 'inc/post.php';

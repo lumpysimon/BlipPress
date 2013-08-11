@@ -38,7 +38,7 @@ class blipfoto_shortcodes {
 
 		$id   = absint( $id );
 		$out  = '';
-		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ) );
 
 		if ( $data = $blip->get_entry_by_id( $id ) ) {
 			$out = $this->build_single_blip( $data );
@@ -60,7 +60,7 @@ class blipfoto_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_option( 'username' ),
+					'user' => blip_auth_option( 'username' ),
 					'date' => date( 'd-m-Y' )
 					),
 				$atts
@@ -80,7 +80,7 @@ class blipfoto_shortcodes {
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
 		$out  = '';
-		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ) );
 
 		if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
 			$out = $this->build_single_blip( $data );
@@ -104,14 +104,14 @@ class blipfoto_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_option( 'username' )
+					'user' => blip_auth_option( 'username' )
 					),
 				$atts
 				)
 			);
 
 		$out      = '';
-		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ) );
 		if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
 			$out = self::build_single_blip( $data );
 		} else {
@@ -134,8 +134,8 @@ class blipfoto_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_option( 'username' ),
-					'num'  => $blipfoto->default_num
+					'user' => blip_auth_option( 'username' ),
+					'num'  => blip_option( 'num' )
 					),
 				$atts
 				)
@@ -145,12 +145,12 @@ class blipfoto_shortcodes {
 			$num = $blipfoto->default_num;
 		}
 
-		$out      = '';
-		$blip = new blip( $blipfoto->key, blip_option( 'secret' ) );
+		$out = '';
+		$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ) );
 		if ( $data = $blip->get_latest_entries_by_user( $user, $num ) ) {
-			$out = self::build_multi_blips( $data );
+			$out .= self::build_multi_blips( $data );
 		} else {
-			$out = '<p>It\'s all gone tits up</p>';
+			$out .= '<p>It\'s all gone tits up</p>';
 		}
 
 		return $out;
@@ -161,9 +161,13 @@ class blipfoto_shortcodes {
 
 	private function build_single_blip( $data ) {
 
-		$out .= '<div class="blip">';
+		$out  = '<div class="blip">';
 		$out .= '<h2>' . $data->title . '</h2>';
-		$out .= '<img src="' . $data->image . '" height="' . $data->image_height . '" width="' . $data->image_width . '">';
+		$out .= '<img src="' . $data->image . '"';
+		if ( isset( $data->dimensions ) ) {
+			$out .= ' height="' . $data->dimensions->height . '" width="' . $data->dimensions->width . '"';
+		}
+		$out .= '>';
 		$out .= '<p>Taken on ' . date( get_option( 'date_format' ), strtotime( $data->date ) ) . '</p>';
 
 		if ( isset( $data->exif ) ) {

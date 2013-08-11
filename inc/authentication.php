@@ -12,6 +12,7 @@ class blipfoto_authentication {
 
 
 	var $slug   = 'blipfoto-authentication';
+	var $option = 'blipfoto-authentication';
 	var $notice = array();
 
 
@@ -19,8 +20,16 @@ class blipfoto_authentication {
 	function __construct() {
 
 		add_action( 'admin_menu',   array( $this, 'add_page' ) );
-		add_action( 'admin_init',   array( $this, 'check' ) );
+		add_action( 'admin_enqueue_scripts',   array( $this, 'check' ) );
 		add_action( 'admin_footer', array( $this, 'notice' ) );
+
+	}
+
+
+
+	function get_option() {
+
+		return get_option( $this->option );
 
 	}
 
@@ -43,7 +52,17 @@ class blipfoto_authentication {
 
 	function is_authentication_page() {
 
-		return ( is_admin() and isset( $_GET['page'] ) and $this->slug == $_GET['page'] );
+		$screen = get_current_screen();
+
+		return ( 'blipfoto_page_' . $this->slug == $screen->id );
+
+	}
+
+
+
+	function page_url() {
+
+		return admin_url( 'admin.php?page=' . $this->slug );
 
 	}
 
@@ -59,20 +78,20 @@ class blipfoto_authentication {
 		if ( ! is_admin() )
 			return;
 
-		if ( !$this->is_authentication_page() and ( !check_blip_permission() or !check_blip_options() ) )  {
+		if ( !$this->is_authentication_page() and !check_blip_permission() )  {
 			$this->notice['type']    = 'error';
-			$this->notice['message'] = '<p><strong>Blipfoto needs some attention</strong>: Please <a href="' . admin_url( 'admin.php?page=' . $this->slug ) . '">configure Blipfoto</a></p>';
+			$this->notice['message'] = '<p><strong>Blipfoto needs some attention</strong>: Please <a href="' . $this->page_url() . '">authenticate your Blipfoto account</a></p>';
 		}
 
 		if ( ! $this->is_authentication_page() )
 			return;
 
-		$opts = get_option( 'blipfoto' );
+		$opts = get_option( $this->option );
 
 		if ( isset( $_POST['request-permission'] ) and 'go' == $_POST['request-permission'] ) {
 
 			$blip = new blip( $blipfoto->key );
-			$blip->get_temp_token( $blipfoto->permissions_id, admin_url( 'admin.php?page=' . $this->slug ) );
+			$blip->get_temp_token( $blipfoto->permissions_id, $this->page_url() );
 
 		}
 
@@ -84,7 +103,7 @@ class blipfoto_authentication {
 					'token'    => $data->token,
 					'secret'   => $data->secret
 					);
-				update_option( 'blipfoto', $opts );
+				update_option( $this->option, $opts );
 			}
 		}
 
@@ -141,9 +160,7 @@ class blipfoto_authentication {
 
 	function render_page() {
 
-		global $blipfoto;
-
-		$opts = get_option( 'blipfoto' );
+		$opts = get_option( $this->option );
 
 		?>
 
@@ -158,13 +175,13 @@ class blipfoto_authentication {
 				<?php if ( ! check_blip_permission() ) { ?>
 					<p>You need to grant permission for Blipfoto to access your account.</p>
 					<form method="post">
-						<p class="submit">
+						<p>
 							<input type="hidden" name="request-permission" value="go">
 							<input class="button-primary" name="submit" type="submit" value="Grant Permission">
 						</p>
 					</form>
 				<?php } else { ?>
-					<p>Looking good... Your website has permission to access the following Blipfoto account: <strong><?php echo blip_option( 'username' ); ?></strong></p>
+					<p>Looking good... Your website has permission to access the following Blipfoto account: <strong><?php echo $opts['username']; ?></strong></p>
 				<?php } ?>
 
 			</div>
