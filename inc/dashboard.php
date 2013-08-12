@@ -98,7 +98,7 @@ class blipfoto_dashboard {
 
 					<h3>Your recent blips</h3>
 
-					<?php echo blip_latest( array( 'num' => 30 ) ); ?>
+					<?php echo blip_latest(); ?>
 
 				<?php } else {
 					echo blip_authenticate_message( ' to show this page.' );

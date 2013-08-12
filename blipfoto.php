@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: Blipfoto for WordPress
-Plugin URI:  http://wpblip.org
+Plugin Name: BlipPress
+Plugin URI:  http://blippress.org
 Description: All the Blipfoto things but for WordPress
 Version:     0.1
-Author:      Simon Blackbourn @ Lumpy Lmeon
+Author:      Simon Blackbourn @ Lumpy Lemon
 Author URI:  https://twitter.com/lumpysimon
 
 
@@ -19,6 +19,7 @@ Author URI:  https://twitter.com/lumpysimon
 
 	The Blipfoto website is at http://blipfoto.com
 	My own Blipfoto journal can be viewed at http://blipfoto.com/lumpysimon
+	If you're so inclined you can follow me on Twitter at https://twitter.com/lumpysimon
 
 
 
@@ -83,12 +84,14 @@ class blipfoto {
 
 
 
-	var $plugin_page    = 'http://wordpress.org/extend/plugins/blipfoto-for-wordpress';
-	var $me             = 'lumpysimon';
-	var $permissions_id = '139459';
-	var $key            = '46a9df14f768a45619a5c0eb312d51a3';
-	var $secret         = 'd96e00ecb17c1fd33e37b73a0c483fef';
-	var $default_num    = 16;
+	var $plugin_page       = 'http://wordpress.org/extend/plugins/blipfoto-for-wordpress';
+	var $me                = 'lumpysimon';
+	var $permissions_id    = '139459';
+	var $key               = '46a9df14f768a45619a5c0eb312d51a3';
+	var $secret            = 'd96e00ecb17c1fd33e37b73a0c483fef';
+	var $default_num       = 16;
+	var $transient_prefix  = 'blipfoto-';
+	var $transient_timeout = 900; // 15 minutes
 
 
 

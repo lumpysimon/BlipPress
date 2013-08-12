@@ -8,7 +8,7 @@ function blip_latest( $args = array() ) {
 
 	$defaults = array(
 		'user' => blip_auth_option( 'username' ),
-		'num'  => $blipfoto->default_num,
+		'num'  => blip_option( 'num' ),
 		'size' => blip_option( 'size' )
 		);
 

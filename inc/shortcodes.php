@@ -36,12 +36,21 @@ class blipfoto_shortcodes {
 		if ( !$id or !is_numeric( $id ) )
 			return;
 
-		$id   = absint( $id );
-		$out  = '';
-		$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+		$id        = absint( $id );
+		$transient = $blipfoto->transient_prefix . 'single-' . $id;
 
-		if ( $data = $blip->get_entry_by_id( $id ) ) {
-			$out = $this->build_single_blip( $data );
+		if ( false === $out = get_transient( $transient ) ) {
+
+			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+
+			if ( $data = $blip->get_entry_by_id( $id ) ) {
+				$out = $this->build_single_blip( $data );
+			}
+
+			set_transient( $transient, $out, $blipfoto->transient_timeout );
+
+		} else {
+			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
@@ -79,13 +88,20 @@ class blipfoto_shortcodes {
 
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
-		$out  = '';
-		$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+		$transient = $blipfoto->transient_prefix . 'date-' . $date;
 
-		if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
-			$out = $this->build_single_blip( $data );
+		if ( false === $out = get_transient( $transient ) ) {
+
+			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+
+			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
+				$out = $this->build_single_blip( $data );
+			}
+
+			set_transient( $transient, $out, $blipfoto->transient_timeout );
+
 		} else {
-			$out = '<p>Whoops! Couldn\'t retrieve ' . $user . '\'s blip for ' . date( get_option( 'date_format' ), strtotime( $date ) ) . '</p>';
+			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
@@ -110,12 +126,20 @@ class blipfoto_shortcodes {
 				)
 			);
 
-		$out      = '';
-		$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
-		if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
-			$out = self::build_single_blip( $data );
+		$transient = $blipfoto->transient_prefix . 'latest-' . $user;
+
+		if ( false === $out = get_transient( $transient ) ) {
+
+			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+
+			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
+				$out = self::build_single_blip( $data );
+			}
+
+			set_transient( $transient, $out, $blipfoto->transient_timeout );
+
 		} else {
-			$out = '<p>Couldn\'t retrieve latest entry for ' . $user . '</p>';
+			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
@@ -151,12 +175,20 @@ class blipfoto_shortcodes {
 			$size = 'big';
 		}
 
-		$out = '';
-		$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
-		if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
-			$out .= self::build_multi_blips( $data, $size );
+		$transient = $blipfoto->transient_prefix . 'latest-' . $user . '-' . $num . '-' . $size;
+
+		if ( false === $out = get_transient( $transient ) ) {
+
+			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+
+			if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
+				$out = self::build_multi_blips( $data, $size );
+			}
+
+			set_transient( $transient, $out, $blipfoto->transient_timeout );
+
 		} else {
-			$out .= '<p>It\'s all gone tits up</p>';
+			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;

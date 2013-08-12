@@ -5,6 +5,7 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 ## To Do
 
 * validate settings
+* validate shortcode atts
 * API error handling
 * media library integration
 * check menu icon in different browsers
