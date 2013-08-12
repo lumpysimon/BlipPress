@@ -1,9 +1,10 @@
-# Blipfoto for WordPress
+# BlipPress
 
 A WordPress plugin to integrate Blipfoto into your WordPress website. Display single or multiple blips anywhere on your website, and create blips from within the WordPress admin area.
 
 ## To Do
 
+* change name
 * validate settings
 * validate shortcode atts
 * API error handling

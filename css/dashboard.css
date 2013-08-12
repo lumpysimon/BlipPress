@@ -1,17 +1,33 @@
-.blip-thumb {
+.blippress-gallery {
+	overflow: hidden;
+}
+
+.blippress-thumb {
 	float: left;
 	margin: 0 20px 20px 0;
 }
 
-.admin-color-mp6 .blip-thumb a {
+.blippress-thumb-small {
+	margin: 0 10px 10px 0;
+}
+
+.admin-color-mp6 .blippress-thumb a {
 	border: 4px dashed #eee;
 	display: block;
 }
 
-.admin-color-mp6 .blip-thumb a:hover {
+.admin-color-mp6 .blippress-thumb-small a {
+	border-width: 2px;
+}
+
+.admin-color-mp6 .postbox .blippress-thumb a {
+	border-color: #fff;
+}
+
+.admin-color-mp6 .blippress-thumb a:hover {
 	border-color: #333;
 }
 
-.blip-thumb img {
+.blippress-thumb img {
 	display: block;
 }

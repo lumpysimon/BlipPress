@@ -2,25 +2,25 @@
 
 
 
-function blip_latest( $args = array() ) {
+function blippress_latest( $args = array() ) {
 
-	global $blipfoto, $blipfoto_shortcodes;
+	global $blippress, $blippress_shortcodes;
 
 	$defaults = array(
-		'user' => blip_auth_option( 'username' ),
-		'num'  => blip_option( 'num' ),
-		'size' => blip_option( 'size' )
+		'user' => blippress_auth_option( 'username' ),
+		'num'  => blippress_option( 'num' ),
+		'size' => blippress_option( 'size' )
 		);
 
 	$args = wp_parse_args( $args, $defaults );
 
-	echo $blipfoto_shortcodes->multi_latest( $args );
+	echo $blippress_shortcodes->multi_latest( $args );
 
 }
 
 
 
-function get_blip_url( $id ) {
+function get_blippress_url( $id ) {
 
 	if ( ! is_numeric( $id ) )
 		return;
@@ -34,31 +34,51 @@ function get_blip_url( $id ) {
 
 
 
-function blip_url( $id ) {
+function blippress_url( $id ) {
 
-	echo get_blip_url( $id );
+	echo get_blippress_url( $id );
 
 }
 
 
 
-function get_blip_id( $post_id = null ) {
+function get_blippress_user_url( $user, $protocol = 'http://' ) {
 
-	global $post, $blipfoto_post;
+	return sprintf(
+				'%sblipfoto.com/%s',
+				$protocol,
+				$user
+				);
+
+}
+
+
+
+function blippress_user_url( $user, $protocol = 'http://' ) {
+
+	echo get_blippress_user_url( $user, $protocol );
+
+}
+
+
+
+function get_blippress_id( $post_id = null ) {
+
+	global $post, $blippress_post;
 
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
 
-	return get_post_meta( $post_id, $blipfoto_post->postmeta, true );
+	return get_post_meta( $post_id, $blippress_post->postmeta, true );
 
 }
 
 
 
-function blip_id( $post_id = null ) {
+function blippress_id( $post_id = null ) {
 
-	echo get_blip_id( $post_id );
+	echo get_blippress_id( $post_id );
 
 }
 
@@ -66,15 +86,15 @@ function blip_id( $post_id = null ) {
 
 function is_blipped( $post_id = null ) {
 
-	return get_blip_id( $post_id );
+	return get_blippress_id( $post_id );
 
 }
 
 
 
-function blip_check_permission() {
+function blippress_check_permission() {
 
-	if ( !blip_auth_option( 'username' ) or !blip_auth_option( 'token' ) or !blip_auth_option( 'secret' ) )
+	if ( !blippress_auth_option( 'username' ) or !blippress_auth_option( 'token' ) or !blippress_auth_option( 'secret' ) )
 		return false;
 
 	return true;
@@ -83,21 +103,21 @@ function blip_check_permission() {
 
 
 
-function blip_authenticate_message( $text = '' ) {
+function blippress_authenticate_message( $text = '' ) {
 
-	global $blipfoto_authentication;
+	global $blippress_authentication;
 
-	return 'Please <a href="' . $blipfoto_authentication->page_url() . '">authenticate your Blipfoto account</a>' . $text;
+	return 'Please <a href="' . $blippress_authentication->page_url() . '">authenticate your Blipfoto account</a>' . $text;
 
 }
 
 
 
-function blip_option( $opt ) {
+function blippress_option( $opt ) {
 
-	global $blipfoto_settings;
+	global $blippress_settings;
 
-	$opts = $blipfoto_settings->get();
+	$opts = $blippress_settings->get();
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
@@ -108,11 +128,21 @@ function blip_option( $opt ) {
 
 
 
-function blip_post_types() {
+function blippress_options() {
 
-	global $blipfoto_settings;
+	global $blippress_settings;
 
-	$opts = $blipfoto_settings->get();
+	return $blippress_settings->get();
+
+}
+
+
+
+function blippress_post_types() {
+
+	global $blippress_settings;
+
+	$opts = $blippress_settings->get();
 
 	if ( isset( $opts['post-types'] ) and is_array( $opts['post-types'] ) )
 		return array_keys( $opts['post-types'] );
@@ -123,7 +153,7 @@ function blip_post_types() {
 
 
 
-function is_blip_post_type( $type = null ) {
+function is_blippress_post_type( $type = null ) {
 
 	global $post;
 
@@ -133,7 +163,7 @@ function is_blip_post_type( $type = null ) {
 		}
 	}
 
-	if ( $types = blip_option( 'post-types' ) ) {
+	if ( $types = blippress_option( 'post-types' ) ) {
 		return array_key_exists( $type, $types );
 	}
 
@@ -143,11 +173,11 @@ function is_blip_post_type( $type = null ) {
 
 
 
-function blip_auth_option( $opt ) {
+function blippress_auth_option( $opt ) {
 
-	global $blipfoto_authentication;
+	global $blippress_authentication;
 
-	$opts = $blipfoto_authentication->get_option();
+	$opts = $blippress_authentication->get_option();
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
@@ -158,7 +188,7 @@ function blip_auth_option( $opt ) {
 
 
 
-function blip_exif_fields( $keys_only = false ) {
+function blippress_exif_fields( $keys_only = false ) {
 
 	$fields = array(
 		'camera'        => 'Camera',

@@ -1,32 +1,32 @@
-#blip-this-spinner {
+#blippress-this-spinner {
 	float: left;
 }
 
-.blip-this-details {
+.blippress-this-details {
 	overflow: hidden;
 }
 
-.blip-this-thumb {
+.blippress-this-thumb {
 	float: left;
 	margin-right: 20px;
 	padding-top: 10px;
 }
 
-.blip-status {
+.blippress-status {
 	color: white;
 	font-weight: bold;
 	padding: 5px;
 }
 
-.blip-status a {
+.blippress-status a {
 	color: white;
 }
 
-.blip-success {
+.blippress-success {
 	background-color: green;
 }
 
-.blip-error {
+.blippress-error {
 	background-color: red;
 }
 

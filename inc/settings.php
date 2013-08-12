@@ -2,12 +2,12 @@
 
 
 
-class blipfoto_settings {
+class blippress_settings {
 
 
 
-	var $slug   = 'blipfoto-settings';
-	var $option = 'blipfoto-general';
+	var $slug   = 'blippress-settings';
+	var $option = 'blippress-general';
 	var $notice = array();
 
 
@@ -75,8 +75,8 @@ class blipfoto_settings {
 	function add_page() {
 
 		add_options_page(
-			'Blipfoto Settings',
-			'Blipfoto',
+			'BlipPress Settings',
+			'BlipPress',
 			'manage_options',
 			$this->slug,
 			array( $this, 'render_page' )
@@ -88,10 +88,10 @@ class blipfoto_settings {
 
 	function defaults() {
 
-		global $blipfoto;
+		global $blippress;
 
 		return array(
-			'num'        => $blipfoto->default_num,
+			'num'        => $blippress->default_num,
 			'size'       => 'big',
 			'css'        => 1,
 			'post-types' => array( 'post' => true )
@@ -135,9 +135,9 @@ class blipfoto_settings {
 
 		<div class="wrap">
 
-			<h2>Blipfoto Settings</h2>
+			<h2>BlipPress Settings</h2>
 
-			<?php if ( blip_check_permission() ) { ?>
+			<?php if ( blippress_check_permission() ) { ?>
 
 				<form method="post" action="options.php">
 
@@ -203,13 +203,13 @@ class blipfoto_settings {
 					</table>
 
 					<p class="submit">
-						<input class="button-primary" name="blipfoto-submit" type="submit" value="Save Settings">
+						<input class="button-primary" name="blippress-submit" type="submit" value="Save Settings">
 					</p>
 
 				</form>
 
 			<?php } else {
-				echo blip_authenticate_message( ' to show this page.' );
+				echo blippress_authenticate_message( ' to show this page.' );
 			} ?>
 
 		</div>
@@ -224,4 +224,6 @@ class blipfoto_settings {
 
 
 
-$blipfoto_settings = new blipfoto_settings;
+global $blippress_settings;
+
+$blippress_settings = new blippress_settings;

@@ -2,7 +2,7 @@
 
 
 
-class blipfoto_frontend {
+class blippress_frontend {
 
 
 
@@ -19,13 +19,13 @@ class blipfoto_frontend {
 		if ( blip_option( 'css' ) ) {
 
 			wp_register_style(
-				'blipfoto-frontend',
-				BLIPFOTO_PLUGIN_DIR . 'css/frontend.css',
+				'blippress-frontend',
+				BLIPPRESS_PLUGIN_DIR . 'css/frontend.css',
 				null,
-				filemtime( BLIPFOTO_PLUGIN_PATH . 'css/frontend.css' )
+				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/frontend.css' )
 				);
 
-			wp_enqueue_style( 'blipfoto-frontend' );
+			wp_enqueue_style( 'blippress-frontend' );
 
 		}
 
@@ -37,4 +37,6 @@ class blipfoto_frontend {
 
 
 
-$blipfoto_frontend = new blipfoto_frontend;
+global $blippress_frontend;
+
+$blippress_frontend = new blippress_frontend;

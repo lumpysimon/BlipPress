@@ -1,16 +1,16 @@
-.blip-thumb {
+.blippress-thumb {
 	float: left;
 	margin: 0 20px 20px 0;
 }
 
-.blip-thumb-small {
+.blippress-thumb-small {
 	margin: 0 10px 10px 0;
 }
 
-.blip-thumb a {
+.blippress-thumb a {
 	display: block;
 }
 
-.blip-thumb img {
+.blippress-thumb img {
 	display: block;
 }

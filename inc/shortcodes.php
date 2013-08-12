@@ -2,7 +2,7 @@
 
 
 
-class blipfoto_shortcodes {
+class blippress_shortcodes {
 
 
 
@@ -19,9 +19,9 @@ class blipfoto_shortcodes {
 
 	function single_id( $atts ) {
 
-		global $blipfoto;
+		global $blippress;
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
 		extract(
@@ -37,17 +37,17 @@ class blipfoto_shortcodes {
 			return;
 
 		$id        = absint( $id );
-		$transient = $blipfoto->transient_prefix . 'single-' . $id;
+		$transient = $blippress->transient_prefix . 'single-' . $id;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
-			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_id( $id ) ) {
 				$out = $this->build_single_blip( $data );
 			}
 
-			set_transient( $transient, $out, $blipfoto->transient_timeout );
+			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		} else {
 			error_log( 'getting transient: '.$transient );
@@ -61,15 +61,15 @@ class blipfoto_shortcodes {
 
 	function single_date( $atts ) {
 
-		global $blipfoto;
+		global $blippress;
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_auth_option( 'username' ),
+					'user' => blippress_auth_option( 'username' ),
 					'date' => date( 'd-m-Y' )
 					),
 				$atts
@@ -88,17 +88,17 @@ class blipfoto_shortcodes {
 
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
-		$transient = $blipfoto->transient_prefix . 'date-' . $date;
+		$transient = $blippress->transient_prefix . 'date-' . $date;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
-			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
 				$out = $this->build_single_blip( $data );
 			}
 
-			set_transient( $transient, $out, $blipfoto->transient_timeout );
+			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		} else {
 			error_log( 'getting transient: '.$transient );
@@ -112,31 +112,31 @@ class blipfoto_shortcodes {
 
 	function single_latest( $atts ) {
 
-		global $blipfoto;
+		global $blippress;
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_auth_option( 'username' )
+					'user' => blippress_auth_option( 'username' )
 					),
 				$atts
 				)
 			);
 
-		$transient = $blipfoto->transient_prefix . 'latest-' . $user;
+		$transient = $blippress->transient_prefix . 'latest-' . $user;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
-			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
 				$out = self::build_single_blip( $data );
 			}
 
-			set_transient( $transient, $out, $blipfoto->transient_timeout );
+			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		} else {
 			error_log( 'getting transient: '.$transient );
@@ -150,24 +150,24 @@ class blipfoto_shortcodes {
 
 	function multi_latest( $atts ) {
 
-		global $blipfoto;
+		global $blippress;
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blip_auth_option( 'username' ),
-					'num'  => blip_option( 'num' ),
-					'size' => blip_option( 'size' )
+					'user' => blippress_auth_option( 'username' ),
+					'num'  => blippress_option( 'num' ),
+					'size' => blippress_option( 'size' )
 					),
 				$atts
 				)
 			);
 
 		if ( ! $num = absint( $num ) ) {
-			$num = $blipfoto->default_num;
+			$num = $blippress->default_num;
 		}
 
 		$size = strtolower( $size );
@@ -175,17 +175,17 @@ class blipfoto_shortcodes {
 			$size = 'big';
 		}
 
-		$transient = $blipfoto->transient_prefix . 'latest-' . $user . '-' . $num . '-' . $size;
+		$transient = $blippress->transient_prefix . 'latest-' . $user . '-' . $num . '-' . $size;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
-			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ) );
+			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
 				$out = self::build_multi_blips( $data, $size );
 			}
 
-			set_transient( $transient, $out, $blipfoto->transient_timeout );
+			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		} else {
 			error_log( 'getting transient: '.$transient );
@@ -246,11 +246,11 @@ class blipfoto_shortcodes {
 
 	private function build_multi_blips( $data, $size ) {
 
-		$out = '<div class="blip-gallery blip-gallery-' . $size . '">';
+		$out = '<div class="blippress-gallery blippress-gallery-' . $size . '">';
 
 		foreach ( $data as $entry ) {
 
-			$out .= '<div class="blip-thumb blip-thumb-' . $size . '" id="blip-thumb-' . $entry->entry_id . '">';
+			$out .= '<div class="blippress-thumb blippress-thumb-' . $size . '" id="blippress-thumb-' . $entry->entry_id . '">';
 			$out .= '<a href="' . $entry->url . '" title="View &quot;' . $entry->title . '&quot; (' . date( get_option( 'date_format' ), strtotime( $entry->date ) ) . ') on Blipfoto"><img src="' . $entry->thumbnail . '"></a>';
 			$out .= '</div>';
 
@@ -268,4 +268,6 @@ class blipfoto_shortcodes {
 
 
 
-$blipfoto_shortcodes = new blipfoto_shortcodes;
+global $blippress_shortcodes;
+
+$blippress_shortcodes = new blippress_shortcodes;

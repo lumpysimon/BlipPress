@@ -27,6 +27,12 @@
 	This version uses the WordPress wp_remote_get and wp_remote_post functions instead of cURL
 	and also provides various helper functions.
 
+	Originally written for BlipPress:
+	http://blippress.org/plugins/blippress
+	http://wordpress.org/plugins/blippress
+	https://github.com/lumpysimon/blippress
+
+
 
 
 	-------

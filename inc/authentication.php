@@ -7,12 +7,12 @@
 
 
 
-class blipfoto_authentication {
+class blippress_authentication {
 
 
 
-	var $slug   = 'blipfoto-authentication';
-	var $option = 'blipfoto-authentication';
+	var $slug   = 'blippress-authentication';
+	var $option = 'blippress-authentication';
 	var $notice = array();
 
 
@@ -38,8 +38,8 @@ class blipfoto_authentication {
 	function add_page() {
 
 		add_submenu_page(
-			'blipfoto',
-			'Blipfoto Authentication',
+			'blippress',
+			'BlipPress Authentication',
 			'Authentication',
 			'manage_options',
 			$this->slug,
@@ -54,7 +54,7 @@ class blipfoto_authentication {
 
 		$screen = get_current_screen();
 
-		return ( 'blipfoto_page_' . $this->slug == $screen->id );
+		return ( 'blippress_page_' . $this->slug == $screen->id );
 
 	}
 
@@ -70,7 +70,7 @@ class blipfoto_authentication {
 
 	function check() {
 
-		global $blipfoto;
+		global $blippress;
 
 		if ( ! current_user_can( 'manage_options' ) )
 			return;
@@ -78,7 +78,7 @@ class blipfoto_authentication {
 		if ( ! is_admin() )
 			return;
 
-		if ( !$this->is_authentication_page() and !blip_check_permission() )  {
+		if ( !$this->is_authentication_page() and !blippress_check_permission() )  {
 			$this->notice['type']    = 'error';
 			$this->notice['message'] = '<p><strong>Blipfoto needs some attention</strong>: Please <a href="' . $this->page_url() . '">authenticate your Blipfoto account</a></p>';
 		}
@@ -94,13 +94,13 @@ class blipfoto_authentication {
 
 		if ( isset( $_POST['request-permission'] ) and 'go' == $_POST['request-permission'] ) {
 
-			$blip = new blipWP( $blipfoto->key );
-			$blip->get_temp_token( $blipfoto->permissions_id, $this->page_url() );
+			$blip = new blipWP( $blippress->key );
+			$blip->get_temp_token( $blippress->permissions_id, $this->page_url() );
 
 		}
 
 		if ( isset( $_GET['temp_token'] ) and $temp_token = self::alphanumeric( $_GET['temp_token'] ) ) {
-			$blip = new blipWP( $blipfoto->key, $blipfoto->secret );
+			$blip = new blipWP( $blippress->key, $blippress->secret );
 			if ( $data = $blip->get_user_token( $temp_token ) ) {
 				$opts = array(
 					'username' => $data->display_name,
@@ -117,7 +117,7 @@ class blipfoto_authentication {
 		// 			if ( isset( $_GET['token'] ) and $token = self::lowercase_alphanumeric( $_GET['token'] ) and $username = self::lowercase_alphanumeric( $_GET['display_name'] ) ) {
 		// 				$opts['token'] = $token;
 		// 				$opts['username'] = $username;
-		// 				update_option( 'blipfoto', $opts );
+		// 				update_option( 'blippress', $opts );
 		// 				$this->notice['type'] = 'updated';
 		// 				$this->notice['message'] = '<p>Permission successfully granted for <em>' . $username . '</em></p>';
 		// 			} else {
@@ -155,7 +155,7 @@ class blipfoto_authentication {
 	function notice() {
 
 		if ( current_user_can( 'manage_options' ) and isset( $this->notice ) and !empty( $this->notice ) ) {
-			echo '<div class="' . $this->notice['type'] . '" id="blipfoto-notice">' . $this->notice['message'] . '</div>';
+			echo '<div class="' . $this->notice['type'] . '" id="blippress-notice">' . $this->notice['message'] . '</div>';
 		}
 
 	}
@@ -172,7 +172,7 @@ class blipfoto_authentication {
 
 			<h3>Permission</h3>
 
-			<?php if ( ! blip_check_permission() ) { ?>
+			<?php if ( ! blippress_check_permission() ) { ?>
 
 				<p>You need to grant permission for your website to access your Blipfoto account.</p>
 				<form method="post">
@@ -184,11 +184,11 @@ class blipfoto_authentication {
 
 			<?php } else { ?>
 
-				<p>Your website has permission to access the following Blipfoto account: <a href="http://blipfoto.com/<?php echo blip_auth_option( 'username' ); ?>">blipfoto.com/<?php echo blip_auth_option( 'username' ); ?></a></p>
+				<p>Your website has permission to access the following Blipfoto account: <a href="<?php blippress_user_url( blippress_auth_option( 'username' ) ); ?>"><?php blippress_user_url( blippress_auth_option( 'username' ), '' ); ?></a></p>
 
 			<?php } ?>
 
-			<?php if ( blip_check_permission() ) { ?>
+			<?php if ( blippress_check_permission() ) { ?>
 
 				<h3>Revoke</h3>
 
@@ -215,4 +215,6 @@ class blipfoto_authentication {
 
 
 
-$blipfoto_authentication = new blipfoto_authentication;
+global $blippress_authentication;
+
+$blippress_authentication = new blippress_authentication;

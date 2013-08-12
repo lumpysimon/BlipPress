@@ -60,11 +60,11 @@ defined( 'ABSPATH' ) or die();
 
 
 
-if ( ! defined( 'BLIPFOTO_PLUGIN_PATH' ) )
-	define( 'BLIPFOTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+if ( ! defined( 'BLIPPRESS_PLUGIN_PATH' ) )
+	define( 'BLIPPRESS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
-if ( ! defined( 'BLIPFOTO_PLUGIN_DIR' ) )
-	define( 'BLIPFOTO_PLUGIN_DIR', plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'BLIPPRESS_PLUGIN_DIR' ) )
+	define( 'BLIPPRESS_PLUGIN_DIR', plugin_dir_url( __FILE__ ) );
 
 
 
@@ -80,17 +80,17 @@ require 'inc/post.php';
 
 
 
-class blipfoto {
+class blippress {
 
 
 
-	var $plugin_page       = 'http://wordpress.org/extend/plugins/blipfoto-for-wordpress';
+	var $plugin_page       = 'http://wordpress.org/extend/plugins/blippress';
 	var $me                = 'lumpysimon';
 	var $permissions_id    = '139459';
 	var $key               = '46a9df14f768a45619a5c0eb312d51a3';
 	var $secret            = 'd96e00ecb17c1fd33e37b73a0c483fef';
 	var $default_num       = 16;
-	var $transient_prefix  = 'blipfoto-';
+	var $transient_prefix  = 'blippress-';
 	var $transient_timeout = 900; // 15 minutes
 
 
@@ -105,9 +105,7 @@ class blipfoto {
 
 	function hello() {
 
-		global $blipfoto_settings;
-
-		$blipfoto_settings->get();
+		$opts = blippress_options();
 
 	}
 
@@ -117,4 +115,6 @@ class blipfoto {
 
 
 
-$blipfoto = new blipfoto;
+global $blippress;
+
+$blippress = new blippress;

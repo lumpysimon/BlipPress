@@ -2,12 +2,12 @@
 
 
 
-class blipfoto_post {
+class blippress_post {
 
 
 
-	var $postmeta = 'blipfoto-entry';
-	var $nonce    = 'blip-this-nonce';
+	var $postmeta = 'blippress-entry';
+	var $nonce    = 'blippress-this-nonce';
 	var $notice   = array();
 
 
@@ -16,7 +16,7 @@ class blipfoto_post {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'script' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'style' ) );
-		add_action( 'wp_ajax_send_post_to_blipfoto', array( $this, 'ajax_send_post_to_blipfoto' ) );
+		add_action( 'wp_ajax_post_to_blipfoto', array( $this, 'ajax_post_to_blipfoto' ) );
 		// add_action( 'add_meta_boxes', array( $this, 'check' ) );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 		// add_action( 'save_post',      array( $this, 'save_date' ), 25, 2 );
@@ -29,17 +29,17 @@ class blipfoto_post {
 	function script() {
 
 		wp_register_script(
-			'blipfoto-post',
-			BLIPFOTO_PLUGIN_DIR . 'js/post.js',
+			'blippress-post',
+			BLIPPRESS_PLUGIN_DIR . 'js/post.js',
 			array( 'jquery' ),
-			filemtime( BLIPFOTO_PLUGIN_PATH . 'js/post.js' )
+			filemtime( BLIPPRESS_PLUGIN_PATH . 'js/post.js' )
 			);
 
-		wp_enqueue_script( 'blipfoto-post' );
+		wp_enqueue_script( 'blippress-post' );
 
 		// wp_localize_script(
-		// 	'blipfoto-post',
-		// 	'blipfoto',
+		// 	'blippress-post',
+		// 	'blippress',
 		// 	array(
 		// 		'ajaxurl' => admin_url( 'admin-ajax.php' )
 		// 	)
@@ -52,24 +52,24 @@ class blipfoto_post {
 	function style() {
 
 		wp_register_style(
-			'blipfoto-post',
-			BLIPFOTO_PLUGIN_DIR . 'css/post.css',
+			'blippress-post',
+			BLIPPRESS_PLUGIN_DIR . 'css/post.css',
 			null,
-			filemtime( BLIPFOTO_PLUGIN_PATH . 'css/post.css' )
+			filemtime( BLIPPRESS_PLUGIN_PATH . 'css/post.css' )
 			);
 
-		wp_enqueue_style( 'blipfoto-post' );
+		wp_enqueue_style( 'blippress-post' );
 
 	}
 
 
 
-	function ajax_send_post_to_blipfoto() {
+	function ajax_post_to_blipfoto() {
 
 		// if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce ) )
 		// 	return;
 
-		global $blipfoto;
+		global $blippress;
 
 		if ( ! blip_check_permission() )
 			return;
@@ -85,7 +85,7 @@ class blipfoto_post {
 
 		} else {
 
-			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
+			$blip = new blipWP( $blippress->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
 
 			$meta = $this->metadata( array( 'post_id' => get_post_thumbnail_id( $post_id ), 'image_meta' => false ) );
 
@@ -158,7 +158,7 @@ class blipfoto_post {
 		} else {
 
 			$this->notice['type'] = 'updated';
-			$this->notice['message'] = '<p><a href="' . wp_nonce_url( admin_url( '?page=blipfoto&action=blip&post_id=' . $post->ID ), 'blipfoto-create-nonce' ) . '">Create a Blip from this post</a></p>';
+			$this->notice['message'] = '<p><a href="' . wp_nonce_url( admin_url( '?page=blippress&action=blip&post_id=' . $post->ID ), 'blippress-create-nonce' ) . '">Create a Blip from this post</a></p>';
 
 		}
 
@@ -180,8 +180,8 @@ class blipfoto_post {
 		foreach ( $types as $type ) {
 
 			add_meta_box(
-				'blipfoto',
-				'Blipfoto',
+				'blippress',
+				'BlipPress',
 				array( $this, 'meta_box' ),
 				$type,
 				'normal'
@@ -203,7 +203,7 @@ class blipfoto_post {
 		} else {
 			if ( has_post_thumbnail() ) {
 				echo $this->details();
-				echo '<p><a id="blip-this" class="button" data-post="' . $post->ID . '" href="#">Blip this post</a><span id="' . $this->nonce . '" class="hidden">' . wp_create_nonce( $this->nonce ) . '</span></p>';
+				echo '<p><a id="blippress-this" class="button" data-post="' . $post->ID . '" href="#">Blip this post</a><span id="' . $this->nonce . '" class="hidden">' . wp_create_nonce( $this->nonce ) . '</span></p>';
 			} else {
 				echo '<p>You must set a featured image before you can blip this post</p>';
 			}
@@ -228,11 +228,11 @@ class blipfoto_post {
 		$thumb    = get_the_post_thumbnail( $post->ID, array( 100, 100 ) );
 		$metadata = $this->metadata();
 
-		echo '<div class="blip-this-details">';
-		echo '<div class="blip-this-thumb">';
+		echo '<div class="blippress-this-details">';
+		echo '<div class="blippress-this-thumb">';
 		echo $thumb;
 		echo '</div>';
-		echo '<div class="blip-this-meta">';
+		echo '<div class="blippress-this-meta">';
 		echo '<ul>';
 		foreach ( $metadata as $k => $v ) {
 			echo '<li>' . $k . ': ' . $v . '</li>';
@@ -247,7 +247,7 @@ class blipfoto_post {
 
 	function metadata( $args = array() ) {
 
-		global $post, $blipfoto;
+		global $post;
 
 		$defaults = array(
 			'post_id'    => null,
@@ -259,7 +259,7 @@ class blipfoto_post {
 		extract( $args, EXTR_SKIP );
 
 		if ( ! $post_id ) {
-			$post_id   = get_post_thumbnail_id( $post->ID );
+			$post_id = get_post_thumbnail_id( $post->ID );
 		}
 
 		if ( ! $post_id )
@@ -309,7 +309,7 @@ class blipfoto_post {
 		if ( $id = get_post_thumbnail_id( $post_id ) ) {
 			if ( $meta = wp_get_attachment_metadata( $id ) ) {
 				if ( $image_date = $meta['image_meta']['created_timestamp'] ) {
-					update_post_meta( $post_id, 'blipfoto-image-date', absint( $image_date ) );
+					update_post_meta( $post_id, 'blippress-image-date', absint( $image_date ) );
 				}
 			}
 		}
@@ -323,7 +323,7 @@ class blipfoto_post {
 		if ( !current_user_can( 'edit_posts' ) or !isset( $this->notice ) or empty( $this->notice ) )
 			return;
 
-		echo '<div class="' . $this->notice['type'] . '" id="blipfoto-notice">' . $this->notice['message'] . '</div>';
+		echo '<div class="' . $this->notice['type'] . '" id="blippress-notice">' . $this->notice['message'] . '</div>';
 
 	}
 
@@ -333,4 +333,6 @@ class blipfoto_post {
 
 
 
-$blipfoto_post = new blipfoto_post;
+global $blippress_post;
+
+$blippress_post = new blippress_post;

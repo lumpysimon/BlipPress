@@ -2,11 +2,11 @@
 
 
 
-class blipfoto_dashboard {
+class blippress_dashboard {
 
 
 
-	var $slug   = 'blipfoto';
+	var $slug   = 'blippress';
 
 
 
@@ -25,28 +25,28 @@ class blipfoto_dashboard {
 		if ( 'mp6' == get_user_option( 'admin_color' ) ) {
 
 			wp_register_style(
-				'blipfoto-icon',
-				BLIPFOTO_PLUGIN_DIR . 'css/icon.css',
+				'blippress-icon',
+				BLIPPRESS_PLUGIN_DIR . 'css/icon.css',
 				null,
-				filemtime( BLIPFOTO_PLUGIN_PATH . 'css/icon.css' )
+				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/icon.css' )
 				);
 
-			wp_enqueue_style( 'blipfoto-icon' );
+			wp_enqueue_style( 'blippress-icon' );
 
 		}
 
 		$screen = get_current_screen();
 
-		if ( 'toplevel_page_blipfoto' == $screen->id ) {
+		if ( 'toplevel_page_blippress' == $screen->id ) {
 
 			wp_register_style(
-				'blipfoto-dashboard',
-				BLIPFOTO_PLUGIN_DIR . 'css/dashboard.css',
+				'blippress-dashboard',
+				BLIPPRESS_PLUGIN_DIR . 'css/dashboard.css',
 				null,
-				filemtime( BLIPFOTO_PLUGIN_PATH . 'css/dashboard.css' )
+				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/dashboard.css' )
 				);
 
-			wp_enqueue_style( 'blipfoto-dashboard' );
+			wp_enqueue_style( 'blippress-dashboard' );
 
 		}
 
@@ -57,8 +57,8 @@ class blipfoto_dashboard {
 	function add_page() {
 
 		add_menu_page(
-			'Blipfoto',
-			'Blipfoto',
+			'BlipPress',
+			'BlipPress',
 			'manage_options',
 			$this->slug,
 			array( $this, 'render_page' )
@@ -82,26 +82,26 @@ class blipfoto_dashboard {
 
 	function render_page() {
 
-		global $blipfoto;
+		global $blippress;
 
-		$opts = get_option( 'blipfoto' );
+		$opts = blippress_options();
 
 		?>
 
 		<div class="wrap">
 
-			<h2>Blipfoto Dashboard</h2>
+			<h2>BlipPress Dashboard</h2>
 
 			<div class="postbox-container" style="width:65%;">
 
-				<?php if ( blip_check_permission() ) { ?>
+				<?php if ( blippress_check_permission() ) { ?>
 
 					<h3>Your recent blips</h3>
 
-					<?php echo blip_latest(); ?>
+					<?php echo blippress_latest(); ?>
 
 				<?php } else {
-					echo blip_authenticate_message( ' to show this page.' );
+					echo blippress_authenticate_message( ' to show this page.' );
 				} ?>
 
 			</div>
@@ -111,23 +111,23 @@ class blipfoto_dashboard {
 				<div class="metabox-holder">
 
 					<div class="meta-box-sortables" style="min-height:0;">
-						<div class="postbox blipfoto-info" id="blipfoto-support">
+						<div class="postbox blippress-info" id="blippress-support">
 							<h3 class="hndle"><span>Need Help?</span></h3>
 							<div class="inside">
-								<p>If something's not working, the first step is to read the <a href="<?php echo $blipfoto->plugin_page; ?>/faq/">[!!LINK!!] FAQ</a>.</p>
-								<p>If your question is not answered there, please check the official <a href="http://wordpress.org/tags/blipfoto?forum_id=10">[!!LINK!!] support forum</a>.</p>
+								<p>If something's not working, the first step is to read the <a href="<?php echo $blippress->plugin_page; ?>/faq/">[!!LINK!!] FAQ</a>.</p>
+								<p>If your question is not answered there, please check the official <a href="http://wordpress.org/tags/blippress?forum_id=10">[!!LINK!!] support forum</a>.</p>
 							</div>
 						</div>
 					</div>
 
 					<div class="meta-box-sortables" style="min-height:0;">
-						<div class="postbox blipfoto-info" id="blipfoto-suggest">
+						<div class="postbox blippress-info" id="blippress-suggest">
 							<h3 class="hndle"><span>Like this plugin?</span></h3>
 							<div class="inside">
 								<p>If this plugin has helped you showcase your photography skills, please consider supporting it:</p>
 								<ul>
-									<li><a href="<?php echo $blipfoto->plugin_page; ?>">[!!LINK!!] Rate it and let other people know it works</a>.</li>
-									<li>Link to or share <a href="<?php echo $blipfoto->plugin_page; ?>" target="_blank">the plugin page</a> on Twitter or Facebook.</li>
+									<li><a href="<?php echo $blippress->plugin_page; ?>">[!!LINK!!] Rate it and let other people know it works</a>.</li>
+									<li>Link to or share <a href="<?php echo $blippress->plugin_page; ?>" target="_blank">the plugin page</a> on Twitter or Facebook.</li>
 									<li>Write a review on your website or blog.</li>
 									<li>Make a <a href="http://lumpylemon.co.uk/donate/">donation</a>.</li>
 									<li><a href="http://lumpylemon.co.uk/">Commission me</a> for WordPress development, plugin or design work (or photography if you're feeling brave!).</li>
@@ -137,10 +137,10 @@ class blipfoto_dashboard {
 					</div>
 
 					<div class="meta-box-sortables" style="min-height:0;">
-						<div class="postbox blipfoto-info" id="blipfoto-lumpysimon">
-							<h3 class="hndle"><span><?php echo $blipfoto->me; ?> on Blipfoto</span></h3>
+						<div class="postbox blippress-info" id="blippress-lumpysimon">
+							<h3 class="hndle"><span><a href="<?php blippress_user_url( $blippress->me ); ?>"><?php echo $blippress->me; ?></a> on Blipfoto</span></h3>
 							<div class="inside">
-								<p>[!!Show my latest blips here!!]</p>
+								<?php echo blippress_latest( array( 'user' => $blippress->me, 'num' => 9, 'size' => 'small' ) ); ?>
 							</div>
 						</div>
 					</div>
@@ -161,4 +161,6 @@ class blipfoto_dashboard {
 
 
 
-$blipfoto_dashboard = new blipfoto_dashboard;
+global $blippress_dashboard;
+
+$blippress_dashboard = new blippress_dashboard;
