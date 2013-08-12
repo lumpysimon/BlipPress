@@ -3,17 +3,75 @@
 
 
 /*
-This class is very heavily - about 90%! - based on BlipPHP v1.2 by Graham Bradley
-http://gbradley.co.uk/projects/BlipPHP
- */
+
+	-----------
+	Description
+	-----------
+
+	Blipfoto WordPress API v1
+
+	A class to simplify working with the Blipfoto API in a WordPress plugin or theme.
 
 
 
-class blip {
+	-------
+	Credits
+	-------
+
+	By Simon Blackbourn (https://twitter.com/lumpysimon)
+	https://github.com/lumpysimon/blipfoto-wordpress-api
+
+	This class is a rewrite of BlipPHP v1.2 written by Graham Bradley
+	A newer version of that class now exists: https://github.com/Blipfoto/blipfoto-api-php
+
+	This version uses the WordPress wp_remote_get and wp_remote_post functions instead of cURL
+	and also provides various helper functions.
 
 
 
-	var $version     = '0.1';
+	-------
+	License
+	-------
+
+	Released under the GPL license:
+	http://www.opensource.org/licenses/gpl-license.php
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+
+
+	---------
+	Changelog
+	---------
+
+	1.0
+	- We have take-off
+
+
+
+	-----
+	To Do
+	-----
+
+	- Error handling
+
+*/
+
+
+
+class blipWP {
+
+
+
+	var $version     = '1';
 	var $api_version = '3';
 
 	// @@TODO@@
@@ -37,8 +95,6 @@ class blip {
 		$this->secret  = $s;
 		$this->token   = ( isset( $conf['token'] ) ? $conf['token'] : '' );
 
-error_log('token: '.$this->token);
-
 	}
 
 
@@ -48,6 +104,7 @@ error_log('token: '.$this->token);
 		$url = 'http://www.blipfoto.com/getpermission/v' . $this->api_version . '/' . $permissions_id;
 		$url = add_query_arg( 'callback_url', $callback_url, $url );
 		header( 'Location: ' . $url );
+		exit( 0 );
 
 	}
 
@@ -72,8 +129,6 @@ error_log('token: '.$this->token);
 
 
 
-	// @@TODO@@
-	// figure why i can't do this: function get_entry_by_id( $ids, $data = self::$data )
 	function get_entry_by_id( $id ) {
 
 		if ( ! $id = absint( $id ) )
@@ -144,12 +199,13 @@ error_log('token: '.$this->token);
 
 
 
-	function get_latest_entries_by_user( $user, $num ) {
+	function get_latest_entries_by_user( $user, $num, $size ) {
 
 		$args = array(
 			'params' => array(
 				'query' => 'by ' . $user,
-				'max'   => $num
+				'max'   => $num,
+				'size'  => $size
 				)
 			);
 
@@ -258,9 +314,9 @@ error_log('token: '.$this->token);
 
 		$sig = array();
 
-		$sig['timestamp']  = $this->create_time_stamp();
-		$sig['nonce'] = md5( uniqid( rand(), true ) );
-		$sig['token'] = '';
+		$sig['timestamp'] = $this->create_time_stamp();
+		$sig['nonce']     = str_shuffle( md5( uniqid( rand(), true ) ) );
+		$sig['token']     = '';
 
 		if ( $user_auth ) {
 			$sig['token'] = $this->token;
@@ -288,9 +344,6 @@ error_log('token: '.$this->token);
 
 			if ( isset( $json->data->timestamp) ) {
 				$diff = intval( $json->data->timestamp ) - $now;
-				// if ( defined( 'WP_LOCAL_DEV' ) and WP_LOCAL_DEV ) {
-				// 	$timeout = 10;
-				// }
 				set_transient( $transient, $diff, $timeout );
 			}
 
@@ -327,19 +380,6 @@ error_log('token: '.$this->token);
 		if ( !is_wp_error( $response ) and isset( $response['body'] ) and $response['body'] ) {
 			return json_decode( $response['body'] );
 		}
-
-		return false;
-
-	}
-
-
-
-	// @@TODO@@
-	// sort this out
-	private function raise_error( $e, $apie = null ) {
-
-		if ( $this->fatal )
-			throw new Exception( blip::$errors[$e] . ( $apie ? ' ' . $apie : '' ) );
 
 		return false;
 

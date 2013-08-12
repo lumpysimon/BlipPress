@@ -28,7 +28,7 @@ class blipfoto_create {
 		if ( 'blippress' != $_GET['page'] )
 			return;
 
-		if ( !check_blip_permission() ) {
+		if ( !blip_check_permission() ) {
 			$this->error = 'You cannot create a Blip until you have configured BlipPress';
 			return;
 		}
@@ -49,7 +49,7 @@ class blipfoto_create {
 
 		global $blippress;
 
-		if ( !check_blip_permission() ) {
+		if ( !blip_check_permission() ) {
 			$this->error = 'You cannot create a Blip until you have authenticated your Blipfoto account.';
 		}
 
@@ -100,7 +100,7 @@ class blipfoto_create {
 		$opts = get_option( 'blippress' );
 
 		// everything looks ok so far, so let's get started...
-		$blip = new blip(
+		$blip = new blipWP(
 			$blippress->key,
 			$opts['access-code'],
 			array( 'id_token' => $opts['token'],
@@ -181,12 +181,12 @@ class blipfoto_create {
 
 			<h2>Create a blip</h2>
 
-			<?php if ( check_blip_permission() ) { ?>
+			<?php if ( blip_check_permission() ) { ?>
 
 				<h3>Something</h3>
 
 			<?php } else {
-				echo blipfoto_authenticate_message( ' to create a blip.' );
+				echo blip_authenticate_message( ' to create a blip.' );
 			} ?>
 
 			<?php if ( $this->error ) {

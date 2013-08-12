@@ -1,19 +1,22 @@
 # Blipfoto for WordPress
 
-A WordPress plugin for posting to Blipfoto and for displaying blips on your WordPress website
+A WordPress plugin to integrate Blipfoto into your WordPress website. Display single or multiple blips anywhere on your website, and create blips from within the WordPress admin area.
 
 ## To Do
 
+* validate settings
+* API error handling
+* media library integration
 * check menu icon in different browsers
 * button to clear credentials (re-authenticate)
 * caching
 * singularisation
 * localisation
 * toolbar
-* separate options & authentication page
 * widget
 * styles:
-* - admin
+* - metabox
+* - dashboard
 * - front-end
 * options:
 * - show desc
@@ -27,3 +30,6 @@ A WordPress plugin for posting to Blipfoto and for displaying blips on your Word
 * shortcode generator on dashboard
 * search feature on dashboard
 * filter hooks
+* nonce on post button
+* nonces on auth page
+* esc_attr etc

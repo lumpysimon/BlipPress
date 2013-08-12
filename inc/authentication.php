@@ -78,7 +78,7 @@ class blipfoto_authentication {
 		if ( ! is_admin() )
 			return;
 
-		if ( !$this->is_authentication_page() and !check_blip_permission() )  {
+		if ( !$this->is_authentication_page() and !blip_check_permission() )  {
 			$this->notice['type']    = 'error';
 			$this->notice['message'] = '<p><strong>Blipfoto needs some attention</strong>: Please <a href="' . $this->page_url() . '">authenticate your Blipfoto account</a></p>';
 		}
@@ -88,15 +88,19 @@ class blipfoto_authentication {
 
 		$opts = get_option( $this->option );
 
+		if ( isset( $_POST['revoke-permission'] ) and 'go' == $_POST['revoke-permission'] ) {
+			delete_option( $this->option );
+		}
+
 		if ( isset( $_POST['request-permission'] ) and 'go' == $_POST['request-permission'] ) {
 
-			$blip = new blip( $blipfoto->key );
+			$blip = new blipWP( $blipfoto->key );
 			$blip->get_temp_token( $blipfoto->permissions_id, $this->page_url() );
 
 		}
 
 		if ( isset( $_GET['temp_token'] ) and $temp_token = self::alphanumeric( $_GET['temp_token'] ) ) {
-			$blip = new blip( $blipfoto->key, $blipfoto->secret );
+			$blip = new blipWP( $blipfoto->key, $blipfoto->secret );
 			if ( $data = $blip->get_user_token( $temp_token ) ) {
 				$opts = array(
 					'username' => $data->display_name,
@@ -160,31 +164,44 @@ class blipfoto_authentication {
 
 	function render_page() {
 
-		$opts = get_option( $this->option );
-
 		?>
 
 		<div class="wrap">
 
 			<h2>Blipfoto Authentication</h2>
 
-			<div class="postbox-container">
+			<h3>Permission</h3>
 
-				<h3>Permission</h3>
+			<?php if ( ! blip_check_permission() ) { ?>
 
-				<?php if ( ! check_blip_permission() ) { ?>
-					<p>You need to grant permission for Blipfoto to access your account.</p>
-					<form method="post">
-						<p>
-							<input type="hidden" name="request-permission" value="go">
-							<input class="button-primary" name="submit" type="submit" value="Grant Permission">
-						</p>
-					</form>
-				<?php } else { ?>
-					<p>Looking good... Your website has permission to access the following Blipfoto account: <strong><?php echo $opts['username']; ?></strong></p>
-				<?php } ?>
+				<p>You need to grant permission for your website to access your Blipfoto account.</p>
+				<form method="post">
+					<p>
+						<input type="hidden" name="request-permission" value="go">
+						<input class="button-primary" name="submit" type="submit" value="Grant permission">
+					</p>
+				</form>
 
-			</div>
+			<?php } else { ?>
+
+				<p>Your website has permission to access the following Blipfoto account: <a href="http://blipfoto.com/<?php echo blip_auth_option( 'username' ); ?>">blipfoto.com/<?php echo blip_auth_option( 'username' ); ?></a></p>
+
+			<?php } ?>
+
+			<?php if ( blip_check_permission() ) { ?>
+
+				<h3>Revoke</h3>
+
+				<p>You can revoke permission by clicking the button below (e.g. if you wish to use a different account).</p>
+				<p><strong>Important!</strong> Revoking permission will prevent any blips being displayed on your website and you will not be able to post to Blipfoto until you grant permission again.</p>
+				<form method="post">
+					<p>
+						<input type="hidden" name="revoke-permission" value="go">
+						<input class="button-primary" name="submit" type="submit" value="Revoke permission" onClick="return confirm('Are you sure you want to revoke permission?')">
+					</p>
+				</form>
+
+			<?php } ?>
 
 		</div>
 

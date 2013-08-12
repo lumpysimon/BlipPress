@@ -71,7 +71,7 @@ class blipfoto_post {
 
 		global $blipfoto;
 
-		if ( ! check_blip_permission() )
+		if ( ! blip_check_permission() )
 			return;
 
 		$post_id = absint( $_POST['post_id'] );
@@ -85,7 +85,7 @@ class blipfoto_post {
 
 		} else {
 
-			$blip = new blip( $blipfoto->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
+			$blip = new blipWP( $blipfoto->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
 
 			$meta = $this->metadata( array( 'post_id' => get_post_thumbnail_id( $post_id ), 'image_meta' => false ) );
 
@@ -144,7 +144,7 @@ class blipfoto_post {
 
 		global $post;
 
-		if ( !check_blip_permission() )
+		if ( !blip_check_permission() )
 			return;
 
 		if ( is_blipped() or !is_blip_post_type() or !isset( $_GET['post'] ) or !isset( $_GET['action'] ) or 'edit' != $_GET['action'] )
@@ -168,7 +168,7 @@ class blipfoto_post {
 
 	function add_meta_box() {
 
-		if ( ! check_blip_permission() )
+		if ( ! blip_check_permission() )
 			return;
 
 		if ( ! is_blip_post_type() )
@@ -247,7 +247,7 @@ class blipfoto_post {
 
 	function metadata( $args = array() ) {
 
-		global $post;
+		global $post, $blipfoto;
 
 		$defaults = array(
 			'post_id'    => null,
@@ -270,13 +270,7 @@ class blipfoto_post {
 		$attachment      = get_post( $post_id );
 		$attachment_meta = wp_get_attachment_metadata( $post_id );
 
-		$image_fields = array(
-			'aperture',
-			'camera',
-			'focal_length',
-			'iso',
-			'shutter_speed'
-			);
+		$image_fields = blip_exif_fields( true );
 
 		$meta                = array();
 		// $meta['url']         = $url;

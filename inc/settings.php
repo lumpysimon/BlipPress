@@ -92,8 +92,9 @@ class blipfoto_settings {
 
 		return array(
 			'num'        => $blipfoto->default_num,
+			'size'       => 'big',
 			'css'        => 1,
-			'post-types' => array( 'post' )
+			'post-types' => array( 'post' => true )
 			);
 
 	}
@@ -126,13 +127,17 @@ class blipfoto_settings {
 
 		$opts = $this->get();
 
+		if ( !isset( $opts['post-types'] ) or !is_array( $opts['post-types'] ) ) {
+			$opts['post-types'] = array();
+		}
+
 		?>
 
 		<div class="wrap">
 
 			<h2>Blipfoto Settings</h2>
 
-			<?php if ( check_blip_permission() ) { ?>
+			<?php if ( blip_check_permission() ) { ?>
 
 				<form method="post" action="options.php">
 
@@ -147,6 +152,23 @@ class blipfoto_settings {
 								<td>
 									<input name="<?php echo $this->option; ?>[num]" class="small-text" type="number" step="1" min="0" value="<?php echo $opts['num']; ?>">
 									<p class="description">How many images to display when retrieving multiple blips. This can be manually overridden in the shortcode.</p>
+								</td>
+							</tr>
+
+							<tr valign="top">
+								<th scope="row">Size</th>
+								<td>
+									<fieldset>
+										<label title="Big">
+											<input name="<?php echo $this->option; ?>[size]" type="radio" value="big" <?php checked( $opts['size'], 'big' ); ?>>
+											<span>Big</span>
+										</label><br>
+										<label title="Small">
+											<input name="<?php echo $this->option; ?>[size]" type="radio" value="small" <?php checked( $opts['size'], 'small' ); ?>>
+											<span>Small</span>
+										</label>
+									<p class="description">The thumbnail size to show when retrieving multiple blips.</p>
+									<fieldset>
 								</td>
 							</tr>
 
@@ -187,7 +209,7 @@ class blipfoto_settings {
 				</form>
 
 			<?php } else {
-				echo blipfoto_authenticate_message( ' to show this page.' );
+				echo blip_authenticate_message( ' to show this page.' );
 			} ?>
 
 		</div>

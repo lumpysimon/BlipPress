@@ -2,13 +2,14 @@
 
 
 
-function blipfoto_bliplatest( $args = array() ) {
+function blip_latest( $args = array() ) {
 
 	global $blipfoto, $blipfoto_shortcodes;
 
 	$defaults = array(
 		'user' => blip_auth_option( 'username' ),
-		'num'  => $blipfoto->default_num
+		'num'  => $blipfoto->default_num,
+		'size' => blip_option( 'size' )
 		);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -71,7 +72,7 @@ function is_blipped( $post_id = null ) {
 
 
 
-function check_blip_permission() {
+function blip_check_permission() {
 
 	if ( !blip_auth_option( 'username' ) or !blip_auth_option( 'token' ) or !blip_auth_option( 'secret' ) )
 		return false;
@@ -82,7 +83,7 @@ function check_blip_permission() {
 
 
 
-function blipfoto_authenticate_message( $text = '' ) {
+function blip_authenticate_message( $text = '' ) {
 
 	global $blipfoto_authentication;
 
@@ -152,5 +153,24 @@ function blip_auth_option( $opt ) {
 		return $opts[$opt];
 
 	return false;
+
+}
+
+
+
+function blip_exif_fields( $keys_only = false ) {
+
+	$fields = array(
+		'camera'        => 'Camera',
+		'aperture'      => 'Aperture',
+		'shutter_speed' => 'Exposure',
+		'focal_length'  => 'Focal length',
+		'iso'           => 'ISO'
+		);
+
+	if ( $keys_only )
+		return array_keys( $fields );
+
+	return $fields;
 
 }
