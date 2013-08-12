@@ -8,10 +8,11 @@ class blippress_shortcodes {
 
 	public function __construct() {
 
-		add_shortcode( 'blip',       array( $this, 'single_id'     ) );
-		add_shortcode( 'blipdate',   array( $this, 'single_date'   ) );
-		add_shortcode( 'bliplatest', array( $this, 'single_latest' ) );
-		add_shortcode( 'blips',      array( $this, 'multi_latest'  ) );
+		add_shortcode( 'blip',         array( $this, 'single_id'        ) );
+		add_shortcode( 'blipdate',     array( $this, 'single_date'      ) );
+		add_shortcode( 'blippostdate', array( $this, 'single_post_date' ) );
+		add_shortcode( 'bliplatest',   array( $this, 'single_latest'    ) );
+		add_shortcode( 'blips',        array( $this, 'multi_latest'     ) );
 
 	}
 
@@ -49,8 +50,6 @@ class blippress_shortcodes {
 
 			set_transient( $transient, $out, $blippress->transient_timeout );
 
-		} else {
-			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
@@ -100,11 +99,23 @@ class blippress_shortcodes {
 
 			set_transient( $transient, $out, $blippress->transient_timeout );
 
-		} else {
-			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
+
+	}
+
+
+
+	function single_post_date() {
+
+		global $post;
+
+		$args = array(
+			'date' => mysql2date( 'd-m-Y', $post->post_date )
+			);
+
+		return $this->single_date( $args );
 
 	}
 
@@ -138,8 +149,6 @@ class blippress_shortcodes {
 
 			set_transient( $transient, $out, $blippress->transient_timeout );
 
-		} else {
-			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;
@@ -187,8 +196,6 @@ class blippress_shortcodes {
 
 			set_transient( $transient, $out, $blippress->transient_timeout );
 
-		} else {
-			error_log( 'getting transient: '.$transient );
 		}
 
 		return $out;

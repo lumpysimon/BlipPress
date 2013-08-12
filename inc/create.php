@@ -28,7 +28,7 @@ class blipfoto_create {
 		if ( 'blippress' != $_GET['page'] )
 			return;
 
-		if ( !blip_check_permission() ) {
+		if ( !blippress_check_permission() ) {
 			$this->error = 'You cannot create a Blip until you have configured BlipPress';
 			return;
 		}
@@ -49,7 +49,7 @@ class blipfoto_create {
 
 		global $blippress;
 
-		if ( !blip_check_permission() ) {
+		if ( !blippress_check_permission() ) {
 			$this->error = 'You cannot create a Blip until you have authenticated your Blipfoto account.';
 		}
 
@@ -63,7 +63,7 @@ class blipfoto_create {
 		if ( is_blipped( $post_id ) ) {
 			$this->error = sprintf(
 				'Already blipped! <a href="%s" target="_blank">%s</a>.',
-				get_blip_url( get_blip_id() )
+				get_blippress_url( get_blippress_id() )
 				);
 			return;
 		}
@@ -181,12 +181,12 @@ class blipfoto_create {
 
 			<h2>Create a blip</h2>
 
-			<?php if ( blip_check_permission() ) { ?>
+			<?php if ( blippress_check_permission() ) { ?>
 
 				<h3>Something</h3>
 
 			<?php } else {
-				echo blip_authenticate_message( ' to create a blip.' );
+				echo blippress_authenticate_message( ' to create a blip.' );
 			} ?>
 
 			<?php if ( $this->error ) {

@@ -16,7 +16,7 @@ class blippress_frontend {
 
 	function styles() {
 
-		if ( blip_option( 'css' ) ) {
+		if ( blippress_option( 'css' ) ) {
 
 			wp_register_style(
 				'blippress-frontend',

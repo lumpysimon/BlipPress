@@ -71,7 +71,7 @@ class blippress_post {
 
 		global $blippress;
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
 		$post_id = absint( $_POST['post_id'] );
@@ -85,7 +85,7 @@ class blippress_post {
 
 		} else {
 
-			$blip = new blipWP( $blippress->key, blip_auth_option( 'secret' ), array( 'token' => blip_auth_option( 'token' ) ) );
+			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ), array( 'token' => blippress_auth_option( 'token' ) ) );
 
 			$meta = $this->metadata( array( 'post_id' => get_post_thumbnail_id( $post_id ), 'image_meta' => false ) );
 
@@ -144,10 +144,10 @@ class blippress_post {
 
 		global $post;
 
-		if ( !blip_check_permission() )
+		if ( !blippress_check_permission() )
 			return;
 
-		if ( is_blipped() or !is_blip_post_type() or !isset( $_GET['post'] ) or !isset( $_GET['action'] ) or 'edit' != $_GET['action'] )
+		if ( is_blipped() or !is_blippress_post_type() or !isset( $_GET['post'] ) or !isset( $_GET['action'] ) or 'edit' != $_GET['action'] )
 			return;
 
 		if ( ! has_post_thumbnail( $post->ID ) ) {
@@ -168,13 +168,13 @@ class blippress_post {
 
 	function add_meta_box() {
 
-		if ( ! blip_check_permission() )
+		if ( ! blippress_check_permission() )
 			return;
 
-		if ( ! is_blip_post_type() )
+		if ( ! is_blippress_post_type() )
 			return;
 
-		if ( ! $types = blip_post_types() )
+		if ( ! $types = blippress_post_types() )
 			return;
 
 		foreach ( $types as $type ) {
@@ -198,7 +198,7 @@ class blippress_post {
 		if ( is_blipped() ) {
 			echo sprintf(
 					'<p>This post is blipped - <a href="%s" target="_blank">view</a></p>',
-					get_blip_url( get_blip_id() )
+					get_blippress_url( get_blippress_id() )
 					);
 		} else {
 			if ( has_post_thumbnail() ) {
@@ -270,7 +270,7 @@ class blippress_post {
 		$attachment      = get_post( $post_id );
 		$attachment_meta = wp_get_attachment_metadata( $post_id );
 
-		$image_fields = blip_exif_fields( true );
+		$image_fields = blippress_exif_fields( true );
 
 		$meta                = array();
 		// $meta['url']         = $url;
