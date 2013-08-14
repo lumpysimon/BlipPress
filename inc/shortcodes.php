@@ -13,6 +13,17 @@ class blippress_shortcodes {
 		add_shortcode( 'blippostdate', array( $this, 'single_post_date' ) );
 		add_shortcode( 'bliplatest',   array( $this, 'single_latest'    ) );
 		add_shortcode( 'blips',        array( $this, 'multi_latest'     ) );
+		add_shortcode( 'postblip',     array( $this, 'single_post'      ) );
+
+	}
+
+
+
+	function single_post() {
+
+		if ( $entry_id = is_blipped() ) {
+			echo $this->single_id( array( 'id' => $entry_id ) );
+		}
 
 	}
 
@@ -20,7 +31,7 @@ class blippress_shortcodes {
 
 	function single_id( $atts ) {
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! blippress_check_permission() )
 			return;
@@ -38,7 +49,7 @@ class blippress_shortcodes {
 			return;
 
 		$id        = absint( $id );
-		$transient = $blippress->transient_prefix . 'single-' . $id;
+		$transient = $blippress->prefix . 'single-' . $id;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
@@ -46,9 +57,9 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_entry_by_id( $id ) ) {
 				$out = $this->build_single_blip( $data );
+				set_transient( $transient, $out, $blippress->transient_timeout );
+				$blippress_cache->add( $transient );
 			}
-
-			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		}
 
@@ -60,7 +71,7 @@ class blippress_shortcodes {
 
 	function single_date( $atts ) {
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! blippress_check_permission() )
 			return;
@@ -87,7 +98,7 @@ class blippress_shortcodes {
 
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
-		$transient = $blippress->transient_prefix . 'date-' . $date;
+		$transient = $blippress->prefix . 'date-' . $date;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
@@ -95,9 +106,9 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
 				$out = $this->build_single_blip( $data );
+				set_transient( $transient, $out, $blippress->transient_timeout );
+				$blippress_cache->add( $transient );
 			}
-
-			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		}
 
@@ -123,7 +134,7 @@ class blippress_shortcodes {
 
 	function single_latest( $atts ) {
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! blippress_check_permission() )
 			return;
@@ -137,7 +148,7 @@ class blippress_shortcodes {
 				)
 			);
 
-		$transient = $blippress->transient_prefix . 'latest-' . $user;
+		$transient = $blippress->prefix . 'latest-' . $user;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
@@ -145,9 +156,9 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
 				$out = self::build_single_blip( $data );
+				set_transient( $transient, $out, $blippress->transient_timeout );
+				$blippress_cache->add( $transient );
 			}
-
-			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		}
 
@@ -159,7 +170,7 @@ class blippress_shortcodes {
 
 	function multi_latest( $atts ) {
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! blippress_check_permission() )
 			return;
@@ -184,7 +195,7 @@ class blippress_shortcodes {
 			$size = 'big';
 		}
 
-		$transient = $blippress->transient_prefix . 'latest-' . $user . '-' . $num . '-' . $size;
+		$transient = $blippress->prefix . 'latest-' . $user . '-' . $num . '-' . $size;
 
 		if ( false === $out = get_transient( $transient ) ) {
 
@@ -192,9 +203,9 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
 				$out = self::build_multi_blips( $data, $size );
+				set_transient( $transient, $out, $blippress->transient_timeout );
+				$blippress_cache->add( $transient );
 			}
-
-			set_transient( $transient, $out, $blippress->transient_timeout );
 
 		}
 
@@ -206,9 +217,9 @@ class blippress_shortcodes {
 
 	private function build_single_blip( $data ) {
 
-		$out  = '<div class="blip">';
+		$out  = '<div class="blippress blippress-single">';
 		$out .= '<h2>' . $data->title . '</h2>';
-		$out .= '<img src="' . $data->image . '"';
+		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . $data->image . '"';
 		if ( isset( $data->dimensions ) ) {
 			$out .= ' height="' . $data->dimensions->height . '" width="' . $data->dimensions->width . '"';
 		}
@@ -253,11 +264,11 @@ class blippress_shortcodes {
 
 	private function build_multi_blips( $data, $size ) {
 
-		$out = '<div class="blippress-gallery blippress-gallery-' . $size . '">';
+		$out = '<div class="blippress blippress-multi blippress-multi-' . $size . '">';
 
 		foreach ( $data as $entry ) {
 
-			$out .= '<div class="blippress-thumb blippress-thumb-' . $size . '" id="blippress-thumb-' . $entry->entry_id . '">';
+			$out .= '<div class="blippress-image blippress-image-multi blippress-image-multi-' . $size . '" id="blippress-image-multi-' . $entry->entry_id . '">';
 			$out .= '<a href="' . $entry->url . '" title="View &quot;' . $entry->title . '&quot; (' . date( get_option( 'date_format' ), strtotime( $entry->date ) ) . ') on Blipfoto"><img src="' . $entry->thumbnail . '"></a>';
 			$out .= '</div>';
 

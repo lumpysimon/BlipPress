@@ -1,16 +1,21 @@
-.blippress-thumb {
+.blippress-image-single {
+	height: auto;
+	max-width: 100%;
+}
+
+.blippress-image-multi {
 	float: left;
 	margin: 0 20px 20px 0;
 }
 
-.blippress-thumb-small {
+.blippress-image-multi-small {
 	margin: 0 10px 10px 0;
 }
 
-.blippress-thumb a {
+.blippress-image-multi a {
 	display: block;
 }
 
-.blippress-thumb img {
+.blippress-image-multi img {
 	display: block;
 }

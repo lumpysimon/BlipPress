@@ -69,6 +69,8 @@ if ( ! defined( 'BLIPPRESS_PLUGIN_DIR' ) )
 
 
 require 'inc/blipfoto-wordpress-api.php';
+require 'inc/helpers.php';
+require 'inc/cache.php';
 require 'inc/frontend.php';
 require 'inc/settings.php';
 require 'inc/dashboard.php';
@@ -90,8 +92,8 @@ class blippress {
 	var $key               = '46a9df14f768a45619a5c0eb312d51a3';
 	var $secret            = 'd96e00ecb17c1fd33e37b73a0c483fef';
 	var $default_num       = 16;
-	var $transient_prefix  = 'blippress-';
-	var $transient_timeout = 900; // 15 minutes
+	var $prefix            = 'blippress-';
+	var $transient_timeout = 300; // 5 minutes
 
 
 

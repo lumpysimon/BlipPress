@@ -230,6 +230,7 @@ class blipWP {
 	function validate_date( $date ) {
 
 		$args = array(
+			'user_auth' => true,
 			'params' => array(
 				'date' => $date
 				)
@@ -239,7 +240,7 @@ class blipWP {
 
 		$json = $this->request( $url );
 
-		if ( isset( $json->message ) ) {
+		if ( isset( $json->data->message ) ) {
 			return true;
 		}
 
@@ -310,6 +311,8 @@ class blipWP {
 
 		}
 
+		// error_log('   -----   BLIPFOTO URL   -----   '.print_r($url,true));
+
 		return $url;
 
 	}
@@ -320,7 +323,7 @@ class blipWP {
 
 		$sig = array();
 
-		$sig['timestamp'] = $this->create_time_stamp();
+		$sig['timestamp'] = $this->create_timestamp();
 		$sig['nonce']     = str_shuffle( md5( uniqid( rand(), true ) ) );
 		$sig['token']     = '';
 
@@ -336,7 +339,7 @@ class blipWP {
 
 
 
-	private function create_time_stamp() {
+	private function create_timestamp() {
 
 		$transient = 'blipfoto-time';
 		$timeout   = 600;
@@ -382,6 +385,8 @@ class blipWP {
 					);
 			break;
 		}
+
+		// error_log('   -----   BLIPFOTO RESPONSE   -----   '.print_r($response,true));
 
 		if ( !is_wp_error( $response ) and isset( $response['body'] ) and $response['body'] ) {
 			return json_decode( $response['body'] );

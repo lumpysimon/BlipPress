@@ -6,21 +6,19 @@ class blippress_post {
 
 
 
-	var $postmeta = 'blippress-entry';
-	var $nonce    = 'blippress-this-nonce';
-	var $notice   = array();
+	var $entry_post_meta = 'entry';
+	var $image_post_meta = 'image-id';
+	var $nonce           = 'blippress-this-nonce';
 
 
 
 	public function __construct() {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'script' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'style' ) );
+		add_action( 'admin_enqueue_scripts',    array( $this, 'script' ) );
+		add_action( 'admin_enqueue_scripts',    array( $this, 'style' ) );
 		add_action( 'wp_ajax_post_to_blipfoto', array( $this, 'ajax_post_to_blipfoto' ) );
-		// add_action( 'add_meta_boxes', array( $this, 'check' ) );
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-		// add_action( 'save_post',      array( $this, 'save_date' ), 25, 2 );
-		// add_action( 'admin_footer',   array( $this, 'notice' ) );
+		add_action( 'add_meta_boxes',           array( $this, 'add_meta_box' ) );
+		add_action( 'save_post',                array( $this, 'save_image_meta' ), 10, 2 );
 
 	}
 
@@ -31,19 +29,21 @@ class blippress_post {
 		wp_register_script(
 			'blippress-post',
 			BLIPPRESS_PLUGIN_DIR . 'js/post.js',
-			array( 'jquery' ),
+			array( 'jquery', 'media-upload', 'media-views' ),
 			filemtime( BLIPPRESS_PLUGIN_PATH . 'js/post.js' )
 			);
 
 		wp_enqueue_script( 'blippress-post' );
 
-		// wp_localize_script(
-		// 	'blippress-post',
-		// 	'blippress',
-		// 	array(
-		// 		'ajaxurl' => admin_url( 'admin-ajax.php' )
-		// 	)
-		// );
+		wp_localize_script(
+			'blippress-post',
+			'BlipPress',
+			array(
+				'frameTitle'      => 'Choose an image',
+				'frameUpdateText' => 'Update image',
+				'fullSizeLabel'   => 'Full Size'
+				)
+			);
 
 	}
 
@@ -69,56 +69,101 @@ class blippress_post {
 		// if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce ) )
 		// 	return;
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! blippress_check_permission() )
 			return;
 
+		$ok = true;
+
 		$post_id = absint( $_POST['post_id'] );
 
-		if ( ! has_post_thumbnail( $post_id ) ) {
-
-			$response = array(
-				'result'  => 'error',
-				'message' => 'No featured image - please set the featured image, save the post, then try again'
+		$args = array(
+			'p'           => $post_id,
+			'post_status' => 'publish,pending,draft,future,private'
 			);
 
+		$posts = get_posts( $args );
+
+		if ( $posts and !is_wp_error( $posts  ) ) {
+
+			$post = array_shift( $posts );
+
+			if ( !$post->post_title ) {
+				$ok = false;
+				$response = array(
+					'result'  => 'error',
+					'message' => 'The post title is missing, please save your post and try again'
+				);
+			}
+
+			if ( !$post->post_content ) {
+				$ok = false;
+				$response = array(
+					'result'  => 'error',
+					'message' => 'The post content is missing, please save your post and try again'
+				);
+			}
+
 		} else {
+			$ok = false;
+			$response = array(
+				'result'  => 'error',
+				'message' => 'Couldn\'t access post details, please save your post and try again'
+			);
+		}
+
+		if ( isset( $_POST['image_id'] ) ) {
+
+			$image_id = absint( $_POST['image_id'] );
+
+		} else {
+			$ok = false;
+			$response = array(
+				'result'  => 'error',
+				'message' => 'No image chosen - please choose an image then try again'
+			);
+		}
+
+		if ( $ok ) {
+
+			// set this here as we want to remember the image chosen even if blipping fails
+			update_blippress_meta( $this->image_post_meta, $image_id, $post_id );
 
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ), array( 'token' => blippress_auth_option( 'token' ) ) );
 
-			$meta = $this->metadata( array( 'post_id' => get_post_thumbnail_id( $post_id ), 'image_meta' => false ) );
+			$meta = $this->metadata( $image_id );
 
-			if ( 1 != 1 ) {
-			// @TODO@
-			// if ( ! $blip->validate_date( '2013-08-06' ) ) {
+			if ( ! $blip->validate_date( $meta['created_timestamp'] ) ) {
 
 				$response = array(
 					'result'  => 'error',
-					'message' => 'You\'ve already blipped on this date'
+					'message' => 'Cannot create an entry for ' . date( get_option( 'date_format' ), strtotime( $meta['created_timestamp'] ) ) . ' (most likely you have already blipped on that date)'
 				);
 
 			} else {
 
 				$postdata = array(
 					'image_url'   => $meta['url'],
-					'title'       => $meta['title'],
-					'description' => $meta['description']
+					'title'       => $post->post_title,
+					'description' => $post->post_content,
+					'date'        => $meta['created_timestamp']
 					);
 
 				$json = $blip->post_entry( $postdata );
 
 				if ( isset( $json->data ) ) {
 
-					// error_log(print_r($json->data,true));
+					$entry_id = $json->data->entry_id;
 
 					$response = array(
 						'result'  => 'success',
 						'message' => 'Success! The entry has been published',
-						'data'    => array( 'entry_id' => $json->data->entry_id )
+						'data'    => array( 'entry_id' => $entry_id )
 					);
 
-					update_post_meta( $post_id, $this->postmeta, $json->data->entry_id );
+					update_blippress_meta( $this->entry_post_meta, $entry_id, $post_id );
+					$blippress_cache->clear();
 
 				} else {
 
@@ -135,32 +180,6 @@ class blippress_post {
 
 		header('Content-type: application/json');
 		die( json_encode( $response ) );
-
-	}
-
-
-
-	function check() {
-
-		global $post;
-
-		if ( !blippress_check_permission() )
-			return;
-
-		if ( is_blipped() or !is_blippress_post_type() or !isset( $_GET['post'] ) or !isset( $_GET['action'] ) or 'edit' != $_GET['action'] )
-			return;
-
-		if ( ! has_post_thumbnail( $post->ID ) ) {
-
-			$this->notice['type'] = 'updated';
-			$this->notice['message'] = '<p>Please add a featured image if you\'d like to create a Blip from this post</a></p>';
-
-		} else {
-
-			$this->notice['type'] = 'updated';
-			$this->notice['message'] = '<p><a href="' . wp_nonce_url( admin_url( '?page=blippress&action=blip&post_id=' . $post->ID ), 'blippress-create-nonce' ) . '">Create a Blip from this post</a></p>';
-
-		}
 
 	}
 
@@ -195,62 +214,50 @@ class blippress_post {
 
 	function meta_box( $post ) {
 
+		global $blippress;
+
+		$button_classes = array( 'button', 'button-hero', 'blippress-image-control-choose' );
+
+		$image_id = absint( get_blippress_meta( $this->image_post_meta ) );
+
+		echo meta_handler_nonce_field( $post->ID, $blippress->prefix . 'image' );
+		echo '<input type="hidden" name="blippress-image-id" id="blippress-image-id" value="' . esc_attr( $image_id ) . '">';
+
 		if ( is_blipped() ) {
 			echo sprintf(
 					'<p>This post is blipped - <a href="%s" target="_blank">view</a></p>',
 					get_blippress_url( get_blippress_id() )
 					);
-		} else {
-			if ( has_post_thumbnail() ) {
-				echo $this->details();
-				echo '<p><a id="blippress-this" class="button" data-post="' . $post->ID . '" href="#">Blip this post</a><span id="' . $this->nonce . '" class="hidden">' . wp_create_nonce( $this->nonce ) . '</span></p>';
-			} else {
-				echo '<p>You must set a featured image before you can blip this post</p>';
+			if ( $image_id ) {
+				echo wp_get_attachment_image( $image_id, 'medium', false );
 			}
-		}
+		} else { ?>
+
+			<p class="blippress-image-control<?php echo ( $image_id ) ? ' has-image' : ''; ?>"
+				data-title="<?php esc_attr( 'Choose an image' ); ?>"
+				data-update-text="<?php esc_attr( 'Change Image' ); ?>"
+				data-target="#blippress-this">
+				<?php
+				if ( $image_id ) {
+					echo wp_get_attachment_image( $image_id, 'medium', false );
+					unset( $button_classes[ array_search( 'button-hero', $button_classes ) ] );
+				}
+				?>
+				<a href="#" class="<?php echo join( ' ', $button_classes ); ?>">Choose an image</a>
+			</p>
+			<p><a id="blippress-this" class="button image-id" data-post="<?php echo $post->ID; ?>" data-image="<?php echo $image_id; ?>" href="#">Blip it!</a><span id="<?php echo $this->nonce; ?>" class="hidden"><?php echo wp_create_nonce( $this->nonce ); ?></span></p>
+
+		<?php }
 
 	}
 
 
 
-	function thumb() {
-
-		the_post_thumbnail( array( 124, 124 ) );
-
-	}
-
-
-
-	function details() {
-
-		global $post;
-
-		$thumb    = get_the_post_thumbnail( $post->ID, array( 100, 100 ) );
-		$metadata = $this->metadata();
-
-		echo '<div class="blippress-this-details">';
-		echo '<div class="blippress-this-thumb">';
-		echo $thumb;
-		echo '</div>';
-		echo '<div class="blippress-this-meta">';
-		echo '<ul>';
-		foreach ( $metadata as $k => $v ) {
-			echo '<li>' . $k . ': ' . $v . '</li>';
-		}
-		echo '</ul>';
-		echo '</div>';
-		echo '</div>';
-
-	}
-
-
-
-	function metadata( $args = array() ) {
+	function metadata( $image_id, $args = array() ) {
 
 		global $post;
 
 		$defaults = array(
-			'post_id'    => null,
 			'image_meta' => true
 			);
 
@@ -258,23 +265,15 @@ class blippress_post {
 
 		extract( $args, EXTR_SKIP );
 
-		if ( ! $post_id ) {
-			$post_id = get_post_thumbnail_id( $post->ID );
-		}
-
-		if ( ! $post_id )
-			return;
-
-		$thumb_src       = wp_get_attachment_image_src( $post_id, 'full' );
+		$thumb_src       = wp_get_attachment_image_src( $image_id, 'full' );
 		$url             = $thumb_src[0];
-		$attachment      = get_post( $post_id );
-		$attachment_meta = wp_get_attachment_metadata( $post_id );
+		$attachment      = get_post( $image_id );
+		$attachment_meta = wp_get_attachment_metadata( $image_id );
 
 		$image_fields = blippress_exif_fields( true );
 
 		$meta                = array();
-		// $meta['url']         = $url;
-		$meta['url']         = 'http://lumpysimon.net/bliptest/2013-08-09-meldon-rocks-again.jpg';
+		$meta['url']         = $url;
 		$meta['title']       = $attachment->post_title;
 		$meta['description'] = $attachment->post_content;
 
@@ -282,6 +281,13 @@ class blippress_post {
 			foreach ( $image_fields as $field ) {
 				if ( isset( $attachment_meta['image_meta'][$field] ) ) {
 					$meta[$field] = $attachment_meta['image_meta'][$field];
+					if ( 'created_timestamp' == $field ) {
+						if ( isset( $attachment_meta['image_meta']['created_timestamp'] ) and $attachment_meta['image_meta']['created_timestamp'] ) {
+							$meta['created_timestamp'] = date( 'Y-m-d', $attachment_meta['image_meta']['created_timestamp'] );
+						} else {
+							$meta['created_timestamp'] = date( 'Y-m-d' );
+						}
+					}
 				}
 			}
 		}
@@ -292,38 +298,27 @@ class blippress_post {
 
 
 
-	function save_date( $post_id, $post ) {
+	function save_image_meta( $post_id, $post ) {
 
-		if (
-			!has_post_thumbnail( $post_id )
-			or !current_user_can( 'edit_post', $post_id )
-			or ( defined( 'DOING_AJAX' ) and DOING_AJAX )
-			or wp_is_post_revision( $post_id )
-			or wp_is_post_autosave( $post_id )
-			or 'auto-draft' == $post->post_status
-			or 'trash' == $post->post_status
-			) {
-			return;
+		global $blippress;
+
+		$meta = array();
+
+		if ( verify_meta_handler_nonce( $post_id, $blippress->prefix . 'image' ) ) {
+			$meta[] = 'image-id';
 		}
 
-		if ( $id = get_post_thumbnail_id( $post_id ) ) {
-			if ( $meta = wp_get_attachment_metadata( $id ) ) {
-				if ( $image_date = $meta['image_meta']['created_timestamp'] ) {
-					update_post_meta( $post_id, 'blippress-image-date', absint( $image_date ) );
+		if ( $meta ) {
+
+			foreach ( $meta as $field ) {
+				delete_post_meta( $post_id, $blippress->prefix . $field );
+				if ( isset( $_POST[$blippress->prefix . $field] ) and '' != trim( $_POST[$blippress->prefix . $field] ) ) {
+					$data = wp_kses( trim( $_POST[$blippress->prefix . $field] ) );
+					update_post_meta( $post_id, $blippress->prefix . $field, $data );
 				}
 			}
+
 		}
-
-	}
-
-
-
-	function notice() {
-
-		if ( !current_user_can( 'edit_posts' ) or !isset( $this->notice ) or empty( $this->notice ) )
-			return;
-
-		echo '<div class="' . $this->notice['type'] . '" id="blippress-notice">' . $this->notice['message'] . '</div>';
 
 	}
 

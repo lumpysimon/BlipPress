@@ -70,7 +70,7 @@ class blippress_authentication {
 
 	function check() {
 
-		global $blippress;
+		global $blippress, $blippress_cache;
 
 		if ( ! current_user_can( 'manage_options' ) )
 			return;
@@ -90,6 +90,7 @@ class blippress_authentication {
 
 		if ( isset( $_POST['revoke-permission'] ) and 'go' == $_POST['revoke-permission'] ) {
 			delete_option( $this->option );
+			$blippress_cache->clear();
 		}
 
 		if ( isset( $_POST['request-permission'] ) and 'go' == $_POST['request-permission'] ) {
@@ -108,6 +109,7 @@ class blippress_authentication {
 					'secret'   => $data->secret
 					);
 				update_option( $this->option, $opts );
+				$blippress_cache->clear();
 			}
 		}
 

@@ -62,15 +62,39 @@ function blippress_user_url( $user, $protocol = 'http://' ) {
 
 
 
-function get_blippress_id( $post_id = null ) {
+function update_blippress_meta( $meta, $data, $post_id = null ) {
 
-	global $post, $blippress_post;
+	global $post, $blippress;
 
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
 
-	return get_post_meta( $post_id, $blippress_post->postmeta, true );
+	update_post_meta( $post_id, $blippress->prefix . $meta, $data );
+
+}
+
+
+
+function get_blippress_meta( $meta, $post_id = null ) {
+
+	global $post, $blippress;
+
+	if ( ! $post_id ) {
+		$post_id = $post->ID;
+	}
+
+	return get_post_meta( $post_id, $blippress->prefix . $meta, true );
+
+}
+
+
+
+function get_blippress_id( $post_id = null ) {
+
+	global $blippress_post;
+
+	return get_blippress_meta( $blippress_post->entry_post_meta );
 
 }
 
@@ -188,14 +212,25 @@ function blippress_auth_option( $opt ) {
 
 
 
+function blippress_auth_options() {
+
+	global $blippress_authentication;
+
+	return $blippress_authentication->get_option();
+
+}
+
+
+
 function blippress_exif_fields( $keys_only = false ) {
 
 	$fields = array(
-		'camera'        => 'Camera',
-		'aperture'      => 'Aperture',
-		'shutter_speed' => 'Exposure',
-		'focal_length'  => 'Focal length',
-		'iso'           => 'ISO'
+		'camera'            => 'Camera',
+		'aperture'          => 'Aperture',
+		'shutter_speed'     => 'Exposure',
+		'focal_length'      => 'Focal length',
+		'iso'               => 'ISO',
+		'created_timestamp' => 'Date taken'
 		);
 
 	if ( $keys_only )

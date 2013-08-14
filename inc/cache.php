@@ -1,0 +1,88 @@
+<?php
+
+
+
+/**
+ * Because WordPress has no transient garbage clearing mechanism,
+ * we keep a record each time we set a transient so we can
+ * later clear them out as needed.
+ */
+class blippress_cache {
+
+
+
+	var $option = 'transients';
+
+
+
+	function __construct() {
+
+	}
+
+
+
+	function name() {
+
+		global $blippress;
+
+		return $blippress->prefix . $this->option;
+
+	}
+
+
+
+	function get() {
+
+		return get_option( $this->name() );
+
+	}
+
+
+
+	function set( $transients ) {
+
+		update_option( $this->name(), $transients );
+
+	}
+
+
+
+	function clear() {
+
+		if ( $transients = $this->get() ) {
+
+			foreach ( $transients as $transient ) {
+				delete_transient( $transient );
+			}
+
+			delete_option( $this->name() );
+
+		}
+
+	}
+
+
+
+	function add( $transient ) {
+
+		if ( $transients = $this->get() ) {
+			if ( ! in_array( $transient, $transients ) ) {
+				$transients[] = $transient;
+			}
+		} else {
+			$transients = array( $transient );
+		}
+
+		$this->set( $transients );
+
+	}
+
+
+
+} // class
+
+
+
+global $blippress_cache;
+
+$blippress_cache = new blippress_cache;

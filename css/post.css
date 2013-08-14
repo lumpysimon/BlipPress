@@ -1,3 +1,22 @@
+.blippress-image-control {
+	border: 1px dashed #aaa;
+	padding: 20px 0;
+	text-align: center;
+}
+
+.blippress-image-control.has-image {
+	border: 1px dashed #aaa;
+	padding: 10px;
+	text-align: left;
+}
+
+.blippress-image-control img {
+	display: block;
+	height: auto;
+	margin-bottom: 10px;
+	max-width: 100%;
+}
+
 #blippress-this-spinner {
 	float: left;
 }
