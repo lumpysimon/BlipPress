@@ -1,5 +1,19 @@
+.blippress {
+	margin-bottom: 2em;
+}
+
+.blippress-single {
+	position: relative;
+}
+
+.blippress img {
+	display: block !important;
+}
+
 .blippress-image-single {
+	float: none;
 	height: auto;
+	margin: 0 auto;
 	max-width: 100%;
 }
 
@@ -16,6 +30,27 @@
 	display: block;
 }
 
-.blippress-image-multi img {
-	display: block;
+.blippress-single .blippress-info {
+	background: rgba(0,0,0,0.7);
+	bottom: 0;
+	left: 0;
+	padding: 5px 5px 0;
+	position: absolute;
+	right: 0;
+}
+
+.blippress-single .blippress-info p {
+	color: #fff !important;
+	margin: 0 !important;
+	padding: 0 5px 5px 5px !important;
+	text-align: right !important;
+}
+
+.blippress-single .blippress-info .blippress-date, .blippress-single .blippress-info .blippress-meta {
+	font-size: 0.8em !important;
+}
+
+.blippress-single .blippress-info a {
+	color: #fff !important;
+	text-decoration: underline !important;
 }

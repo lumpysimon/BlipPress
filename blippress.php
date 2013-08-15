@@ -3,7 +3,7 @@
 Plugin Name: BlipPress
 Plugin URI:  http://blippress.org
 Description: All the Blipfoto things but for WordPress
-Version:     0.1
+Version:     0.1beta
 Author:      Simon Blackbourn @ Lumpy Lemon
 Author URI:  https://twitter.com/lumpysimon
 
@@ -93,7 +93,7 @@ class blippress {
 	var $secret            = 'd96e00ecb17c1fd33e37b73a0c483fef';
 	var $default_num       = 16;
 	var $prefix            = 'blippress-';
-	var $transient_timeout = 300; // 5 minutes
+	var $transient_timeout = 600; // 10 minutes
 
 
 

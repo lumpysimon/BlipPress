@@ -17,35 +17,14 @@
 	max-width: 100%;
 }
 
-#blippress-this-spinner {
-	float: left;
+#blippress-button {
+	margin-bottom: 1em;
 }
 
-.blippress-this-details {
-	overflow: hidden;
+#blippress-waiting {
+	display: none;
 }
 
-.blippress-this-thumb {
-	float: left;
-	margin-right: 20px;
-	padding-top: 10px;
+#blippress-status {
+	background: #f1f1f1;
 }
-
-.blippress-status {
-	color: white;
-	font-weight: bold;
-	padding: 5px;
-}
-
-.blippress-status a {
-	color: white;
-}
-
-.blippress-success {
-	background-color: green;
-}
-
-.blippress-error {
-	background-color: red;
-}
-

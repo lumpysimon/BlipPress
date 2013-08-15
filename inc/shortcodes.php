@@ -56,7 +56,7 @@ class blippress_shortcodes {
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_id( $id ) ) {
-				$out = $this->build_single_blip( $data );
+				$out = $this->render_single_blip( $data );
 				set_transient( $transient, $out, $blippress->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -105,7 +105,7 @@ class blippress_shortcodes {
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
-				$out = $this->build_single_blip( $data );
+				$out = $this->render_single_blip( $data );
 				set_transient( $transient, $out, $blippress->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -155,7 +155,7 @@ class blippress_shortcodes {
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
-				$out = self::build_single_blip( $data );
+				$out = self::render_single_blip( $data );
 				set_transient( $transient, $out, $blippress->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -202,7 +202,7 @@ class blippress_shortcodes {
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
-				$out = self::build_multi_blips( $data, $size );
+				$out = self::render_multi_blips( $data, $size );
 				set_transient( $transient, $out, $blippress->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -215,44 +215,72 @@ class blippress_shortcodes {
 
 
 
-	private function build_single_blip( $data ) {
+	private function meta( $data ) {
+
+		if ( ! blippress_option( 'meta' ) )
+			return;
+
+		if ( ! isset( $data->exif ) )
+			return;
+
+		$fields = array( 'Model', 'FNumber', 'ExposureTime', 'FocalLength', 'ISO' );
+		$values = array();
+
+		foreach ( $fields as $field ) {
+
+			if ( $value = trim( $data->exif->$field ) ) {
+
+				switch ( $field ) {
+
+					case 'FNumber' :
+						$value = 'f/' . $value;
+					break;
+
+					case 'ExposureTime' :
+						$value .= 's';
+					break;
+
+					case 'FocalLength' :
+						$value .= 'mm';
+					break;
+
+					case 'ISO' :
+						$value = 'ISO ' . $value;
+					break;
+
+				}
+
+				$values[$field] = $value;
+
+			}
+
+		}
+
+		if ( ! empty( $values ) ) {
+			$out  = '<p class="blippress-meta">' . implode( ' : ', $values ) . '</p>';
+		}
+
+		return $out;
+
+	}
+
+
+
+	private function render_single_blip( $data ) {
 
 		$out  = '<div class="blippress blippress-single">';
-		$out .= '<h2>' . $data->title . '</h2>';
+
 		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . $data->image . '"';
 		if ( isset( $data->dimensions ) ) {
 			$out .= ' height="' . $data->dimensions->height . '" width="' . $data->dimensions->width . '"';
 		}
 		$out .= '>';
-		$out .= '<p>Taken on ' . date( get_option( 'date_format' ), strtotime( $data->date ) ) . '</p>';
 
-		if ( isset( $data->exif ) ) {
-			$fields = array( 'Model', 'FNumber', 'ExposureTime', 'FocalLength', 'ISO' );
-			$values = array();
-			foreach ( $fields as $field ) {
-				if ( $value = $data->exif->$field ) {
-					switch ( $field ) {
-						case 'FNumber' :
-							$value = 'f/' . $value;
-						break;
-						case 'ExposureTime' :
-							$value .= 's';
-						break;
-						case 'FocalLength' :
-							$value .= 'mm';
-						break;
-					}
-					$values[$field] = $value;
-				}
-			}
-			if ( !empty( $values ) ) {
-				$out .= '<ul>';
-				foreach ( $values as $k => $v ) {
-					$out .= '<li>' . $k . ': ' . $v . '</li>';
-				}
-				$out .= '</ul>';
-			}
-		}
+		$out .= '<div class="blippress-info">';
+		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_attr( $data->url ) . '">&quot;' . esc_html( $data->title ) . '&quot; by ' . $data->display_name . '</a></p>';
+		$out .= '<p class="blippress-date">Taken on ' . date( get_option( 'date_format' ), strtotime( $data->date ) ) . '</p>';
+		$out .= $this->meta( $data );
+		$out .= '</div>';
 
 		$out .= '</div>';
 
@@ -262,17 +290,19 @@ class blippress_shortcodes {
 
 
 
-	private function build_multi_blips( $data, $size ) {
+	private function render_multi_blips( $data, $size ) {
 
 		$out = '<div class="blippress blippress-multi blippress-multi-' . $size . '">';
 
 		foreach ( $data as $entry ) {
 
 			$out .= '<div class="blippress-image blippress-image-multi blippress-image-multi-' . $size . '" id="blippress-image-multi-' . $entry->entry_id . '">';
-			$out .= '<a href="' . $entry->url . '" title="View &quot;' . $entry->title . '&quot; (' . date( get_option( 'date_format' ), strtotime( $entry->date ) ) . ') on Blipfoto"><img src="' . $entry->thumbnail . '"></a>';
+			$out .= '<a href="' . esc_attr( $entry->url ) . '" title="View &quot;' . esc_attr( $entry->title ) . '&quot; (' . esc_attr( date( get_option( 'date_format' ), strtotime( $entry->date ) ) ) . ') by ' . esc_attr( $entry->display_name ) . ' on Blipfoto"><img src="' . esc_attr( $entry->thumbnail ) . '"></a>';
 			$out .= '</div>';
 
 		}
+
+		$out .= '<div class="blippress-info"></div>';
 
 		$out .= '</div>';
 

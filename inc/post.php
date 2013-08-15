@@ -138,7 +138,7 @@ class blippress_post {
 
 				$response = array(
 					'result'  => 'error',
-					'message' => 'Cannot create an entry for ' . date( get_option( 'date_format' ), strtotime( $meta['created_timestamp'] ) ) . ' (most likely you have already blipped on that date)'
+					'message' => 'Cannot create an entry for ' . date( get_option( 'date_format' ), strtotime( $meta['created_timestamp'] ) ) . ' (most likely is that you have already blipped on that date)'
 				);
 
 			} else {
@@ -157,8 +157,8 @@ class blippress_post {
 					$entry_id = $json->data->entry_id;
 
 					$response = array(
-						'result'  => 'success',
-						'message' => 'Success! The entry has been published',
+						'result'  => 'updated',
+						'message' => 'Success! The entry has been published to ' . blippress_auth_option( 'username' ) . '\'s journal',
 						'data'    => array( 'entry_id' => $entry_id )
 					);
 
@@ -201,7 +201,7 @@ class blippress_post {
 			add_meta_box(
 				'blippress',
 				'BlipPress',
-				array( $this, 'meta_box' ),
+				array( $this, 'render_meta_box' ),
 				$type,
 				'normal'
 			);
@@ -212,7 +212,7 @@ class blippress_post {
 
 
 
-	function meta_box( $post ) {
+	function render_meta_box( $post ) {
 
 		global $blippress;
 
@@ -225,7 +225,7 @@ class blippress_post {
 
 		if ( is_blipped() ) {
 			echo sprintf(
-					'<p>This post is blipped - <a href="%s" target="_blank">view</a></p>',
+					'<p>This post is blipped. <a href="%s" target="_blank">View on Blipfoto</a></p>',
 					get_blippress_url( get_blippress_id() )
 					);
 			if ( $image_id ) {
@@ -233,10 +233,12 @@ class blippress_post {
 			}
 		} else { ?>
 
+			<p>You can create a Blipfoto journal entry for <strong><?php echo blippress_auth_option( 'username' ); ?></strong> from this post. Just upload or choose any photograph from your media library, the entry date will be set to the date the photograph was taken and the post title and content will be used.</p>
+
 			<p class="blippress-image-control<?php echo ( $image_id ) ? ' has-image' : ''; ?>"
 				data-title="<?php esc_attr( 'Choose an image' ); ?>"
 				data-update-text="<?php esc_attr( 'Change Image' ); ?>"
-				data-target="#blippress-this">
+				data-target="#blippress-action">
 				<?php
 				if ( $image_id ) {
 					echo wp_get_attachment_image( $image_id, 'medium', false );
@@ -245,7 +247,9 @@ class blippress_post {
 				?>
 				<a href="#" class="<?php echo join( ' ', $button_classes ); ?>">Choose an image</a>
 			</p>
-			<p><a id="blippress-this" class="button image-id" data-post="<?php echo $post->ID; ?>" data-image="<?php echo $image_id; ?>" href="#">Blip it!</a><span id="<?php echo $this->nonce; ?>" class="hidden"><?php echo wp_create_nonce( $this->nonce ); ?></span></p>
+			<div id="blippress-button"><a id="blippress-action" class="button image-id" data-post="<?php echo $post->ID; ?>" data-image="<?php echo $image_id; ?>" href="#">Blip it!</a><span id="<?php echo $this->nonce; ?>" class="hidden"><?php echo wp_create_nonce( $this->nonce ); ?></span> <span id="blippress-waiting">Please wait...</span></div>
+
+			<div id="blippress-status"></div>
 
 		<?php }
 

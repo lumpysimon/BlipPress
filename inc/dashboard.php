@@ -140,7 +140,7 @@ class blippress_dashboard {
 						<div class="postbox blippress-info" id="blippress-lumpysimon">
 							<h3 class="hndle"><span><a href="<?php blippress_user_url( $blippress->me ); ?>"><?php echo $blippress->me; ?></a> on Blipfoto</span></h3>
 							<div class="inside">
-								<?php echo blippress_latest( array( 'user' => $blippress->me, 'num' => 9, 'size' => 'small' ) ); ?>
+								<?php echo blippress_latest( array( 'user' => $blippress->me, 'num' => 12, 'size' => 'small' ) ); ?>
 							</div>
 						</div>
 					</div>

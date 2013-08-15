@@ -1,5 +1,7 @@
 var BlipPress;
 
+// @TODO@ CREDIT THIS!!
+
 /**
  * Media control frame popup.
  */
@@ -84,14 +86,14 @@ jQuery(function($) {
 	};
 
 	mediaControl.init();
-});
 
-jQuery(function($) {
+
+
 	$('#wpbody').on('selectionChange.blippress', '.blippress-image-control', function( e, selection ) {
 
-		image_id=$('#blippress-this').attr('data-image');
+		image_id=$('#blippress-action').attr('data-image');
 		$('#blippress-image-id').val(image_id);
-		$('.blippress-status').remove();
+		$('#blippress-status').removeClass('updated error').html('').hide();
 
 		var $control = $( e.target ),
 			model = selection.first(),
@@ -112,22 +114,20 @@ jQuery(function($) {
 			.addClass('has-image')
 			.find('a.blippress-image-control-choose').removeClass('button-hero');
 	});
-});
 
-jQuery(function($){
 
-	$(document).on('click','#blippress-this',function(e){
+
+	$(document).on('click','#blippress-action',function(e){
 
 		post_id  = $(this).attr('data-post');
 		image_id = $(this).attr('data-image');
 
-		if ( image_id && post_id ) {
+		if ( image_id && "0" != image_id && post_id ) {
 
 			if ( confirm('You are about to create an entry on Blipfoto. Proceed?' ) ) {
 
-				$(this).after('<span id="blippress-this-info"><span id="blippress-this-spinner" class="spinner"></span> Please wait...</span>');
-				$('#blippress-this-spinner').show();
-				$('.blippress-status').remove();
+				$('#blippress-waiting').show();
+				$('#blippress-status').removeClass('updated error').html('').hide();
 
 				$.post( ajaxurl, {
 					'action'  : 'post_to_blipfoto',
@@ -137,14 +137,13 @@ jQuery(function($){
 
 					text = r.message;
 					status = r.result
-					text = '<div class="blippress-status blippress-'+status+'">'+text;
-					if ( 'success' == r.result ) {
-						text = text + ' <a href="http://blipfoto.com/entry/' + r.data.entry_id + '" target="_blank">View</a>';
+					$('#blippress-status').addClass(status);
+					if ( 'updated' == r.result ) {
+						text = text+' <a href="http://blipfoto.com/entry/' + r.data.entry_id + '" target="_blank">View on Blipfoto</a>';
 					}
-					text = text + '</div>';
 
-					$('#blippress-this-info').html( text );
-					$('.blippress-status').show();
+					$('#blippress-waiting').hide();
+					$('#blippress-status').html('<p>'+text+'</p>').show();
 
 				} );
 

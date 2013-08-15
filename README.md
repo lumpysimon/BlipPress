@@ -4,6 +4,7 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 ## To Do
 
+* credit media library jquery
 * show metadata when choosing image
 * single global $prefix
 * requires 3.5
@@ -11,7 +12,7 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * validate shortcode atts
 * API error handling
 * check menu icon in different browsers
-* singularisation
+* class singularisation
 * localisation
 * toolbar
 * widget
@@ -33,3 +34,4 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * nonce on post button
 * nonces on auth page
 * esc_attr etc
+* search for @TODO@

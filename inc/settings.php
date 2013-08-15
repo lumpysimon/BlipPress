@@ -37,6 +37,8 @@ class blippress_settings {
 	// do it
 	function validate( $inputs ) {
 
+		global $blippress_cache;
+
 		$new = array();
 
 		if ( $inputs ) {
@@ -44,6 +46,8 @@ class blippress_settings {
 				$new[$k] = $v;
 			}
 		}
+
+		$blippress_cache->clear();
 
 		return $new;
 
@@ -66,7 +70,10 @@ class blippress_settings {
 
 	function update( $opts ) {
 
+		global $blippress_cache;
+
 		update_option( $this->option, $opts );
+		$blippress_cache->clear();
 
 	}
 
@@ -94,6 +101,7 @@ class blippress_settings {
 			'num'        => $blippress->default_num,
 			'size'       => 'big',
 			'css'        => 1,
+			'meta'       => true,
 			'post-types' => array( 'post' => true )
 			);
 
@@ -177,9 +185,20 @@ class blippress_settings {
 								<td>
 									<label for="<?php echo $this->option; ?>[css]">
 										<input name="<?php echo $this->option; ?>[css]" type="checkbox" value="1" <?php checked( $opts['css'] ); ?>>
-										Use in-built stylesheet?
+										Use BlipPress styles?
 									</label>
-									<p class="description">Untick if you prefer to use your own styling. [@TODO@ LINK TO STYLE GUIDE]</p>
+									<p class="description">Untick if you prefer to use your own CSS styling. [@TODO@ LINK TO STYLE GUIDE]</p>
+								</td>
+							</tr>
+
+							<tr valign="top">
+								<th scope="row">Metadata</th>
+								<td>
+									<label for="<?php echo $this->option; ?>[meta]">
+										<input name="<?php echo $this->option; ?>[meta]" type="checkbox" value="1" <?php checked( $opts['meta'] ); ?>>
+										Show image metadata?
+									</label>
+									<p class="description">Choose whether to display the camera, aperture, exposure, focal length and ISO.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto</p>
 								</td>
 							</tr>
 

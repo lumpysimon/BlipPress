@@ -166,6 +166,8 @@ class blippress_authentication {
 
 	function render_page() {
 
+		global $blippress_settings;
+
 		?>
 
 		<div class="wrap">
@@ -183,6 +185,13 @@ class blippress_authentication {
 						<input class="button-primary" name="submit" type="submit" value="Grant permission">
 					</p>
 				</form>
+
+				<h4>What does this mean?</h4>
+
+				<p>In order to prevent anyone accessing your Blipfoto account without your permission, the BlipPress app will connect to your account on the blipfoto.com website, so you can then verify that it is yours. You only need to do this once.</p>
+				<p>You will then be able to display blips here on your website and create entries on Blipfoto from the post edit screen.</p>
+				<p>BlipPress does not have the ability to create entries by itself, only you can manually do this. The creators of BlipPress have no way of accessing any of your account credentials or other personal details (the necessary access token and key are only stored here in your website's database).</p>
+				<p>If you have any questions about this, please use the <a href="#" target="_blank">support forums</a> [@TODO@ link].</p>
 
 			<?php } else { ?>
 
@@ -202,6 +211,10 @@ class blippress_authentication {
 						<input class="button-primary" name="submit" type="submit" value="Revoke permission" onClick="return confirm('Are you sure you want to revoke permission?')">
 					</p>
 				</form>
+
+				<h3>Other settings</h3>
+
+				<p>Please visit the <a href="<?php echo admin_url( 'options-general.php?page=' . $blippress_settings->slug ); ?>">settings page</a> to configure optional BlipPress settings.</p>
 
 			<?php } ?>
 
