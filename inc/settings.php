@@ -6,8 +6,8 @@ class blippress_settings {
 
 
 
-	var $slug   = 'blippress-settings';
-	var $option = 'blippress-general';
+	var $slug   = 'settings';
+	var $option = 'general';
 	var $notice = array();
 
 
@@ -21,11 +21,31 @@ class blippress_settings {
 
 
 
+	function slug() {
+
+		global $blippress;
+
+		return $blippress->prefix . $this->slug;
+
+	}
+
+
+
+	function option() {
+
+		global $blippress;
+
+		return $blippress->prefix . $this->option;
+
+	}
+
+
+
 	function init() {
 
 		register_setting(
-			$this->option,
-			$this->option,
+			$this->option(),
+			$this->option(),
 			array( $this, 'validate' )
 			);
 
@@ -33,8 +53,6 @@ class blippress_settings {
 
 
 
-	// @TODO@
-	// do it
 	function validate( $inputs ) {
 
 		global $blippress_cache;
@@ -57,7 +75,7 @@ class blippress_settings {
 
 	function get() {
 
-		if ( ! $opts = get_option( $this->option ) ) {
+		if ( ! $opts = get_option( $this->option() ) ) {
 			$opts = $this->defaults();
 			$this->update( $opts );
 		}
@@ -72,7 +90,7 @@ class blippress_settings {
 
 		global $blippress_cache;
 
-		update_option( $this->option, $opts );
+		update_option( $this->option(), $opts );
 		$blippress_cache->clear();
 
 	}
@@ -85,7 +103,7 @@ class blippress_settings {
 			'BlipPress Settings',
 			'BlipPress',
 			'manage_options',
-			$this->slug,
+			$this->slug(),
 			array( $this, 'render_page' )
 			);
 
@@ -149,7 +167,7 @@ class blippress_settings {
 
 				<form method="post" action="options.php">
 
-					<?php settings_fields( $this->option ); ?>
+					<?php settings_fields( $this->option() ); ?>
 
 					<table class="form-table">
 
@@ -158,7 +176,7 @@ class blippress_settings {
 							<tr valign="top">
 								<th scope="row">Number of images</th>
 								<td>
-									<input name="<?php echo $this->option; ?>[num]" class="small-text" type="number" step="1" min="0" value="<?php echo $opts['num']; ?>">
+									<input name="<?php echo $this->option(); ?>[num]" class="small-text" type="number" step="1" min="0" value="<?php echo $opts['num']; ?>">
 									<p class="description">How many images to display when retrieving multiple blips. This can be manually overridden in the shortcode.</p>
 								</td>
 							</tr>
@@ -168,11 +186,11 @@ class blippress_settings {
 								<td>
 									<fieldset>
 										<label title="Big">
-											<input name="<?php echo $this->option; ?>[size]" type="radio" value="big" <?php checked( $opts['size'], 'big' ); ?>>
+											<input name="<?php echo $this->option(); ?>[size]" type="radio" value="big" <?php checked( $opts['size'], 'big' ); ?>>
 											<span>Big</span>
 										</label><br>
 										<label title="Small">
-											<input name="<?php echo $this->option; ?>[size]" type="radio" value="small" <?php checked( $opts['size'], 'small' ); ?>>
+											<input name="<?php echo $this->option(); ?>[size]" type="radio" value="small" <?php checked( $opts['size'], 'small' ); ?>>
 											<span>Small</span>
 										</label>
 									<p class="description">The thumbnail size to show when retrieving multiple blips.</p>
@@ -183,8 +201,8 @@ class blippress_settings {
 							<tr valign="top">
 								<th scope="row">Styling</th>
 								<td>
-									<label for="<?php echo $this->option; ?>[css]">
-										<input name="<?php echo $this->option; ?>[css]" type="checkbox" value="1" <?php checked( $opts['css'] ); ?>>
+									<label for="<?php echo $this->option(); ?>[css]">
+										<input name="<?php echo $this->option(); ?>[css]" type="checkbox" value="1" <?php checked( $opts['css'] ); ?>>
 										Use BlipPress styles?
 									</label>
 									<p class="description">Untick if you prefer to use your own CSS styling. [@TODO@ LINK TO STYLE GUIDE]</p>
@@ -194,8 +212,8 @@ class blippress_settings {
 							<tr valign="top">
 								<th scope="row">Metadata</th>
 								<td>
-									<label for="<?php echo $this->option; ?>[meta]">
-										<input name="<?php echo $this->option; ?>[meta]" type="checkbox" value="1" <?php checked( $opts['meta'] ); ?>>
+									<label for="<?php echo $this->option(); ?>[meta]">
+										<input name="<?php echo $this->option(); ?>[meta]" type="checkbox" value="1" <?php checked( $opts['meta'] ); ?>>
 										Show image metadata?
 									</label>
 									<p class="description">Choose whether to display the camera, aperture, exposure, focal length and ISO.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto</p>
@@ -207,8 +225,8 @@ class blippress_settings {
 								<td>
 									<fieldset>
 										<?php foreach ( $this->types() as $type => $label ) { ?>
-											<label for="<?php echo $this->option; ?>[post-types][<?php echo $type; ?>]">
-												<input name="<?php echo $this->option; ?>[post-types][<?php echo $type; ?>]" type="checkbox" value="1" <?php checked( array_key_exists( $type, $opts['post-types'] ) ); ?>>
+											<label for="<?php echo $this->option(); ?>[post-types][<?php echo $type; ?>]">
+												<input name="<?php echo $this->option(); ?>[post-types][<?php echo $type; ?>]" type="checkbox" value="1" <?php checked( array_key_exists( $type, $opts['post-types'] ) ); ?>>
 												<?php echo $label; ?>
 											</label><br>
 										<?php } ?>

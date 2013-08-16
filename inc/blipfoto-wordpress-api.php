@@ -22,16 +22,16 @@
 	https://github.com/lumpysimon/blipfoto-wordpress-api
 
 	This class is a rewrite of BlipPHP v1.2 written by Graham Bradley
-	A newer version of that class now exists: https://github.com/Blipfoto/blipfoto-api-php
+	That version is no longer online, but a newer version now exists at https://github.com/Blipfoto/blipfoto-api-php
 
-	This version uses the WordPress wp_remote_get and wp_remote_post functions instead of cURL
+	This class uses the WordPress wp_remote_get and wp_remote_post functions (instead of cURL),
+	caches the timestamp difference in a transient,
 	and also provides various helper functions.
 
 	Originally written for BlipPress:
-	http://blippress.org/plugins/blippress
+	http://blippress.com
 	http://wordpress.org/plugins/blippress
 	https://github.com/lumpysimon/blippress
-
 
 
 
@@ -63,9 +63,9 @@
 
 
 
-	-----
-	To Do
-	-----
+	------
+	@TODO@
+	------
 
 	- Error handling
 
@@ -80,8 +80,6 @@ class blipWP {
 	var $version     = '1';
 	var $api_version = '3';
 
-	// @@TODO@@
-	// sort this out
 	var $errors = array(
 		'1' => 'callback_url must be on the same domain',
 		'2' => 'The API returned the following error code:',
@@ -92,6 +90,7 @@ class blipWP {
 
 	protected $api_key;
 	protected $secret;
+	protected $token;
 
 
 
@@ -109,6 +108,7 @@ class blipWP {
 
 		$url = 'http://www.blipfoto.com/getpermission/v' . $this->api_version . '/' . $permissions_id;
 		$url = add_query_arg( 'callback_url', $callback_url, $url );
+
 		header( 'Location: ' . $url );
 		exit( 0 );
 
@@ -231,7 +231,7 @@ class blipWP {
 
 		$args = array(
 			'user_auth' => true,
-			'params' => array(
+			'params'    => array(
 				'date' => $date
 				)
 			);
@@ -240,9 +240,8 @@ class blipWP {
 
 		$json = $this->request( $url );
 
-		if ( isset( $json->data->message ) ) {
+		if ( isset( $json->data->message ) )
 			return true;
-		}
 
 		return false;
 
@@ -341,8 +340,10 @@ class blipWP {
 
 	private function create_timestamp() {
 
-		$transient = 'blipfoto-time';
-		$timeout   = 600;
+		global $blippress;
+
+		$transient = $blippress->prefix . 'time';
+		$timeout   = 3600; // 1hr
 		$now       = time();
 
 		if ( false === $diff = get_transient( $transient ) ) {

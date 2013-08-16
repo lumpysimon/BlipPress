@@ -4,14 +4,15 @@
 
 /**
  * Because WordPress has no transient garbage clearing mechanism,
- * we store an array  of transient names tha we have set,
+ * we store an array  of transient names that we have set,
  * so we can later clear them out when needed.
  */
 class blippress_cache {
 
 
 
-	var $option = 'transients';
+	var $option            = 'transients';
+	var $transient_timeout = 600; // 10 minutes
 
 
 

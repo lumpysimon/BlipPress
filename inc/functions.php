@@ -94,7 +94,7 @@ function get_blippress_id( $post_id = null ) {
 
 	global $blippress_post;
 
-	return get_blippress_meta( $blippress_post->entry_post_meta );
+	return get_blippress_meta( $blippress_post->entry_post_meta, $post_id );
 
 }
 
@@ -139,9 +139,7 @@ function blippress_authenticate_message( $text = '' ) {
 
 function blippress_option( $opt ) {
 
-	global $blippress_settings;
-
-	$opts = $blippress_settings->get();
+	$opts = blippress_options();
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
@@ -164,9 +162,7 @@ function blippress_options() {
 
 function blippress_post_types() {
 
-	global $blippress_settings;
-
-	$opts = $blippress_settings->get();
+	$opts = blippress_options();
 
 	if ( isset( $opts['post-types'] ) and is_array( $opts['post-types'] ) )
 		return array_keys( $opts['post-types'] );
@@ -187,9 +183,8 @@ function is_blippress_post_type( $type = null ) {
 		}
 	}
 
-	if ( $types = blippress_option( 'post-types' ) ) {
+	if ( $types = blippress_option( 'post-types' ) )
 		return array_key_exists( $type, $types );
-	}
 
 	return false;
 
@@ -199,9 +194,7 @@ function is_blippress_post_type( $type = null ) {
 
 function blippress_auth_option( $opt ) {
 
-	global $blippress_authentication;
-
-	$opts = $blippress_authentication->get_option();
+	$opts = blippress_auth_options();
 
 	if ( isset( $opts[$opt] ) )
 		return $opts[$opt];
@@ -216,7 +209,7 @@ function blippress_auth_options() {
 
 	global $blippress_authentication;
 
-	return $blippress_authentication->get_option();
+	return get_option( $blippress_authentication->option() );
 
 }
 
@@ -237,5 +230,25 @@ function blippress_exif_fields( $keys_only = false ) {
 		return array_keys( $fields );
 
 	return $fields;
+
+}
+
+
+
+function blippress_website( $protocol = true ) {
+
+	global $blippress;
+
+	return $protocol ? 'http://' . $blippress->website : $blippress->website;
+
+}
+
+
+
+function blippress_plugin_page() {
+
+	global $blippress;
+
+	return $blippress->plugin_page;
 
 }

@@ -57,7 +57,7 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_entry_by_id( $id ) ) {
 				$out = $this->render_single_blip( $data );
-				set_transient( $transient, $out, $blippress->transient_timeout );
+				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
 
@@ -106,7 +106,7 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
 				$out = $this->render_single_blip( $data );
-				set_transient( $transient, $out, $blippress->transient_timeout );
+				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
 
@@ -156,7 +156,7 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
 				$out = self::render_single_blip( $data );
-				set_transient( $transient, $out, $blippress->transient_timeout );
+				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
 
@@ -203,7 +203,7 @@ class blippress_shortcodes {
 
 			if ( $data = $blip->get_latest_entries_by_user( $user, $num, $size ) ) {
 				$out = self::render_multi_blips( $data, $size );
-				set_transient( $transient, $out, $blippress->transient_timeout );
+				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
 
@@ -256,11 +256,8 @@ class blippress_shortcodes {
 
 		}
 
-		if ( ! empty( $values ) ) {
-			$out  = '<p class="blippress-meta">' . implode( ' : ', $values ) . '</p>';
-		}
-
-		return $out;
+		if ( ! empty( $values ) )
+			return implode( ' : ', $values );
 
 	}
 
@@ -278,8 +275,11 @@ class blippress_shortcodes {
 
 		$out .= '<div class="blippress-info">';
 		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_attr( $data->url ) . '">&quot;' . esc_html( $data->title ) . '&quot; by ' . $data->display_name . '</a></p>';
-		$out .= '<p class="blippress-date">Taken on ' . date( get_option( 'date_format' ), strtotime( $data->date ) ) . '</p>';
-		$out .= $this->meta( $data );
+		$out .= '<p class="blippress-details">' . date( get_option( 'date_format' ), strtotime( $data->date ) );
+		if ( $meta = $this->meta( $data ) ) {
+			$out .=  ' : ' . $meta;
+		}
+		$out .= '</p>';
 		$out .= '</div>';
 
 		$out .= '</div>';

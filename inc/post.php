@@ -8,7 +8,7 @@ class blippress_post {
 
 	var $entry_post_meta = 'entry';
 	var $image_post_meta = 'image-id';
-	var $nonce           = 'blippress-this-nonce';
+	var $nonce           = 'action-nonce';
 
 
 
@@ -24,19 +24,31 @@ class blippress_post {
 
 
 
+	function nonce() {
+
+		global $blippress;
+
+		return $blippress->prefix . $this->nonce;
+
+	}
+
+
+
 	function script() {
 
+		global $blippress;
+
 		wp_register_script(
-			'blippress-post',
+			$blippress->prefix . 'post',
 			BLIPPRESS_PLUGIN_DIR . 'js/post.js',
 			array( 'jquery', 'media-upload', 'media-views' ),
 			filemtime( BLIPPRESS_PLUGIN_PATH . 'js/post.js' )
 			);
 
-		wp_enqueue_script( 'blippress-post' );
+		wp_enqueue_script( $blippress->prefix . 'post' );
 
 		wp_localize_script(
-			'blippress-post',
+			$blippress->prefix . 'post',
 			'BlipPress',
 			array(
 				'frameTitle'      => 'Choose an image',
@@ -51,23 +63,22 @@ class blippress_post {
 
 	function style() {
 
+		global $blippress;
+
 		wp_register_style(
-			'blippress-post',
+			$blippress->prefix . 'post',
 			BLIPPRESS_PLUGIN_DIR . 'css/post.css',
 			null,
 			filemtime( BLIPPRESS_PLUGIN_PATH . 'css/post.css' )
 			);
 
-		wp_enqueue_style( 'blippress-post' );
+		wp_enqueue_style( $blippress->prefix . 'post' );
 
 	}
 
 
 
 	function ajax_post_to_blipfoto() {
-
-		// if ( ! wp_verify_nonce( $_REQUEST['nonce'], $this->nonce ) )
-		// 	return;
 
 		global $blippress, $blippress_cache;
 
@@ -89,7 +100,7 @@ class blippress_post {
 
 			$post = array_shift( $posts );
 
-			if ( !$post->post_title ) {
+			if ( ! $post->post_title ) {
 				$ok = false;
 				$response = array(
 					'result'  => 'error',
@@ -97,7 +108,7 @@ class blippress_post {
 				);
 			}
 
-			if ( !$post->post_content ) {
+			if ( ! $post->post_content ) {
 				$ok = false;
 				$response = array(
 					'result'  => 'error',
@@ -127,7 +138,7 @@ class blippress_post {
 
 		if ( $ok ) {
 
-			// set this here as we want to remember the image chosen even if blipping fails
+			// set this here as we want to remember the chosen image even if blipping fails
 			update_blippress_meta( $this->image_post_meta, $image_id, $post_id );
 
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ), array( 'token' => blippress_auth_option( 'token' ) ) );
@@ -247,7 +258,7 @@ class blippress_post {
 				?>
 				<a href="#" class="<?php echo join( ' ', $button_classes ); ?>">Choose an image</a>
 			</p>
-			<div id="blippress-button"><a id="blippress-action" class="button image-id" data-post="<?php echo $post->ID; ?>" data-image="<?php echo $image_id; ?>" href="#">Blip it!</a><span id="<?php echo $this->nonce; ?>" class="hidden"><?php echo wp_create_nonce( $this->nonce ); ?></span> <span id="blippress-waiting">Please wait...</span></div>
+			<div id="blippress-button"><a id="blippress-action" class="button image-id" data-post="<?php echo $post->ID; ?>" data-image="<?php echo $image_id; ?>" href="#">Blip it!</a><span id="<?php echo $this->nonce(); ?>" class="hidden"><?php echo wp_create_nonce( $this->nonce() ); ?></span> <span id="blippress-waiting">Please wait...</span></div>
 
 			<div id="blippress-status"></div>
 

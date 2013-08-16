@@ -4,12 +4,14 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 ## To Do
 
+* image not showing on blipped posts?
+* instructions
 * credit media library jquery
 * show metadata when choosing image
-* single global $prefix
 * requires 3.5
 * validate settings
 * validate shortcode atts
+* ajax nonce
 * API error handling
 * check menu icon in different browsers
 * class singularisation
@@ -17,16 +19,12 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * toolbar
 * widget
 * styles:
-* - metabox
 * - dashboard
-* - front-end
+* - check non-mp6 styling
 * options:
-* - show desc
-* - show exif
 * - encrypt token?
 * dashboard sidebar
 * description
-* license
 * changelog
 * shortcode generator on dashboard
 * search feature on dashboard

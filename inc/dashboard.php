@@ -13,8 +13,8 @@ class blippress_dashboard {
 	function __construct() {
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'styles' ) );
-		add_action( 'admin_menu',            array( $this, 'add_page' ) );
-		add_action( 'admin_menu',            array( $this, 'rename_submenu' ), 1000 );
+		add_action( 'admin_menu',            array( $this, 'add_page' ), 100 );
+		add_action( 'admin_menu',            array( $this, 'rename_submenu' ), 120 );
 
 	}
 
@@ -22,16 +22,18 @@ class blippress_dashboard {
 
 	function styles() {
 
+		global $blippress;
+
 		if ( 'mp6' == get_user_option( 'admin_color' ) ) {
 
 			wp_register_style(
-				'blippress-icon',
+				$blippress->prefix . 'icon',
 				BLIPPRESS_PLUGIN_DIR . 'css/icon.css',
 				null,
 				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/icon.css' )
 				);
 
-			wp_enqueue_style( 'blippress-icon' );
+			wp_enqueue_style( $blippress->prefix . 'icon' );
 
 		}
 
@@ -40,13 +42,13 @@ class blippress_dashboard {
 		if ( 'toplevel_page_blippress' == $screen->id ) {
 
 			wp_register_style(
-				'blippress-dashboard',
+				$blippress->prefix . 'dashboard',
 				BLIPPRESS_PLUGIN_DIR . 'css/dashboard.css',
 				null,
 				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/dashboard.css' )
 				);
 
-			wp_enqueue_style( 'blippress-dashboard' );
+			wp_enqueue_style( $blippress->prefix . 'dashboard' );
 
 		}
 
@@ -82,7 +84,7 @@ class blippress_dashboard {
 
 	function render_page() {
 
-		global $blippress;
+		global $blippress, $blippress_settings;
 
 		$opts = blippress_options();
 
@@ -96,7 +98,9 @@ class blippress_dashboard {
 
 				<?php if ( blippress_check_permission() ) { ?>
 
-					<h3>Your recent blips</h3>
+					<h3>Your Blipfoto journal</h3>
+
+					<p>These blips are displayed using your default settings. You can change them at the <a href="<?php echo admin_url( 'options-general.php?page=' . $blippress_settings->slug() ); ?>">settings page</a>.</p>
 
 					<?php echo blippress_latest(); ?>
 
@@ -114,7 +118,7 @@ class blippress_dashboard {
 						<div class="postbox blippress-info" id="blippress-support">
 							<h3 class="hndle"><span>Need Help?</span></h3>
 							<div class="inside">
-								<p>If something's not working, the first step is to read the <a href="<?php echo $blippress->plugin_page; ?>/faq/">[!!LINK!!] FAQ</a>.</p>
+								<p>If something's not working, the first step is to read the <a href="<?php echo blippress_plugin_page(); ?>/faq/">[@TODO@] FAQ</a>. There are also examples at <a href="<?php echo blippress_website(); ?>"><?php echo blippress_website( false ); ?></a>.</p>
 								<p>If your question is not answered there, please check the official <a href="http://wordpress.org/tags/blippress?forum_id=10">[!!LINK!!] support forum</a>.</p>
 							</div>
 						</div>
@@ -126,10 +130,10 @@ class blippress_dashboard {
 							<div class="inside">
 								<p>If this plugin has helped you showcase your photography skills, please consider supporting it:</p>
 								<ul>
-									<li><a href="<?php echo $blippress->plugin_page; ?>">[!!LINK!!] Rate it and let other people know it works</a>.</li>
-									<li>Link to or share <a href="<?php echo $blippress->plugin_page; ?>" target="_blank">the plugin page</a> on Twitter or Facebook.</li>
+									<li><a href="<?php echo blippress_plugin_page(); ?>">[@TODO@] Rate it and let other people know it works</a>.</li>
+									<li>Link to or share <a href="<?php echo blippress_plugin_page(); ?>" target="_blank">the plugin page</a> on Twitter or Facebook.</li>
 									<li>Write a review on your website or blog.</li>
-									<li>Make a <a href="http://lumpylemon.co.uk/donate/">donation</a>.</li>
+									<li>Make a <a href="<?php echo blippress_website(); ?>/donate/">donation</a>.</li>
 									<li><a href="http://lumpylemon.co.uk/">Commission me</a> for WordPress development, plugin or design work (or photography if you're feeling brave!).</li>
 								</ul>
 							</div>

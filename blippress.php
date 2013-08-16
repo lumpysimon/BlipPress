@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: BlipPress
-Plugin URI:  http://blippress.org
-Description: All the Blipfoto things but for WordPress
-Version:     0.1beta
-Author:      Simon Blackbourn @ Lumpy Lemon
+Plugin URI:  http://blippress.com
+Description: Display entries from your Blipfoto journal tand post to Blipfoto from your WordPress website
+Version:     1.0
+Author:      Simon Blackbourn
 Author URI:  https://twitter.com/lumpysimon
+License:     GPL2
 
 
 
@@ -18,7 +19,8 @@ Author URI:  https://twitter.com/lumpysimon
 	photography (in which Blipfoto plays a significant role) and WordPress development.
 
 	The Blipfoto website is at http://blipfoto.com
-	My own Blipfoto journal can be viewed at http://blipfoto.com/lumpysimon
+	My Blipfoto journal can be viewed at http://blipfoto.com/lumpysimon
+	Detailed instructions, news and other random bits n bobs connected with BlipPress at http://blippress.com
 	If you're so inclined you can follow me on Twitter at https://twitter.com/lumpysimon
 
 
@@ -60,6 +62,7 @@ defined( 'ABSPATH' ) or die();
 
 
 
+// define constants, if not defined already
 if ( ! defined( 'BLIPPRESS_PLUGIN_PATH' ) )
 	define( 'BLIPPRESS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -68,32 +71,29 @@ if ( ! defined( 'BLIPPRESS_PLUGIN_DIR' ) )
 
 
 
-require 'inc/blipfoto-wordpress-api.php';
-require 'inc/helpers.php';
-require 'inc/cache.php';
-require 'inc/frontend.php';
-require 'inc/settings.php';
-require 'inc/dashboard.php';
-require 'inc/authentication.php';
-// require 'inc/create.php';
-require 'inc/functions.php';
-require 'inc/shortcodes.php';
-require 'inc/post.php';
+// include all the component files from the 'inc' folder
+foreach ( glob( dirname( __FILE__ ) . '/inc/*.php' ) as $component ) {
+	require $component;
+}
 
 
 
+/**
+ * The main BlipPress class.
+ * Doesnt'actually do much apart from define some variables and run the activation function.
+ */
 class blippress {
 
 
 
 	var $plugin_page       = 'http://wordpress.org/extend/plugins/blippress';
+	var $website           = 'blippress.com';
 	var $me                = 'lumpysimon';
 	var $permissions_id    = '139459';
 	var $key               = '46a9df14f768a45619a5c0eb312d51a3';
 	var $secret            = 'd96e00ecb17c1fd33e37b73a0c483fef';
 	var $default_num       = 16;
 	var $prefix            = 'blippress-';
-	var $transient_timeout = 600; // 10 minutes
 
 
 
