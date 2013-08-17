@@ -1,5 +1,28 @@
+.postbox-container {
+	margin-left: 20px;
+}
+
+.blippress {
+	margin-bottom: 2em;
+	max-width: 90%;
+}
+
+.blippress-single {
+	position: relative;
+}
+
 .blippress-multi {
 	overflow: hidden;
+}
+
+.blippress img {
+	display: block !important;
+}
+
+.blippress-image-single {
+	float: none;
+	height: auto;
+	max-width: 100%;
 }
 
 .blippress-image-multi {
@@ -11,23 +34,27 @@
 	margin: 0 10px 10px 0;
 }
 
-.admin-color-mp6 .blippress-image-multi a {
-	border: 4px dashed #eee;
-	display: block;
+.blippress-single .blippress-info {
+	background: rgba(0,0,0,0.7);
+	bottom: 0;
+	left: 0;
+	padding: 5px 5px 0;
+	position: absolute;
+	right: 0;
 }
 
-.admin-color-mp6 .blippress-image-multi-small a {
-	border-width: 2px;
+.blippress-single .blippress-info p {
+	color: #fff !important;
+	margin: 0 !important;
+	padding: 0 5px 5px 5px !important;
+	text-align: right !important;
 }
 
-.admin-color-mp6 .postbox .blippress-image-multi a {
-	border-color: #fff;
+.blippress-single .blippress-info .blippress-details {
+	font-size: 0.8em !important;
 }
 
-.admin-color-mp6 .blippress-image-multi a:hover {
-	border-color: #333;
-}
-
-.blippress-image-multi img {
-	display: block;
+.blippress-single .blippress-info a {
+	color: #fff !important;
+	text-decoration: underline !important;
 }

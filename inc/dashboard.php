@@ -84,9 +84,7 @@ class blippress_dashboard {
 
 	function render_page() {
 
-		global $blippress, $blippress_settings;
-
-		$opts = blippress_options();
+		global $blippress, $blippress_settings, $blippress_shortcodes;
 
 		?>
 
@@ -94,13 +92,15 @@ class blippress_dashboard {
 
 			<h2>BlipPress Dashboard</h2>
 
-			<div class="postbox-container" style="width:65%;">
+			<div class="postbox-container" style="width:60%;">
 
 				<?php if ( blippress_check_permission() ) { ?>
 
 					<h3>Your Blipfoto journal</h3>
 
 					<p>These blips are displayed using your default settings. You can change them at the <a href="<?php echo admin_url( 'options-general.php?page=' . $blippress_settings->slug() ); ?>">settings page</a>.</p>
+
+					<?php echo $blippress_shortcodes->single_latest( array( 'user' => blippress_auth_option( 'username' ) ) ); ?>
 
 					<?php echo blippress_latest(); ?>
 

@@ -7,6 +7,10 @@
 	position: relative;
 }
 
+.blippress-multi {
+	overflow: hidden;
+}
+
 .blippress img {
 	display: block !important;
 }
