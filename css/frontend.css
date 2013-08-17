@@ -1,5 +1,6 @@
 .blippress {
-	margin-bottom: 2em;
+	margin: 0 auto 2em;
+	max-width: 100%;
 }
 
 .blippress-single {
@@ -13,7 +14,6 @@
 .blippress-image-single {
 	float: none;
 	height: auto;
-	margin: 0 auto;
 	max-width: 100%;
 }
 
@@ -47,6 +47,10 @@
 }
 
 .blippress-single .blippress-info .blippress-details {
+	font-size: 0.8em !important;
+}
+
+.widget .blippress-single .blippress-info .blippress-title {
 	font-size: 0.8em !important;
 }
 

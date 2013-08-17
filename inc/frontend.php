@@ -9,6 +9,7 @@ class blippress_frontend {
 	function __construct() {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'styles' ) );
+		add_filter( 'the_content', array( $this, 'content' ) );
 
 	}
 
@@ -30,6 +31,20 @@ class blippress_frontend {
 			wp_enqueue_style( $blippress->prefix . 'frontend' );
 
 		}
+
+	}
+
+
+
+	function content( $content ) {
+
+		global $blippress_shortcodes;
+
+		if ( $entry_id = is_blipped() ) {
+			$content = $blippress_shortcodes->single_id( array( 'id' => $entry_id ) ) . $content;
+		}
+
+		return $content;
 
 	}
 

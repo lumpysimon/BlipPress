@@ -4,7 +4,6 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 ## To Do
 
-* image not showing on blipped posts?
 * instructions
 * credit media library jquery
 * show metadata when choosing image
@@ -17,7 +16,6 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * class singularisation
 * localisation
 * toolbar
-* widget
 * styles:
 * - dashboard
 * - check non-mp6 styling

@@ -13,7 +13,6 @@ class blippress_shortcodes {
 		add_shortcode( 'blippostdate', array( $this, 'single_post_date' ) );
 		add_shortcode( 'bliplatest',   array( $this, 'single_latest'    ) );
 		add_shortcode( 'blips',        array( $this, 'multi_latest'     ) );
-		add_shortcode( 'postblip',     array( $this, 'single_post'      ) );
 
 	}
 
@@ -39,7 +38,9 @@ class blippress_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'id' => null
+					'id'        => null,
+					'show_date' => true,
+					'show_meta' => blippress_option( 'meta' )
 					),
 				$atts
 				)
@@ -50,13 +51,19 @@ class blippress_shortcodes {
 
 		$id        = absint( $id );
 		$transient = $blippress->prefix . 'single-' . $id;
+		if ( $show_date ) {
+			$transient .= '-d';
+		}
+		if ( $show_meta ) {
+			$transient .= '-m';
+		}
 
 		if ( false === $out = get_transient( $transient ) ) {
 
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_id( $id ) ) {
-				$out = $this->render_single_blip( $data );
+				$out = $this->render_single_blip( $data, $show_date, $show_meta );
 				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -79,8 +86,10 @@ class blippress_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blippress_auth_option( 'username' ),
-					'date' => date( 'd-m-Y' )
+					'user'      => blippress_auth_option( 'username' ),
+					'date'      => date( 'd-m-Y' ),
+					'show_date' => true,
+					'show_meta' => blippress_option( 'meta' )
 					),
 				$atts
 				)
@@ -99,13 +108,19 @@ class blippress_shortcodes {
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
 		$transient = $blippress->prefix . 'date-' . $date;
+		if ( $show_date ) {
+			$transient .= '-d';
+		}
+		if ( $show_meta ) {
+			$transient .= '-m';
+		}
 
 		if ( false === $out = get_transient( $transient ) ) {
 
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_entry_by_date( $user, $date ) ) {
-				$out = $this->render_single_blip( $data );
+				$out = $this->render_single_blip( $data, $show_date, $show_meta );
 				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -142,20 +157,28 @@ class blippress_shortcodes {
 		extract(
 			shortcode_atts(
 				array(
-					'user' => blippress_auth_option( 'username' )
+					'user'      => blippress_auth_option( 'username' ),
+					'show_date' => true,
+					'show_meta' => blippress_option( 'meta' )
 					),
 				$atts
 				)
 			);
 
 		$transient = $blippress->prefix . 'latest-' . $user;
+		if ( $show_date ) {
+			$transient .= '-d';
+		}
+		if ( $show_meta ) {
+			$transient .= '-m';
+		}
 
 		if ( false === $out = get_transient( $transient ) ) {
 
 			$blip = new blipWP( $blippress->key, blippress_auth_option( 'secret' ) );
 
 			if ( $data = $blip->get_latest_entry_by_user( $user ) ) {
-				$out = self::render_single_blip( $data );
+				$out = self::render_single_blip( $data, $show_date, $show_meta );
 				set_transient( $transient, $out, $blippress_cache->transient_timeout );
 				$blippress_cache->add( $transient );
 			}
@@ -217,9 +240,6 @@ class blippress_shortcodes {
 
 	private function meta( $data ) {
 
-		if ( ! blippress_option( 'meta' ) )
-			return;
-
 		if ( ! isset( $data->exif ) )
 			return;
 
@@ -263,9 +283,9 @@ class blippress_shortcodes {
 
 
 
-	private function render_single_blip( $data ) {
+	private function render_single_blip( $data, $show_date, $show_meta ) {
 
-		$out  = '<div class="blippress blippress-single">';
+		$out  = '<div class="blippress blippress-single" ' . apply_filters( 'blippress_div_width', 'style="width: ' . $data->dimensions->width . 'px;"', $data->dimensions->width ) . '>';
 
 		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . $data->image . '"';
 		if ( isset( $data->dimensions ) ) {
@@ -274,12 +294,17 @@ class blippress_shortcodes {
 		$out .= '>';
 
 		$out .= '<div class="blippress-info">';
-		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_attr( $data->url ) . '">&quot;' . esc_html( $data->title ) . '&quot; by ' . $data->display_name . '</a></p>';
-		$out .= '<p class="blippress-details">' . date( get_option( 'date_format' ), strtotime( $data->date ) );
-		if ( $meta = $this->meta( $data ) ) {
-			$out .=  ' : ' . $meta;
+		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_attr( $data->url ) . '">' . esc_html( $data->title ) . '</a> by ' . $data->display_name . '</p>';
+		if ( ( $show_meta and $meta = $this->meta( $data ) ) or $show_date ) {
+			$out .= '<p class="blippress-details">';
+			if ( $show_date ) {
+				$out .= date( get_option( 'date_format' ), strtotime( $data->date ) );
+			}
+			if ( $show_meta and $meta ) {
+				$out .=  ' : ' . $meta;
+			}
+			$out .= '</p>';
 		}
-		$out .= '</p>';
 		$out .= '</div>';
 
 		$out .= '</div>';

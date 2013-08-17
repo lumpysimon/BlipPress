@@ -14,8 +14,8 @@ class blippress_multi_widget extends WP_Widget {
 			);
 
 		parent::__construct(
-			'blippress',
-			'BlipPress',
+			'blippress-multi',
+			'BlipPress Multi',
 			$opts
 			);
 

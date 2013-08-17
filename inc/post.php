@@ -156,8 +156,8 @@ class blippress_post {
 
 				$postdata = array(
 					'image_url'   => $meta['url'],
-					'title'       => $post->post_title,
-					'description' => $post->post_content,
+					'title'       => strip_tags( $post->post_title ),
+					'description' => strip_tags( $post->post_content, '<a><strong><b><em>' ),
 					'date'        => $meta['created_timestamp']
 					);
 

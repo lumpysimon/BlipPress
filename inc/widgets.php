@@ -17,6 +17,8 @@ class blippress_widgets {
 
 		if ( blippress_check_permission() ) {
 			register_widget( 'blippress_multi_widget' );
+			register_widget( 'blippress_single_widget' );
+			register_widget( 'blippress_latest_widget' );
 		}
 
 	}
