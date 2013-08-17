@@ -49,6 +49,10 @@ class blippress_shortcodes {
 		if ( !$id or !is_numeric( $id ) )
 			return;
 
+		if ( 'false' == $show_meta ) {
+			$show_meta = false;
+		}
+
 		$id        = absint( $id );
 		$transient = $blippress->prefix . 'single-' . $id;
 		if ( $show_date ) {

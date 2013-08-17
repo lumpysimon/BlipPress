@@ -13,7 +13,6 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * ajax nonce
 * API error handling
 * check menu icon in different browsers
-* class singularisation
 * localisation
 * toolbar
 * styles:
