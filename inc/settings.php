@@ -176,7 +176,7 @@ class blippress_settings {
 							<tr valign="top">
 								<th scope="row">Number of images</th>
 								<td>
-									<input name="<?php echo $this->option(); ?>[num]" class="small-text" type="number" step="1" min="0" value="<?php echo $opts['num']; ?>">
+									<input name="<?php echo $this->option(); ?>[num]" class="small-text" type="number" step="1" min="1" max="40" value="<?php echo $opts['num']; ?>">
 									<p class="description">How many images to display when retrieving multiple blips. This can be manually overridden in the shortcode.</p>
 								</td>
 							</tr>
