@@ -4,29 +4,37 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 ## To Do
 
-* instructions
-* credit media library jquery
-* show metadata when choosing image
-* requires 3.5
-* validate settings
-* validate shortcode atts
-* ajax nonce
-* API error handling
-* check menu icon in different browsers
-* localisation
-* toolbar
-* styles:
+### Important
+
+* security:
+* - validate settings
+* - validate shortcode atts
+* - TEST ajax nonce
+* - API error handling
+* - nonces on auth page
+* - esc_attr etc
+* info/documentation:
+* - blippress.com
+* - instructions
+* - requires 3.5
+* - description
+* - changelog
+* - credit media library jquery
+* - dashboard sidebar
+* styling:
 * - dashboard
 * - check non-mp6 styling
-* options:
-* - encrypt token?
-* dashboard sidebar
-* description
-* changelog
+* - check menu icon in different browsers
+* everything else:
+* - search for @TODO@
+
+### Less important
+
+* show metadata when choosing image
+* localisation
+* toolbar
 * shortcode generator on dashboard
 * search feature on dashboard
 * filter hooks
-* nonce on post button
-* nonces on auth page
-* esc_attr etc
-* search for @TODO@
+* options:
+* - encrypt token?
