@@ -36,7 +36,7 @@ class blippress_post {
 
 	function script() {
 
-		global $blippress;
+		global $post, $blippress;
 
 		wp_register_script(
 			$blippress->prefix . 'post',
@@ -47,14 +47,17 @@ class blippress_post {
 
 		wp_enqueue_script( $blippress->prefix . 'post' );
 
-		wp_localize_script(
-			$blippress->prefix . 'post',
-			'BlipPress',
-			array(
+		$loc = array(
+				'_nonce'          => wp_create_nonce( 'blippress_request_' . $post->ID ),
 				'frameTitle'      => 'Choose an image',
 				'frameUpdateText' => 'Update image',
 				'fullSizeLabel'   => 'Full Size'
-				)
+				);
+
+		wp_localize_script(
+			$blippress->prefix . 'post',
+			'BlipPress',
+			$loc
 			);
 
 	}
@@ -81,6 +84,9 @@ class blippress_post {
 	function ajax_post_to_blipfoto() {
 
 		global $blippress, $blippress_cache;
+
+		if ( !isset( $_POST['_nonce'] ) or !wp_verify_nonce( $_POST['_nonce'], 'blippress_request_' . $_POST['post_id'] ) )
+			return;
 
 		if ( ! blippress_check_permission() )
 			return;
