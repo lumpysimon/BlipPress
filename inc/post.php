@@ -81,11 +81,15 @@ class blippress_post {
 
 		global $blippress, $blippress_cache;
 
-		if ( !isset( $_POST['_nonce'] ) or !wp_verify_nonce( $_POST['_nonce'], 'blippress_request_' . $_POST['post_id'] ) )
+		if ( !isset( $_POST['_nonce'] ) or !wp_verify_nonce( $_POST['_nonce'], 'blippress_request_' . $_POST['post_id'] ) ) {
+			error_log('nonce failure: '.$_POST['_nonce']);
 			return;
+		}
 
-		if ( ! blippress_check_permission() )
+		if ( ! blippress_check_permission() ) {
+			error_log('permission failure');
 			return;
+		}
 
 		$ok = true;
 
@@ -326,7 +330,7 @@ class blippress_post {
 			foreach ( $meta as $field ) {
 				delete_post_meta( $post_id, blippress_prefix() . $field );
 				if ( isset( $_POST[blippress_prefix() . $field] ) and '' != trim( $_POST[blippress_prefix() . $field] ) ) {
-					$data = wp_kses( trim( $_POST[blippress_prefix() . $field] ) );
+					$data = trim( wp_kses( $_POST[blippress_prefix() . $field], array() ) );
 					update_post_meta( $post_id, blippress_prefix() . $field, $data );
 				}
 			}

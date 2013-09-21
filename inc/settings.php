@@ -70,7 +70,7 @@ class blippress_settings {
 						$new[$k] = (int) $v;
 					break;
 					case 'text' :
-						$new[$k] = wp_kses( $v );
+						$new[$k] = wp_kses( $v, array() );
 					break;
 					case 'boolean' :
 						$new[$k] = (int) $v;

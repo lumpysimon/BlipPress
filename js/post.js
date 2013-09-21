@@ -130,7 +130,7 @@ jQuery(function($) {
 				$('#blippress-status').removeClass('updated error').html('').hide();
 
 				$.post( ajaxurl, {
-					'_nonce' : blippress._nonce,
+					'_nonce' : BlipPress._nonce,
 					'action'  : 'post_to_blipfoto',
 					'post_id' : post_id,
 					'image_id' : image_id

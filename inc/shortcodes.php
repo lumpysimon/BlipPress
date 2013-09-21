@@ -343,7 +343,7 @@ class blippress_shortcodes {
 
 	function sanitise_user_attribute( $user ) {
 
-		return trim( wp_kses( $user ) );
+		return trim( wp_kses( $user, array() ) );
 
 	}
 
