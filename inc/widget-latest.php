@@ -49,7 +49,7 @@ class blippress_latest_widget extends WP_Widget {
 		echo $before_title . $title . $after_title;
 
 		$args = array(
-			'username'  => $username,
+			'user'      => $username,
 			'show_date' => false,
 			'show_meta' => false
 			);
@@ -85,8 +85,8 @@ class blippress_latest_widget extends WP_Widget {
 				)
 			);
 
-		$title = esc_attr( $instance['title'] );
-		$username   = wp_kses( $instance['username'], array() );
+		$title    = esc_attr( $instance['title'] );
+		$username = wp_kses( $instance['username'], array() );
 
 		echo sprintf(
 			'<p><label for="%s">%s</label><input type="text" class="widefat" id="%s" name="%s" value="%s"></p>',
