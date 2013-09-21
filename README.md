@@ -11,11 +11,8 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 * info/documentation:
 * - blippress.com
-* API inline docs
-* improve plugin inline docs
-
-* everything else:
-* - search for @TODO@
+* - API inline docs
+* - improve (& capitalise!) plugin inline docs
 
 ### Less important
 
