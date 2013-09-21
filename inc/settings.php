@@ -55,9 +55,35 @@ class blippress_settings {
 
 		$new = array();
 
+		$opts = array(
+			'num'        => 'numeric',
+			'size'       => 'text',
+			'css'        => 'boolean',
+			'meta'       => 'boolean',
+			'post-types' => 'array'
+			);
+
 		if ( $inputs ) {
 			foreach ( $inputs as $k => $v ) {
-				$new[$k] = $v;
+				switch ( $opts[$k] ) {
+					case 'numeric' :
+						$new[$k] = (int) $v;
+					break;
+					case 'text' :
+						$new[$k] = wp_kses( $v );
+					break;
+					case 'boolean' :
+						$new[$k] = (int) $v;
+					break;
+					case 'array' :
+						foreach ( $v as $array_k => $array_v ) {
+							$new[$k][$array_k] = (int) $array_v;
+						}
+					break;
+				}
+				if ( ! $new[$k] ) {
+					unset( $new[$k] );
+				}
 			}
 		}
 
@@ -115,8 +141,8 @@ class blippress_settings {
 			'num'        => $blippress->default_num,
 			'size'       => 'big',
 			'css'        => 1,
-			'meta'       => true,
-			'post-types' => array( 'post' => true )
+			'meta'       => 1,
+			'post-types' => array( 'post' => 1 )
 			);
 
 	}
