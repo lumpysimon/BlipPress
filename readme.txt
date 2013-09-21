@@ -3,7 +3,7 @@ Contributors: lumpysimon
 Donate link: http://blippress.com/donate
 Tags: blipfoto, blipfoto.com, blip, foto, journal, photography, photo, photos, diary, images, gallery, galleries
 Requires at least: 3.5
-Tested up to: 3.6
+Tested up to: 3.6.1
 Stable tag: trunk
 
 Display entries from your Blipfoto journal tand post to Blipfoto from your WordPress website.
