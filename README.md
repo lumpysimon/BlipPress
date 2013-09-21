@@ -8,17 +8,19 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 * security:
 * - API error handling
+
 * info/documentation:
 * - blippress.com
 * - instructions
 * - description
 * - changelog
-* - credit media library jquery
 * - dashboard sidebar
+
 * styling:
 * - dashboard
 * - check non-mp6 styling
 * - check menu icon in different browsers
+
 * everything else:
 * - search for @TODO@
 
@@ -30,5 +32,6 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 * shortcode generator on dashboard
 * search feature on dashboard
 * filter hooks
+
 * options:
 * - encrypt token?

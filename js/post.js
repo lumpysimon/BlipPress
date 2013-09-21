@@ -1,6 +1,6 @@
 var BlipPress;
 
-// @TODO@ CREDIT THIS!!
+// Adapted from https://github.com/blazersix/simple-image-widget
 
 /**
  * Media control frame popup.

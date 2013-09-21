@@ -47,9 +47,8 @@ class blippress_post {
 
 		$loc = array(
 				'_nonce'          => wp_create_nonce( 'blippress_request_' . $post->ID ),
-				'frameTitle'      => 'Choose an image',
-				'frameUpdateText' => 'Update image',
-				'fullSizeLabel'   => 'Full Size'
+				'frameTitle'      => 'Choose an image for your blip',
+				'frameUpdateText' => 'Select image'
 				);
 
 		wp_localize_script(
