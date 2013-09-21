@@ -22,15 +22,16 @@
 	https://github.com/lumpysimon/blipfoto-wordpress-api
 
 	This class is a rewrite of BlipPHP v1.2 written by Graham Bradley
-	That version is no longer online, but a newer version now exists at https://github.com/Blipfoto/blipfoto-api-php
+	That version is no longer online, but a newer version now exists at
+	https://github.com/Blipfoto/blipfoto-api-php
 
 	This class uses the WordPress wp_remote_get and wp_remote_post functions (instead of cURL),
 	caches the timestamp difference in a transient,
 	and also provides various helper functions.
 
 	Originally written for BlipPress:
-	http://blippress.com
 	http://wordpress.org/plugins/blippress
+	http://blippress.com
 	https://github.com/lumpysimon/blippress
 
 
@@ -68,6 +69,7 @@
 	------
 
 	- Error handling
+	- Inline docs
 
 */
 
