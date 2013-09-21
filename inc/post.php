@@ -80,15 +80,11 @@ class blippress_post {
 
 		global $blippress, $blippress_cache;
 
-		if ( !isset( $_POST['_nonce'] ) or !wp_verify_nonce( $_POST['_nonce'], 'blippress_request_' . $_POST['post_id'] ) ) {
-			error_log('nonce failure: '.$_POST['_nonce']);
+		if ( !isset( $_POST['_nonce'] ) or !wp_verify_nonce( $_POST['_nonce'], 'blippress_request_' . $_POST['post_id'] ) )
 			return;
-		}
 
-		if ( ! blippress_check_permission() ) {
-			error_log('permission failure');
+		if ( ! blippress_check_permission() )
 			return;
-		}
 
 		$ok = true;
 
