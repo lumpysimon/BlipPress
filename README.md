@@ -11,15 +11,6 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 * info/documentation:
 * - blippress.com
-* - instructions
-* - description
-* - changelog
-* - dashboard sidebar
-
-* styling:
-* - dashboard
-* - check non-mp6 styling
-* - check menu icon in different browsers
 
 * everything else:
 * - search for @TODO@
