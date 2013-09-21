@@ -36,9 +36,9 @@ function get_blippress_url( $id ) {
 		return;
 
 	return sprintf(
-				'http://blipfoto.com/entry/%s',
-				absint( $id )
-				);
+		'http://blipfoto.com/entry/%s',
+		absint( $id )
+		);
 
 }
 
@@ -55,10 +55,10 @@ function blippress_url( $id ) {
 function get_blippress_user_url( $user, $protocol = 'http://' ) {
 
 	return sprintf(
-				'%sblipfoto.com/%s',
-				$protocol,
-				$user
-				);
+		'%sblipfoto.com/%s',
+		$protocol,
+		$user
+		);
 
 }
 

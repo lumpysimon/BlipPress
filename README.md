@@ -8,11 +8,9 @@ A WordPress plugin to integrate Blipfoto into your WordPress website. Display si
 
 * security:
 * - API error handling
-* - esc_attr etc
 * info/documentation:
 * - blippress.com
 * - instructions
-* - requires 3.5
 * - description
 * - changelog
 * - credit media library jquery

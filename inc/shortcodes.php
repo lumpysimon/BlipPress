@@ -291,14 +291,14 @@ class blippress_shortcodes {
 
 		$out  = '<div class="blippress blippress-single" ' . apply_filters( 'blippress_div_width', 'style="width: ' . $data->dimensions->width . 'px;"', $data->dimensions->width ) . '>';
 
-		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . $data->image . '"';
+		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . esc_url( $data->image ) . '"';
 		if ( isset( $data->dimensions ) ) {
 			$out .= ' height="' . $data->dimensions->height . '" width="' . $data->dimensions->width . '"';
 		}
 		$out .= '>';
 
 		$out .= '<div class="blippress-info">';
-		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_attr( $data->url ) . '">' . esc_html( $data->title ) . '</a> by ' . $data->display_name . '</p>';
+		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_url( $data->url ) . '">' . $data->title . '</a> by ' . $data->display_name . '</p>';
 		if ( ( $show_meta and $meta = $this->meta( $data ) ) or $show_date ) {
 			$out .= '<p class="blippress-details">';
 			if ( $show_date ) {
@@ -325,8 +325,8 @@ class blippress_shortcodes {
 
 		foreach ( $data as $entry ) {
 
-			$out .= '<div class="blippress-image blippress-image-multi blippress-image-multi-' . $size . '" id="blippress-image-multi-' . $entry->entry_id . '">';
-			$out .= '<a href="' . esc_attr( $entry->url ) . '" title="View &quot;' . esc_attr( $entry->title ) . '&quot; (' . esc_attr( date( get_option( 'date_format' ), strtotime( $entry->date ) ) ) . ') by ' . esc_attr( $entry->display_name ) . ' on Blipfoto"><img src="' . esc_attr( $entry->thumbnail ) . '"></a>';
+			$out .= '<div class="blippress-image blippress-image-multi blippress-image-multi-' . esc_attr( $size ) . '" id="blippress-image-multi-' . $entry->entry_id . '">';
+			$out .= '<a href="' . esc_url( $entry->url ) . '" title="View &quot;' . esc_attr( $entry->title ) . '&quot; (' . esc_attr( date( get_option( 'date_format' ), strtotime( $entry->date ) ) ) . ') by ' . esc_attr( $entry->display_name ) . ' on Blipfoto"><img src="' . esc_url( $entry->thumbnail ) . '"></a>';
 			$out .= '</div>';
 
 		}
