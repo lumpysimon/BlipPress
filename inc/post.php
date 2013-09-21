@@ -26,9 +26,7 @@ class blippress_post {
 
 	function nonce() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->nonce;
+		return blippress_prefix() . $this->nonce;
 
 	}
 
@@ -36,16 +34,16 @@ class blippress_post {
 
 	function script() {
 
-		global $post, $blippress;
+		global $post;
 
 		wp_register_script(
-			$blippress->prefix . 'post',
+			blippress_prefix() . 'post',
 			BLIPPRESS_PLUGIN_DIR . 'js/post.js',
 			array( 'jquery', 'media-upload', 'media-views' ),
 			filemtime( BLIPPRESS_PLUGIN_PATH . 'js/post.js' )
 			);
 
-		wp_enqueue_script( $blippress->prefix . 'post' );
+		wp_enqueue_script( blippress_prefix() . 'post' );
 
 		$loc = array(
 				'_nonce'          => wp_create_nonce( 'blippress_request_' . $post->ID ),
@@ -55,7 +53,7 @@ class blippress_post {
 				);
 
 		wp_localize_script(
-			$blippress->prefix . 'post',
+			blippress_prefix() . 'post',
 			'BlipPress',
 			$loc
 			);
@@ -66,16 +64,14 @@ class blippress_post {
 
 	function style() {
 
-		global $blippress;
-
 		wp_register_style(
-			$blippress->prefix . 'post',
+			blippress_prefix() . 'post',
 			BLIPPRESS_PLUGIN_DIR . 'css/post.css',
 			null,
 			filemtime( BLIPPRESS_PLUGIN_PATH . 'css/post.css' )
 			);
 
-		wp_enqueue_style( $blippress->prefix . 'post' );
+		wp_enqueue_style( blippress_prefix() . 'post' );
 
 	}
 
@@ -231,13 +227,11 @@ class blippress_post {
 
 	function render_meta_box( $post ) {
 
-		global $blippress;
-
 		$button_classes = array( 'button', 'button-hero', 'blippress-image-control-choose' );
 
 		$image_id = absint( get_blippress_meta( $this->image_post_meta ) );
 
-		echo meta_handler_nonce_field( $post->ID, $blippress->prefix . 'image' );
+		echo meta_handler_nonce_field( $post->ID, blippress_prefix() . 'image' );
 		echo '<input type="hidden" name="blippress-image-id" id="blippress-image-id" value="' . esc_attr( $image_id ) . '">';
 
 		if ( is_blipped() ) {
@@ -321,21 +315,19 @@ class blippress_post {
 
 	function save_image_meta( $post_id, $post ) {
 
-		global $blippress;
-
 		$meta = array();
 
-		if ( verify_meta_handler_nonce( $post_id, $blippress->prefix . 'image' ) ) {
+		if ( verify_meta_handler_nonce( $post_id, blippress_prefix() . 'image' ) ) {
 			$meta[] = 'image-id';
 		}
 
 		if ( $meta ) {
 
 			foreach ( $meta as $field ) {
-				delete_post_meta( $post_id, $blippress->prefix . $field );
-				if ( isset( $_POST[$blippress->prefix . $field] ) and '' != trim( $_POST[$blippress->prefix . $field] ) ) {
-					$data = wp_kses( trim( $_POST[$blippress->prefix . $field] ) );
-					update_post_meta( $post_id, $blippress->prefix . $field, $data );
+				delete_post_meta( $post_id, blippress_prefix() . $field );
+				if ( isset( $_POST[blippress_prefix() . $field] ) and '' != trim( $_POST[blippress_prefix() . $field] ) ) {
+					$data = wp_kses( trim( $_POST[blippress_prefix() . $field] ) );
+					update_post_meta( $post_id, blippress_prefix() . $field, $data );
 				}
 			}
 

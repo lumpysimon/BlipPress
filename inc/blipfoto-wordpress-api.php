@@ -340,9 +340,7 @@ class blipWP {
 
 	private function create_timestamp() {
 
-		global $blippress;
-
-		$transient = $blippress->prefix . 'time';
+		$transient = blippress_prefix() . 'time';
 		$timeout   = 3600; // 1hr
 		$now       = time();
 

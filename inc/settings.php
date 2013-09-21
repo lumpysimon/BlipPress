@@ -23,9 +23,7 @@ class blippress_settings {
 
 	function slug() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->slug;
+		return blippress_prefix() . $this->slug;
 
 	}
 
@@ -33,9 +31,7 @@ class blippress_settings {
 
 	function option() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->option;
+		return blippress_prefix() . $this->option;
 
 	}
 

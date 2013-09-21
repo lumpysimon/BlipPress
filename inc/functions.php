@@ -2,6 +2,16 @@
 
 
 
+function blippress_prefix() {
+
+	global $blippress;
+
+	return $blippress->prefix;
+
+}
+
+
+
 function blippress_latest( $args = array() ) {
 
 	global $blippress, $blippress_shortcodes;
@@ -64,13 +74,13 @@ function blippress_user_url( $user, $protocol = 'http://' ) {
 
 function update_blippress_meta( $meta, $data, $post_id = null ) {
 
-	global $post, $blippress;
+	global $post;
 
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
 
-	update_post_meta( $post_id, $blippress->prefix . $meta, $data );
+	update_post_meta( $post_id, blippress_prefix() . $meta, $data );
 
 }
 
@@ -78,13 +88,13 @@ function update_blippress_meta( $meta, $data, $post_id = null ) {
 
 function get_blippress_meta( $meta, $post_id = null ) {
 
-	global $post, $blippress;
+	global $post;
 
 	if ( ! $post_id ) {
 		$post_id = $post->ID;
 	}
 
-	return get_post_meta( $post_id, $blippress->prefix . $meta, true );
+	return get_post_meta( $post_id, blippress_prefix() . $meta, true );
 
 }
 

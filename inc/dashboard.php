@@ -22,18 +22,16 @@ class blippress_dashboard {
 
 	function styles() {
 
-		global $blippress;
-
 		if ( 'mp6' == get_user_option( 'admin_color' ) ) {
 
 			wp_register_style(
-				$blippress->prefix . 'icon',
+				blippress_prefix() . 'icon',
 				BLIPPRESS_PLUGIN_DIR . 'css/icon.css',
 				null,
 				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/icon.css' )
 				);
 
-			wp_enqueue_style( $blippress->prefix . 'icon' );
+			wp_enqueue_style( blippress_prefix() . 'icon' );
 
 		}
 
@@ -42,13 +40,13 @@ class blippress_dashboard {
 		if ( 'toplevel_page_blippress' == $screen->id ) {
 
 			wp_register_style(
-				$blippress->prefix . 'dashboard',
+				blippress_prefix() . 'dashboard',
 				BLIPPRESS_PLUGIN_DIR . 'css/dashboard.css',
 				null,
 				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/dashboard.css' )
 				);
 
-			wp_enqueue_style( $blippress->prefix . 'dashboard' );
+			wp_enqueue_style( blippress_prefix() . 'dashboard' );
 
 		}
 

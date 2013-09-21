@@ -54,7 +54,7 @@ class blippress_shortcodes {
 		}
 
 		$id        = absint( $id );
-		$transient = $blippress->prefix . 'single-' . $id;
+		$transient = blippress_prefix() . 'single-' . $id;
 		if ( $show_date ) {
 			$transient .= '-d';
 		}
@@ -111,7 +111,7 @@ class blippress_shortcodes {
 
 		$date = sprintf( '%s-%s-%s', $day, $month, $year );
 
-		$transient = $blippress->prefix . 'date-' . $date;
+		$transient = blippress_prefix() . 'date-' . $date;
 		if ( $show_date ) {
 			$transient .= '-d';
 		}
@@ -169,7 +169,7 @@ class blippress_shortcodes {
 				)
 			);
 
-		$transient = $blippress->prefix . 'latest-' . $user;
+		$transient = blippress_prefix() . 'latest-' . $user;
 		if ( $show_date ) {
 			$transient .= '-d';
 		}
@@ -222,7 +222,7 @@ class blippress_shortcodes {
 			$size = 'big';
 		}
 
-		$transient = $blippress->prefix . 'latest-' . $user . '-' . $num . '-' . $size;
+		$transient = blippress_prefix() . 'latest-' . $user . '-' . $num . '-' . $size;
 
 		if ( false === $out = get_transient( $transient ) ) {
 

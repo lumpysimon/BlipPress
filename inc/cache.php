@@ -18,9 +18,7 @@ class blippress_cache {
 
 	function name() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->option;
+		return blippress_prefix() . $this->option;
 
 	}
 

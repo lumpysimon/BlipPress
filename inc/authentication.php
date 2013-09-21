@@ -29,9 +29,7 @@ class blippress_authentication {
 
 	function option() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->option;
+		return blippress_prefix() . $this->option;
 
 	}
 
@@ -39,9 +37,7 @@ class blippress_authentication {
 
 	function slug() {
 
-		global $blippress;
-
-		return $blippress->prefix . $this->slug;
+		return blippress_prefix() . $this->slug;
 
 	}
 

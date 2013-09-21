@@ -17,18 +17,16 @@ class blippress_frontend {
 
 	function styles() {
 
-		global $blippress;
-
 		if ( blippress_option( 'css' ) ) {
 
 			wp_register_style(
-				$blippress->prefix . 'frontend',
+				blippress_prefix() . 'frontend',
 				BLIPPRESS_PLUGIN_DIR . 'css/frontend.css',
 				null,
 				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/frontend.css' )
 				);
 
-			wp_enqueue_style( $blippress->prefix . 'frontend' );
+			wp_enqueue_style( blippress_prefix() . 'frontend' );
 
 		}
 
