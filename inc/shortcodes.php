@@ -18,16 +18,6 @@ class blippress_shortcodes {
 
 
 
-	function single_post() {
-
-		if ( $entry_id = is_blipped() ) {
-			echo $this->single_id( array( 'id' => $entry_id ) );
-		}
-
-	}
-
-
-
 	function single_id( $atts ) {
 
 		global $blippress, $blippress_cache;
@@ -53,7 +43,8 @@ class blippress_shortcodes {
 			$show_meta = false;
 		}
 
-		$id        = absint( $id );
+		$id = absint( $id );
+
 		$transient = blippress_prefix() . 'single-' . $id;
 		if ( $show_date ) {
 			$transient .= '-d';
@@ -98,6 +89,9 @@ class blippress_shortcodes {
 				$atts
 				)
 			);
+
+		if ( ! $this->sanitise_user_attribute( $user ) )
+			return;
 
 		if ( 10 != strlen( $date ) )
 			return;
@@ -169,6 +163,9 @@ class blippress_shortcodes {
 				)
 			);
 
+		if ( ! $this->sanitise_user_attribute( $user ) )
+			return;
+
 		$transient = blippress_prefix() . 'latest-' . $user;
 		if ( $show_date ) {
 			$transient .= '-d';
@@ -212,6 +209,9 @@ class blippress_shortcodes {
 				$atts
 				)
 			);
+
+		if ( ! $this->sanitise_user_attribute( $user ) )
+			return;
 
 		if ( ! $num = absint( $num ) ) {
 			$num = $blippress->default_num;
@@ -336,6 +336,14 @@ class blippress_shortcodes {
 		$out .= '</div>';
 
 		return $out;
+
+	}
+
+
+
+	function sanitise_user_attribute( $user ) {
+
+		return trim( wp_kses( $user ) );
 
 	}
 
