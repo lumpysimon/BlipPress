@@ -199,7 +199,7 @@ class blippress_settings {
 								<th scope="row">Number of images</th>
 								<td>
 									<input name="<?php echo $this->option(); ?>[num]" class="small-text" type="number" step="1" min="1" max="40" value="<?php echo $opts['num']; ?>">
-									<p class="description">How many images to display when retrieving multiple blips. This can be manually overridden in the shortcode.</p>
+									<p class="description">How many images to display when retrieving multiple blips.<br />This can be manually overridden in the shortcode.</p>
 								</td>
 							</tr>
 
@@ -227,7 +227,7 @@ class blippress_settings {
 										<input name="<?php echo $this->option(); ?>[css]" type="checkbox" value="1" <?php checked( $opts['css'] ); ?>>
 										Use BlipPress styles?
 									</label>
-									<p class="description">Untick if you prefer to use your own CSS styling. [@TODO@ LINK TO STYLE GUIDE]</p>
+									<p class="description">Untick if you prefer to use your own CSS styling.</p>
 								</td>
 							</tr>
 
@@ -238,7 +238,7 @@ class blippress_settings {
 										<input name="<?php echo $this->option(); ?>[meta]" type="checkbox" value="1" <?php checked( $opts['meta'] ); ?>>
 										Show image metadata?
 									</label>
-									<p class="description">Choose whether to display the camera, aperture, exposure, focal length and ISO.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto</p>
+									<p class="description">Choose whether to display the camera, aperture, exposure, focal length and ISO.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto.</p>
 								</td>
 							</tr>
 
@@ -252,7 +252,7 @@ class blippress_settings {
 												<?php echo $label; ?>
 											</label><br>
 										<?php } ?>
-									<p class="description">Choose which post types blips can be created from</p>
+									<p class="description">Choose which post types blips can be created from.</p>
 									<fieldset>
 								</td>
 							</tr>
