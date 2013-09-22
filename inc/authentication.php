@@ -172,7 +172,7 @@ class blippress_authentication {
 				<p>BlipPress does not have the ability to create entries by itself, nor does it allow anyone else to, only you can manually do this.</p>
 				<p>The creators of BlipPress have no way of accessing any of your account credentials or other personal details (the necessary access token and key are only stored in your WordPress website's database).</p>
 				<h4>Questions?</h4>
-				<p>If you have any questions about this, please use the support forums at the <a href="<?php echo blippress_plugin_page(); ?>">plugin page</a>.</p>
+				<p>If you have any questions about this, please use the <a href="<?php echo blippress_plugin_support_page(); ?>">plugin support forums</a>.</p>
 
 			<?php } else { ?>
 

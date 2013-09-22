@@ -278,3 +278,13 @@ function blippress_plugin_page() {
 	return $blippress->plugin_page;
 
 }
+
+
+
+function blippress_plugin_support_page() {
+
+	global $blippress;
+
+	return $blippress->plugin_support_page;
+
+}

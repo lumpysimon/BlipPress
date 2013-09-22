@@ -88,14 +88,15 @@ class blippress {
 
 
 
-	var $plugin_page    = 'http://wordpress.org/extend/plugins/blippress';
-	var $website        = 'blippress.com';
-	var $me             = 'lumpysimon';
-	var $permissions_id = '139459';
-	var $key            = '46a9df14f768a45619a5c0eb312d51a3';
-	var $secret         = 'd96e00ecb17c1fd33e37b73a0c483fef';
-	var $default_num    = 16;
-	var $prefix         = 'blippress-';
+	var $plugin_page         = 'http://wordpress.org/extend/plugins/blippress';
+	var $plugin_support_page = 'http://wordpress.org/support/plugin/blippress';
+	var $website             = 'blippress.com';
+	var $me                  = 'lumpysimon';
+	var $permissions_id      = '139459';
+	var $key                 = '46a9df14f768a45619a5c0eb312d51a3';
+	var $secret              = 'd96e00ecb17c1fd33e37b73a0c483fef';
+	var $default_num         = 16;
+	var $prefix              = 'blippress-';
 
 
 
