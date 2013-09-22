@@ -18,15 +18,15 @@ BlipPress lets you easily integrate your Blipfoto journal into your WordPress we
 
 There are a number of shortcodes you can use. Just type these into any post or page.
 
+`[bliplatest]` displays the most recent blip from your journal. You can also specify the user: `[bliplatest user=lumpysimon]`
+
+`[blips]` displays a gallery of your recent blips. By default it uses the settings for the number of blips (default 16) and size (default large). You can override these, and also the user: `[blips num=5 size=small user=lumpysimon]`
+
 `[blip]` displays a single blip by entry ID. For example: `[blip id=3317861]`
 
 `[blipdate]` displays a single blip from your journal for a particular date. The date should be in the format dd-mm-yyyy. For example: `[blipdate date=22-09-2013]`. You can also specify the user: `[blipdate date=03-08-2013 user=lumpysimon]`
 
 `[blippostdate]` displays a single blip from your journal corresponding to the date of the current post.
-
-`[bliplatest]` displays the most recent blip from your journal. You can also specify the user: `[bliplatest user=lumpysimon]`
-
-`[blips]` displays a gallery of your recent blips. By default it uses the settings for the number of blips (default 16) and size (default large). You can override these, and also the user: `[blips num=5 size=small user=lumpysimon]`
 
 = Posting to Blipfoto from WordPress =
 
