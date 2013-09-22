@@ -108,4 +108,4 @@ class blippress_multi_widget extends WP_Widget {
 
 
 
-}
+} // class

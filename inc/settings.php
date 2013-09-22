@@ -199,7 +199,7 @@ class blippress_settings {
 								<th scope="row">Number of images</th>
 								<td>
 									<input name="<?php echo $this->option(); ?>[num]" class="small-text" type="number" step="1" min="1" max="40" value="<?php echo $opts['num']; ?>">
-									<p class="description">How many images to display when retrieving multiple blips.<br />This can be manually overridden in the shortcode.</p>
+									<p class="description">How many images to display when retrieving multiple blips.<br />This can be manually overridden in shortcodes and in the widget.</p>
 								</td>
 							</tr>
 
@@ -215,7 +215,7 @@ class blippress_settings {
 											<input name="<?php echo $this->option(); ?>[size]" type="radio" value="small" <?php checked( $opts['size'], 'small' ); ?>>
 											<span>Small</span>
 										</label>
-									<p class="description">The thumbnail size to show when retrieving multiple blips.</p>
+									<p class="description">The thumbnail size to show when retrieving multiple blips using a shortcode.</p>
 									<fieldset>
 								</td>
 							</tr>
@@ -227,7 +227,7 @@ class blippress_settings {
 										<input name="<?php echo $this->option(); ?>[css]" type="checkbox" value="1" <?php checked( $opts['css'] ); ?>>
 										Use BlipPress styles?
 									</label>
-									<p class="description">Untick if you prefer to use your own CSS styling.</p>
+									<p class="description">Untick this if you wish to use your own CSS styling.<br />See <a href="<?php echo esc_url( BLIPPRESS_PLUGIN_DIR . 'css/frontend.css' ); ?>"><?php echo esc_url( BLIPPRESS_PLUGIN_DIR . 'css/frontend.css' ); ?></a> as a guide to which CSS styles you will need to define.</p>
 								</td>
 							</tr>
 
@@ -238,7 +238,7 @@ class blippress_settings {
 										<input name="<?php echo $this->option(); ?>[meta]" type="checkbox" value="1" <?php checked( $opts['meta'] ); ?>>
 										Show image metadata?
 									</label>
-									<p class="description">Choose whether to display the camera, aperture, exposure, focal length and ISO.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto.</p>
+									<p class="description">Untick this if you prefer not to display the camera, aperture, exposure, focal length and ISO on single images.<br />Please note that images will always show the date taken and a link to the entry on Blipfoto.</p>
 								</td>
 							</tr>
 

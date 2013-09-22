@@ -68,5 +68,5 @@ When BlipPress retrieves an image from blipfoto.com it caches it for 10 minutes.
 
 == Changelog ==
 
-= 1.0 =
+= 0.1 =
 * Initial beta release

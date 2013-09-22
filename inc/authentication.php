@@ -4,8 +4,8 @@
 
 /**
  * The authentication class.
- * Handles everything to do with granting permission for BlipPress
- * to access your Blipfoto account.
+ * Handles everything to do with granting permission
+ * for BlipPress to access your Blipfoto account.
  */
 class blippress_authentication {
 
@@ -166,11 +166,11 @@ class blippress_authentication {
 
 				<h4>What does this mean?</h4>
 
-				<p>BlipPress needs your permission in order to access your Blipfoto account, and to prevent anyone accessing your account without your permission. When you click the button above, you will be redirected to the 'apps' page on blipfoto.com where you can verify that you are happy to allow it. You only need to do this once.</p>
+				<p>BlipPress needs your permission in order to access your Blipfoto account, and to prevent anyone else accessing your account without your permission. When you click the button above, you will be redirected to the 'apps' page on blipfoto.com where you can verify that you are happy to allow it. You only need to do this once.</p>
 				<p>You will then be able to display blips here on your website and create entries on your Blipfoto journal from the post edit screen.</p>
 				<h4>Privacy</h4>
 				<p>BlipPress does not have the ability to create entries by itself, nor does it allow anyone else to, only you can manually do this.</p>
-				<p>The creators of BlipPress have no way of accessing any of your account credentials or other personal details (the necessary access token and key are only stored here in your website's database).</p>
+				<p>The creators of BlipPress have no way of accessing any of your account credentials or other personal details (the necessary access token and key are only stored in your WordPress website's database).</p>
 				<h4>Questions?</h4>
 				<p>If you have any questions about this, please use the support forums at the <a href="<?php echo blippress_plugin_page(); ?>">plugin page</a>.</p>
 

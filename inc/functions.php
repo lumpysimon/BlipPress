@@ -12,9 +12,25 @@ function blippress_prefix() {
 
 
 
+function blippress_style( $name, $type ) {
+
+	return constant( 'BLIPPRESS_PLUGIN_' . strtoupper( $type ) ) . 'css/' . $name . '.css';
+
+}
+
+
+
+function blippress_script( $name, $type ) {
+
+	return constant( 'BLIPPRESS_PLUGIN_' . strtoupper( $type ) ) . 'js/' . $name . '.js';
+
+}
+
+
+
 function blippress_latest( $args = array() ) {
 
-	global $blippress, $blippress_shortcodes;
+	global $blippress_shortcodes;
 
 	$defaults = array(
 		'user' => blippress_auth_option( 'username' ),

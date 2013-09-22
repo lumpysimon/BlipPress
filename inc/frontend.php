@@ -9,7 +9,7 @@ class blippress_frontend {
 	function __construct() {
 
 		add_action( 'wp_enqueue_scripts', array( $this, 'styles' ) );
-		add_filter( 'the_content', array( $this, 'content' ) );
+		add_filter( 'the_content',        array( $this, 'content' ) );
 
 	}
 
@@ -21,9 +21,9 @@ class blippress_frontend {
 
 			wp_register_style(
 				blippress_prefix() . 'frontend',
-				BLIPPRESS_PLUGIN_DIR . 'css/frontend.css',
+				blippress_style( 'frontend', 'dir' ),
 				null,
-				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/frontend.css' )
+				filemtime( blippress_style( 'frontend', 'path' ) )
 				);
 
 			wp_enqueue_style( blippress_prefix() . 'frontend' );

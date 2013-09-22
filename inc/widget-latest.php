@@ -110,4 +110,4 @@ class blippress_latest_widget extends WP_Widget {
 
 
 
-}
+} // class

@@ -1,13 +1,12 @@
 # BlipPress
 
-A WordPress plugin to integrate Blipfoto into your WordPress website. Display single or multiple blips anywhere on your website, and create blips from within the WordPress admin area.
+A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal into your WordPress website. Display single or multiple blips (journal entries) anywhere on your website using shortcodes or widgets, and easily create journal entries from within your WordPress admin area.
 
 ## To Do
 
 ### Important
 
-* security:
-* - API error handling
+* API error handling
 
 * info/documentation:
 * - blippress.com

@@ -6,7 +6,7 @@ class blippress_dashboard {
 
 
 
-	var $slug   = 'blippress';
+	var $slug = 'blippress';
 
 
 
@@ -26,9 +26,9 @@ class blippress_dashboard {
 
 			wp_register_style(
 				blippress_prefix() . 'icon',
-				BLIPPRESS_PLUGIN_DIR . 'css/icon.css',
+				blippress_style( 'icon', 'dir' ),
 				null,
-				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/icon.css' )
+				filemtime( blippress_style( 'icon', 'path' ) )
 				);
 
 			wp_enqueue_style( blippress_prefix() . 'icon' );
@@ -41,9 +41,9 @@ class blippress_dashboard {
 
 			wp_register_style(
 				blippress_prefix() . 'dashboard',
-				BLIPPRESS_PLUGIN_DIR . 'css/dashboard.css',
+				blippress_style( 'dashboard', 'dir' ),
 				null,
-				filemtime( BLIPPRESS_PLUGIN_PATH . 'css/dashboard.css' )
+				filemtime( blippress_style( 'dashboard', 'path' ) )
 				);
 
 			wp_enqueue_style( blippress_prefix() . 'dashboard' );

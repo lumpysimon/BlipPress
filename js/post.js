@@ -1,6 +1,13 @@
-var BlipPress;
+/*
+	=================================================================
+	= BlipPress jQuery                                              =
+	= Adapted from https://github.com/blazersix/simple-image-widget =
+	=================================================================
+*/
 
-// Adapted from https://github.com/blazersix/simple-image-widget
+
+
+var BlipPress;
 
 /**
  * Media control frame popup.
@@ -124,7 +131,7 @@ jQuery(function($) {
 
 		if ( image_id && "0" != image_id && post_id ) {
 
-			if ( confirm('You are about to create an entry on Blipfoto. Proceed?' ) ) {
+			if ( confirm('You are about to create an entry on Blipfoto. Are you sure you want to proceed?' ) ) {
 
 				$('#blippress-waiting').show();
 				$('#blippress-status').removeClass('updated error').html('').hide();

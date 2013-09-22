@@ -38,9 +38,9 @@ class blippress_post {
 
 		wp_register_script(
 			blippress_prefix() . 'post',
-			BLIPPRESS_PLUGIN_DIR . 'js/post.js',
+			blippress_script( 'post', 'dir' ),
 			array( 'jquery', 'media-upload', 'media-views' ),
-			filemtime( BLIPPRESS_PLUGIN_PATH . 'js/post.js' )
+			filemtime( blippress_script( 'post', 'path' ) )
 			);
 
 		wp_enqueue_script( blippress_prefix() . 'post' );
@@ -65,9 +65,9 @@ class blippress_post {
 
 		wp_register_style(
 			blippress_prefix() . 'post',
-			BLIPPRESS_PLUGIN_DIR . 'css/post.css',
+			blippress_style( 'post', 'dir' ),
 			null,
-			filemtime( BLIPPRESS_PLUGIN_PATH . 'css/post.css' )
+			filemtime( blippress_style( 'post', 'path' ) )
 			);
 
 		wp_enqueue_style( blippress_prefix() . 'post' );
@@ -243,7 +243,7 @@ class blippress_post {
 			}
 		} else { ?>
 
-			<p>You can create a Blipfoto journal entry for <strong><?php echo blippress_auth_option( 'username' ); ?></strong> from this post. Just upload or choose any photograph from your media library, the entry date will be set to the date the photograph was taken and the post title and content will be used.</p>
+			<p>You can create a Blipfoto journal entry for <strong><?php echo blippress_auth_option( 'username' ); ?></strong> from this post. Just upload or choose any photograph from your media library. The entry date will be set to the date the photograph was taken and the post title and content will be used.</p>
 
 			<p class="blippress-image-control<?php echo ( $image_id ) ? ' has-image' : ''; ?>"
 				data-title="<?php esc_attr( 'Choose an image' ); ?>"

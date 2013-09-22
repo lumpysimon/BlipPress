@@ -9,6 +9,7 @@ class blippress_widgets {
 	function __construct() {
 
 		add_action( 'widgets_init', array( $this, 'register' ) );
+
 	}
 
 
