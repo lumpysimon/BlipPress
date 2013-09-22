@@ -289,6 +289,10 @@ class blippress_shortcodes {
 
 	private function render_single_blip( $data, $show_date, $show_meta ) {
 
+		if ( ! $title = trim( $data->title ) ) {
+			$title = 'Untitled';
+		}
+
 		$out  = '<div class="blippress blippress-single" ' . apply_filters( 'blippress_div_width', 'style="width: ' . $data->dimensions->width . 'px;"', $data->dimensions->width ) . '>';
 
 		$out .= '<img class="blippress-image blippress-image-single" id="blippress-image-single-' . $data->entry_id . '" src="' . esc_url( $data->image ) . '"';
@@ -298,7 +302,7 @@ class blippress_shortcodes {
 		$out .= '>';
 
 		$out .= '<div class="blippress-info">';
-		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $data->title ) . '&quot;on Blipfoto" href="' . esc_url( $data->url ) . '">' . $data->title . '</a> by ' . $data->display_name . '</p>';
+		$out .= '<p class="blippress-title"><a title="View &quot;' . esc_attr( $title ) . '&quot;on Blipfoto" href="' . esc_url( $data->url ) . '">' . $title . '</a> by ' . $data->display_name . '</p>';
 		if ( ( $show_meta and $meta = $this->meta( $data ) ) or $show_date ) {
 			$out .= '<p class="blippress-details">';
 			if ( $show_date ) {
