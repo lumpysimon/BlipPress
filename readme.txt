@@ -52,7 +52,7 @@ This is the first release of this plugin, so it is still under continuous develo
 
 = How do I get the ID number of a journal entry? =
 
-Look at the URL of the journal entry on blipfoto.com, it will look like blipfoto.com/entry/345703 - the entry ID is the number at the end (345703 in this case).
+Look at the URL of the journal entry on blipfoto.com, it will look like blipfoto.com/entry/3475466 - the entry ID is the number at the end (3475466 in this case).
 
 = Why is there sometimes a delay before I see my latest journal entry on my website? =
 
