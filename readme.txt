@@ -50,13 +50,13 @@ This is the first release of this plugin, so it is still under continuous develo
 
 == Frequently Asked Questions ==
 
-= How do I get the ID number of a journal entry?
+= How do I get the ID number of a journal entry? =
 
 Look at the URL of the journal entry on blipfoto.com, it will look like blipfoto.com/entry/345703 - the entry ID is the number at the end (345703 in this case).
 
-= Why is there sometimes a delay before I see my latest journal entry on my website?
+= Why is there sometimes a delay before I see my latest journal entry on my website? =
 
-When BlipPress retrieves an image from blipfoto.com it caches it for 10 minutes. This is to avoid exceeding the API limits specified by Blipfoto and to make blips on your website load faster (you can clear the cache by going to the BlipPress settings page and clicking 'Save settings').
+When BlipPress retrieves journal entry details from blipfoto.com it caches them for 10 minutes. This is to avoid exceeding the API limits specified by Blipfoto and to make blips on your website load faster. This sometimes means that you may have to wait up to 10 minutes for your latest entry to update on your website. You can clear the cache by going to the BlipPress settings page and clicking 'Save settings'.
 
 = Do you have a Blipfoto journal? =
 
@@ -68,7 +68,7 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 2. Activate the plugin.
 3. Go to the Authentication page to grant permission for BlipPress to access your Blipfoto account.
 4. (optional) Configure the settings.
-5. Add one of the shortcodes to a post or page, or create a Blipfoto journal entry from the post editing screen.
+5. Add one of the shortcodes to a post or page, add a widget, or create a Blipfoto journal entry from the post editing screen.
 
 == Changelog ==
 
