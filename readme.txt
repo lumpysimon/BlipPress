@@ -10,7 +10,7 @@ Display entries from your Blipfoto journal and post to Blipfoto from your WordPr
 
 == Description ==
 
-[Blipfoto](http://blipfoto.com) is an online daily photo journal. Each day you can upload one photo and add some words. It is also a very friendly community where you can comment on and rate each other's photos.
+[Blipfoto](http://blipfoto.com) is an online daily photo journal. Each day you can upload one photo and add some words. It is also a very friendly community where people comment on and rate each other's photos, choose favourite 'blips' (the informal name given to journal entries), follow journals, join groups and take part in discussions.
 
 BlipPress lets you easily integrate your Blipfoto journal into your WordPress website. You can display single or multiple entries from your or other people's journals in your posts and pages or in a widget, as well as posting to your journal directly from within WordPress.
 
@@ -57,6 +57,10 @@ Look at the URL of the journal entry on blipfoto.com, it will look like blipfoto
 = Why is there sometimes a delay before I see my latest journal entry on my website?
 
 When BlipPress retrieves an image from blipfoto.com it caches it for 10 minutes. This is to avoid exceeding the API limits specified by Blipfoto and to make blips on your website load faster (you can clear the cache by going to the BlipPress settings page and clicking 'Save settings').
+
+= Do you have a Blipfoto journal? =
+
+Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lumpysimon).
 
 == Installation ==
 

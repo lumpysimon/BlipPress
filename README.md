@@ -21,6 +21,7 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 * shortcode generator on dashboard
 * search feature on dashboard
 * filter hooks
+* show comments etc?
 
 * options:
 * - encrypt token?
