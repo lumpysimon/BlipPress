@@ -109,14 +109,6 @@ class blippress_post {
 				);
 			}
 
-			if ( ! $post->post_content ) {
-				$ok = false;
-				$response = array(
-					'result'  => 'error',
-					'message' => 'The post content is missing, please save your post and try again'
-				);
-			}
-
 		} else {
 			$ok = false;
 			$response = array(
