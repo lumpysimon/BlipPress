@@ -15,8 +15,10 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 ### Less important
 
 * show metadata when choosing image
+* tags when posting
 * localisation
 * toolbar
+* shortcode generator in tinymce
 * shortcode generator on dashboard
 * search feature on dashboard
 * filter hooks
