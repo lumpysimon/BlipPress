@@ -147,7 +147,7 @@ jQuery(function($) {
 					status = r.result
 					$('#blippress-status').addClass(status);
 					if ( 'updated' == r.result ) {
-						text = text+' <a href="http://blipfoto.com/entry/' + r.data.entry_id + '" target="_blank">View on Blipfoto</a>';
+						text = text+' <a href="http://blipfoto.com/entry/' + r.data.entry_id + '" target="_blank">View on Blipfoto</a>. Insert into a post with [blip id=' + r.data.entry_id + ']';
 					}
 
 					$('#blippress-waiting').hide();
