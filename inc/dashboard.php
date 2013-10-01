@@ -116,8 +116,10 @@ class blippress_dashboard {
 						<div class="postbox blippress-info-box" id="blippress-support">
 							<h3 class="hndle"><span>Need Help?</span></h3>
 							<div class="inside">
-								<p>If something's not working, the first step is to read the <a href="<?php echo blippress_plugin_page(); ?>">description</a> and <a href="<?php echo blippress_plugin_page(); ?>/faq/">FAQ</a> pages.</p>
-								<p>If your question is not answered there, please check the official <a href="http://wordpress.org/support/plugin/blippress">support forum</a> and create a new topic if required.</p>
+								<p>Various examples and detailed instructions can be found at <a href="<?php echo blippress_website(); ?>"><?php echo blippress_website( false ); ?></a>.</p>
+								<p>If something's not working, check the <a href="<?php echo blippress_plugin_page(); ?>/faq/">FAQ</a>.</p>
+								<p>Known bugs are listed on the <a href="<?php echo blippress_website(); ?>/roadmap">roadmap</a>.</p>
+								<p>If your question is not answered, please check the official <a href="http://wordpress.org/support/plugin/blippress">support forum</a> and create a new topic if required.</p>
 							</div>
 						</div>
 					</div>
@@ -129,11 +131,10 @@ class blippress_dashboard {
 								<p>If this plugin has helped you showcase your photography skills, please consider supporting it:</p>
 								<ul>
 									<li><a href="<?php echo blippress_plugin_page(); ?>">Rate it and let other people know it works</a>.</li>
-									<li>Link to or share <a href="<?php echo blippress_plugin_page(); ?>" target="_blank">the plugin page</a> on Twitter or Facebook.</li>
+									<li>Link to or share to <a href="<?php echo blippress_website(); ?>"><?php echo blippress_website( false ); ?></a> on Twitter or Facebook.</li>
 									<li>Tell people about it on your Blipfoto journal.</li>
 									<li>Write a review on your website or blog.</li>
-									<li>Make a <a href="<?php echo blippress_website(); ?>/donate/">donation</a>.</li>
-									<li><a href="http://lumpylemon.co.uk/">Commission me</a> for WordPress development, plugin or design work (or photography if you're feeling brave!).</li>
+									<li><a href="<?php echo blippress_website(); ?>/contact">Commission me</a> for WordPress development, plugin or design work (or photography if you're feeling brave!).</li>
 								</ul>
 							</div>
 						</div>
