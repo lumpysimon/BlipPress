@@ -6,6 +6,7 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 
 ### Important
 
+* make blippress.com responsive
 * API error handling
 * info/documentation:
 * - API inline docs
