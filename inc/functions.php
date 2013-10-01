@@ -12,6 +12,16 @@ function blippress_prefix() {
 
 
 
+function blippress_version() {
+
+	global $blippress;
+
+	return $blippress->version;
+
+}
+
+
+
 function blippress_style( $name, $type ) {
 
 	return constant( 'BLIPPRESS_PLUGIN_' . strtoupper( $type ) ) . 'css/' . $name . '.css';

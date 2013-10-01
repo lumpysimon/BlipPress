@@ -39,7 +39,15 @@ class blippress_frontend {
 		global $blippress_shortcodes;
 
 		if ( $entry_id = is_blipped() ) {
-			$content = $blippress_shortcodes->single_id( array( 'id' => $entry_id ) ) . $content;
+			switch ( blippress_option( 'show' ) ) {
+				case 'above':
+				case false:
+					$content = $blippress_shortcodes->single_id( array( 'id' => $entry_id ) ) . $content;
+				break;
+				case 'below':
+					$content = $content . $blippress_shortcodes->single_id( array( 'id' => $entry_id ) );
+				break;
+			}
 		}
 
 		return $content;

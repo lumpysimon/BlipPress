@@ -3,7 +3,7 @@
 Plugin Name: BlipPress
 Plugin URI:  http://blippress.com
 Description: Display entries from your Blipfoto journal and post to Blipfoto from your WordPress website
-Version:     0.1
+Version:     0.2
 Author:      Simon Blackbourn
 Author URI:  https://twitter.com/lumpysimon
 License:     GPL2
@@ -18,19 +18,23 @@ License:     GPL2
 
 	BlipPress lets you easily integrate your Blipfoto journal into your WordPress website. You can display single or multiple entries from your or other people's journals in your posts and pages or in a widget, as well as posting to your journal directly from within WordPress.
 
+	Examples and detailed instructions can be found at http://blippress.com
 
 
-	-------
-	Credits
-	-------
+
+	-----
+	About
+	-----
 
 	This plugin is not an official Blipfoto product.
 	I have written it to combine my two main interests in life:
 	photography (in which Blipfoto plays a significant role) and WordPress development.
 
 	The Blipfoto website is at http://blipfoto.com
+
+	More details and credits are at http://blippress.com/about
+
 	My Blipfoto journal can be viewed at http://blipfoto.com/lumpysimon
-	Detailed instructions, news and other random bits n bobs connected with BlipPress at http://blippress.com
 	If you're so inclined you can follow me on Twitter at https://twitter.com/lumpysimon
 
 
@@ -88,6 +92,7 @@ class blippress {
 
 
 
+	var $version             = 0.2;
 	var $plugin_page         = 'http://wordpress.org/extend/plugins/blippress';
 	var $plugin_support_page = 'http://wordpress.org/support/plugin/blippress';
 	var $website             = 'blippress.com';

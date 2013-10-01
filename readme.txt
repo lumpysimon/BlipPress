@@ -1,18 +1,19 @@
 === BlipPress ===
 Contributors: lumpysimon
-Donate link: http://blippress.com/donate
 Tags: blipfoto, blipfoto.com, blip, foto, journal, photography, photo, photos, diary, images, gallery, galleries
 Requires at least: 3.5
 Tested up to: 3.6.1
 Stable tag: trunk
 
-Display entries from your Blipfoto journal and post to Blipfoto from your WordPress website.
+Display entries from your Blipfoto photography journal and post your photos to Blipfoto from your WordPress website.
 
 == Description ==
 
 [Blipfoto](http://blipfoto.com) is an online daily photo journal. Each day you can upload one photo and add some words. It is also a very friendly community where people comment on and rate each other's photos, choose favourite 'blips' (the informal name given to journal entries), follow journals, join groups and take part in discussions.
 
 BlipPress lets you easily integrate your Blipfoto journal into your WordPress website. You can display single or multiple entries from your or other people's journals in your posts and pages or in a widget, as well as posting to your journal directly from within WordPress.
+
+You can see BlipPress in action, with various examples and detailed instructions at [blippress.com](http://blippress.com).
 
 = Displaying Blipfoto journal entries =
 
@@ -40,13 +41,13 @@ When you publish your post, the journal entry will automatically be displayed at
 
 There are three BlipPress widgets:
 
-* 'Multi' displays thumbnails of your latest journal entries. You can specify how many to display.
 * 'Latest' displays the latest entry from your or another user's journal.
-* 'Single' displays an entry by ID number.
+* 'Multi' displays thumbnails of your latest journal entries. You can specify how many to display.
+* 'Single' displays an blip by ID number.
 
 = This is a beta plugin! =
 
-This is the first release of this plugin, so it is still under continuous development. I am fairly sure there are likely to be some issues, so I recommend that you always check your journal entry after posting from your WordPress website. Please report any problems via the [support forum](http://wordpress.org/support/plugin/blippress).
+This is a new plugin, so it is still under continuous development. I recommend that you always check your journal entry after posting from your WordPress website (a link to the entry is shown after you create it). Please report any problems via the [support forum](http://wordpress.org/support/plugin/blippress).
 
 == Frequently Asked Questions ==
 
@@ -72,5 +73,13 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 
 == Changelog ==
 
-= 0.1 =
+= 0.2 (1st October 2013) =
+* [blippress.com](http://blippress.com) launched
+* New setting to choose where to display blip in blipped posts (above, below, none)
+* Show the blip shortcode after creatng a blip
+* Fix username bug in blipdate shortcode
+* Handle untitled entries in blip thumbs
+* Shorten transient names to minimise exceeding 64 character limit
+
+= 0.1 (22nd September 2013) =
 * Initial beta release

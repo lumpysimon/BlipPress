@@ -30,6 +30,11 @@ class blippress_multi_widget extends WP_Widget {
 
 		extract( $args );
 
+		$username = empty( $instance['username'] ) ? blippress_auth_option( 'username' ) : wp_kses( $instance['username'], array() );
+
+		if ( ! $username )
+			return;
+
 		$title = apply_filters(
 			'widget_title',
 			empty( $instance['title'] ) ? 'My Blipfoto journal' : $instance['title'],
@@ -45,7 +50,8 @@ class blippress_multi_widget extends WP_Widget {
 
 		$args = array(
 			'num'  => $num,
-			'size' => 'small'
+			'size' => 'small',
+			'user' => $username
 			);
 
 		echo blippress_latest( $args );
@@ -60,11 +66,16 @@ class blippress_multi_widget extends WP_Widget {
 
 		$instance = $old;
 
-		$instance['title'] = strip_tags( $new['title'] );
-		$instance['num']   = absint( $new['num'] );
+		$instance['title']    = strip_tags( $new['title'] );
+		$instance['num']      = absint( $new['num'] );
+		$instance['username'] = wp_kses( $new['username'], array() );
 
 		if ( ! $instance['num'] ) {
 			$instance['num'] = blippress_option( 'num' );
+		}
+
+		if ( ! $instance['username'] ) {
+			$instance['username'] = blippress_auth_option( 'username' );
 		}
 
 		return $instance;
@@ -78,13 +89,15 @@ class blippress_multi_widget extends WP_Widget {
 		$instance = wp_parse_args(
 			(array) $instance,
 			array(
-				'title' => 'My Blipfoto journal',
-				'num'   => blippress_option( 'num' )
+				'title'    => 'My Blipfoto journal',
+				'num'      => blippress_option( 'num' ),
+				'username' => blippress_auth_option( 'username' )
 				)
 			);
 
-		$title = esc_attr( $instance['title'] );
-		$num   = absint( $instance['num'] );
+		$title    = esc_attr( $instance['title'] );
+		$num      = absint( $instance['num'] );
+		$username = wp_kses( $instance['username'], array() );
 
 		echo sprintf(
 			'<p><label for="%s">%s</label><input type="text" class="widefat" id="%s" name="%s" value="%s"></p>',
@@ -102,6 +115,15 @@ class blippress_multi_widget extends WP_Widget {
 			$this->get_field_id( 'num' ),
 			$this->get_field_name( 'num' ),
 			$num
+			);
+
+		echo sprintf(
+			'<p><label for="%s">%s</label><input type="text" class="widefat" id="%s" name="%s" value="%s"></p>',
+			$this->get_field_id( 'username' ),
+			'Blipfoto username:',
+			$this->get_field_id( 'username' ),
+			$this->get_field_name( 'username' ),
+			$username
 			);
 
 	}

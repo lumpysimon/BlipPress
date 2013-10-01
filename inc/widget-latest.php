@@ -69,6 +69,10 @@ class blippress_latest_widget extends WP_Widget {
 		$instance['title']    = strip_tags( $new['title'] );
 		$instance['username'] = wp_kses( $new['username'], array() );
 
+		if ( ! $instance['username'] ) {
+			$instance['username'] = blippress_auth_option( 'username' );
+		}
+
 		return $instance;
 
 	}

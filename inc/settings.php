@@ -60,7 +60,8 @@ class blippress_settings {
 			'size'       => 'text',
 			'css'        => 'boolean',
 			'meta'       => 'boolean',
-			'post-types' => 'array'
+			'post-types' => 'array',
+			'show'       => 'text'
 			);
 
 		if ( $inputs ) {
@@ -142,7 +143,8 @@ class blippress_settings {
 			'size'       => 'big',
 			'css'        => 1,
 			'meta'       => 1,
-			'post-types' => array( 'post' => 1 )
+			'post-types' => array( 'post' => 1 ),
+			'show'       => 'above'
 			);
 
 	}
@@ -253,6 +255,27 @@ class blippress_settings {
 											</label><br>
 										<?php } ?>
 									<p class="description">Choose which post types blips can be created from.</p>
+									<fieldset>
+								</td>
+							</tr>
+
+							<tr valign="top">
+								<th scope="row">Auto-show</th>
+								<td>
+									<fieldset>
+										<label title="Above">
+											<input name="<?php echo $this->option(); ?>[show]" type="radio" value="above" <?php checked( $opts['show'], 'above' ); ?>>
+											<span>Above</span>
+										</label><br>
+										<label title="Below">
+											<input name="<?php echo $this->option(); ?>[show]" type="radio" value="below" <?php checked( $opts['show'], 'below' ); ?>>
+											<span>Below</span>
+										</label><br>
+										<label title="Do not show">
+											<input name="<?php echo $this->option(); ?>[show]" type="radio" value="none" <?php checked( $opts['show'], 'none' ); ?>>
+											<span>Do not show</span>
+										</label>
+									<p class="description">When showing a post from which you have created a blip, the blip can be automatically displayed above or below the post content.<br>If you disable it, you can use the [blippostdate] or [blip] shortcodes to show it anywhere in your post.</p>
 									<fieldset>
 								</td>
 							</tr>

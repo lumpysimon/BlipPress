@@ -329,8 +329,12 @@ class blippress_shortcodes {
 
 		foreach ( $data as $entry ) {
 
+			if ( ! $title = trim( $entry->title ) ) {
+				$title = 'Untitled';
+			}
+
 			$out .= '<div class="blippress-image blippress-image-multi blippress-image-multi-' . esc_attr( $size ) . '" id="blippress-image-multi-' . $entry->entry_id . '">';
-			$out .= '<a href="' . esc_url( $entry->url ) . '" title="View &quot;' . esc_attr( $entry->title ) . '&quot; (' . esc_attr( date( get_option( 'date_format' ), strtotime( $entry->date ) ) ) . ') by ' . esc_attr( $entry->display_name ) . ' on Blipfoto"><img src="' . esc_url( $entry->thumbnail ) . '"></a>';
+			$out .= '<a href="' . esc_url( $entry->url ) . '" title="View &quot;' . esc_attr( $title ) . '&quot; (' . esc_attr( date( get_option( 'date_format' ), strtotime( $entry->date ) ) ) . ') by ' . esc_attr( $entry->display_name ) . ' on Blipfoto"><img src="' . esc_url( $entry->thumbnail ) . '"></a>';
 			$out .= '</div>';
 
 		}

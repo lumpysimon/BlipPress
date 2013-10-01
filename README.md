@@ -8,7 +8,6 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 
 * API error handling
 * info/documentation:
-* - blippress.com
 * - API inline docs
 * - improve (& capitalise!) plugin inline docs
 
@@ -16,6 +15,7 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 
 * show metadata when choosing image
 * tags when posting
+* template function to display blips
 * localisation
 * toolbar
 * shortcode generator in tinymce
@@ -25,5 +25,4 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 * show comments etc?
 
 * options:
-* - whether to include image in blipped posts + top or bottom
 * - encrypt token?

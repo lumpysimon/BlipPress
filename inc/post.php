@@ -227,8 +227,9 @@ class blippress_post {
 
 		if ( is_blipped() ) {
 			echo sprintf(
-					'<p>This post is blipped. <a href="%s" target="_blank">View on Blipfoto</a></p>',
-					get_blippress_url( get_blippress_id() )
+					'<p><strong>This post is blipped</strong><br /><a href="%s" target="_blank">View on Blipfoto</a><br />Display in a post: [blip id=%s]</p>',
+					get_blippress_url( get_blippress_id() ),
+					get_blippress_id()
 					);
 			if ( $image_id ) {
 				echo wp_get_attachment_image( $image_id, 'medium', false );
