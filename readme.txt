@@ -42,7 +42,7 @@ When you publish your post, the journal entry will automatically be displayed at
 There are three BlipPress widgets:
 
 * 'Latest' displays the latest entry from your or another user's journal.
-* 'Multi' displays thumbnails of your latest journal entries. You can specify how many to display.
+* 'Multi' displays thumbnails of your or another user's latest journal entries. You can specify how many to display.
 * 'Single' displays an blip by ID number.
 
 = This is a beta plugin! =
