@@ -73,10 +73,13 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 
 == Changelog ==
 
+= 0.2.1 (6th November 2013) =
+* Fix header output bug that affects some hosts ([see this support forum post](http://wordpress.org/support/topic/problems-with-authentication))
+
 = 0.2 (1st October 2013) =
 * [blippress.com](http://blippress.com) launched
 * New setting to choose where to display blip in blipped posts (above, below, none)
-* Show the blip shortcode after creatng a blip
+* Show the blip shortcode after creating a blip
 * Fix username bug in blipdate shortcode
 * Handle untitled entries in blip thumbs
 * Shorten transient names to minimise exceeding 64 character limit

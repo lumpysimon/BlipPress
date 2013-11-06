@@ -3,7 +3,7 @@
 Plugin Name: BlipPress
 Plugin URI:  http://blippress.com
 Description: Display entries from your Blipfoto journal and post to Blipfoto from your WordPress website
-Version:     0.2
+Version:     0.2.1
 Author:      Simon Blackbourn
 Author URI:  https://twitter.com/lumpysimon
 License:     GPL2
@@ -92,7 +92,7 @@ class blippress {
 
 
 
-	var $version             = 0.2;
+	var $version             = 0.21;
 	var $plugin_page         = 'http://wordpress.org/extend/plugins/blippress';
 	var $plugin_support_page = 'http://wordpress.org/support/plugin/blippress';
 	var $website             = 'blippress.com';

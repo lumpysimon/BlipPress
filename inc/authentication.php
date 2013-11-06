@@ -19,9 +19,9 @@ class blippress_authentication {
 
 	function __construct() {
 
-		add_action( 'admin_menu',            array( $this, 'add_page' ), 110 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'check' ) );
-		add_action( 'admin_footer',          array( $this, 'notice' ) );
+		add_action( 'admin_menu',     array( $this, 'add_page' ), 110 );
+		add_action( 'current_screen', array( $this, 'check' ) );
+		add_action( 'admin_footer',   array( $this, 'notice' ) );
 
 	}
 

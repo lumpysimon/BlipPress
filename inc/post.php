@@ -46,10 +46,10 @@ class blippress_post {
 		wp_enqueue_script( blippress_prefix() . 'post' );
 
 		$loc = array(
-				'_nonce'          => wp_create_nonce( 'blippress_request_' . $post->ID ),
-				'frameTitle'      => 'Choose an image for your blip',
-				'frameUpdateText' => 'Select image'
-				);
+			'_nonce'          => wp_create_nonce( 'blippress_request_' . $post->ID ),
+			'frameTitle'      => 'Choose an image for your blip',
+			'frameUpdateText' => 'Select image'
+			);
 
 		wp_localize_script(
 			blippress_prefix() . 'post',
