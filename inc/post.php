@@ -76,6 +76,23 @@ class blippress_post {
 
 
 
+	function convert_to_bbcode( $html ) {
+
+		$html = strip_tags( $html, '<a><strong><b><em>' );
+
+		$out = $html;
+		$out = preg_replace( "/<strong>(.*)<\/strong>/gim", "[b]$1[/b]", $out );
+		$out = preg_replace( "/<b>(.*)<\/b>/gim", "[b]$1[/b]", $out );
+		$out = preg_replace( "/<em>(.*)<\/em>/gim", "[i]$1[/i]", $out );
+		$out = preg_replace( "/<span style=\"text-decoration: underline;\">(.*)<\/span>/gim", "[u]$1[/u]", $out );
+		$out = preg_replace("/<a href='([^'>]+)'>(.*)</a>/gim", "[url=$1]$2[/url]", $out );
+
+		return $out;
+
+	}
+
+
+
 	function ajax_post_to_blipfoto() {
 
 		global $blippress, $blippress_cache;
@@ -150,7 +167,7 @@ class blippress_post {
 				$postdata = array(
 					'image_url'   => $meta['url'],
 					'title'       => strip_tags( $post->post_title ),
-					'description' => strip_tags( $post->post_content, '<a><strong><b><em>' ),
+					'description' => $this->convert_to_bbcode( $post->post_content ),
 					'date'        => $meta['created_timestamp']
 					);
 

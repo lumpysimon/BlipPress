@@ -22,7 +22,9 @@ class blippress_dashboard {
 
 	function styles() {
 
-		if ( 'mp6' == get_user_option( 'admin_color' ) ) {
+		global $wp_version;
+
+		if ( version_compare( $wp_version, '3.8', '>=' ) ) {
 
 			wp_register_style(
 				blippress_prefix() . 'icon',

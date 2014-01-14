@@ -2,7 +2,7 @@
 Contributors: lumpysimon
 Tags: blipfoto, blipfoto.com, blip, foto, journal, photography, photo, photos, diary, images, gallery, galleries
 Requires at least: 3.5
-Tested up to: 3.7.1
+Tested up to: 3.8
 Stable tag: trunk
 
 Display entries from your Blipfoto photography journal and post your photos to Blipfoto from your WordPress website.
@@ -72,6 +72,10 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 5. Add one of the shortcodes to a post or page, add a widget, or create a Blipfoto journal entry from the post editing screen.
 
 == Changelog ==
+
+= 0.2.2 = (14th January 2014)
+* Fix admin menu icon for WordPress 3.8+
+* Convert post_content HTML to BBCode when posting to Blipfoto
 
 = 0.2.1 (6th November 2013) =
 * Fix header output bug that affects some hosts ([see this support forum post](http://wordpress.org/support/topic/problems-with-authentication))
