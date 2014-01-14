@@ -78,14 +78,19 @@ class blippress_post {
 
 	function convert_to_bbcode( $html ) {
 
-		$html = strip_tags( $html, '<a><strong><b><em>' );
+		// get rid of all HTML tags except a, strong, b, em and span
+		// (we need span as TinyMCE uses it for underline)
+		$out = strip_tags( $html, '<a><strong><b><em><span>' );
 
-		$out = $html;
-		$out = preg_replace( "/<strong>(.*)<\/strong>/gim", "[b]$1[/b]", $out );
-		$out = preg_replace( "/<b>(.*)<\/b>/gim", "[b]$1[/b]", $out );
-		$out = preg_replace( "/<em>(.*)<\/em>/gim", "[i]$1[/i]", $out );
-		$out = preg_replace( "/<span style=\"text-decoration: underline;\">(.*)<\/span>/gim", "[u]$1[/u]", $out );
-		$out = preg_replace("/<a href='([^'>]+)'>(.*)</a>/gim", "[url=$1]$2[/url]", $out );
+		// replace remaining tags with BBCode equivalents
+		$out = preg_replace( '/<strong>(.*)<\/strong>/', '[b]$1[/b]', $out );
+		$out = preg_replace( '/<b>(.*)<\/b>/', '[b]$1[/b]', $out );
+		$out = preg_replace( '/<em>(.*)<\/em>/', '[i]$1[/i]', $out );
+		$out = preg_replace( '/<span style="text-decoration: underline;">(.*)<\/span>/', '[u]$1[/u]', $out );
+		$out = preg_replace( '/<a(.*)href="([^"]*)"(.*)>([^<]*)<\/a>/', '[url=$2]$4[/url]', $out );
+
+		// now get rid of any other (non-underline) spans that have been left behind
+		$out = strip_tags( $out, '' );
 
 		return $out;
 
