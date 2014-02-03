@@ -4,16 +4,10 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 
 ## To Do
 
-### Important
-
-* make blippress.com responsive
 * API error handling
 * info/documentation:
 * - API inline docs
 * - improve (& capitalise!) plugin inline docs
-
-### Less important
-
 * show metadata when choosing image
 * tags when posting
 * template function to display blips
@@ -24,6 +18,4 @@ A WordPress plugin to integrate the [Blipfoto](blipfoto.com) daily photo journal
 * search feature on dashboard
 * filter hooks
 * show comments etc?
-
-* options:
-* - encrypt token?
+* options: encrypt token?
