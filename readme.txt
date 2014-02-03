@@ -73,7 +73,7 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 
 == Changelog ==
 
-= 0.2.2 = (14th January 2014)
+= 0.2.2 = (3rd February 2014)
 * Fix admin menu icon for WordPress 3.8+
 * Convert post_content HTML to BBCode when posting to Blipfoto
 
