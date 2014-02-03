@@ -2,7 +2,7 @@
 Contributors: lumpysimon
 Tags: blipfoto, blipfoto.com, blip, foto, journal, photography, photo, photos, diary, images, gallery, galleries
 Requires at least: 3.5
-Tested up to: 3.8
+Tested up to: 3.8.1
 Stable tag: trunk
 
 Display entries from your Blipfoto photography journal and post your photos to Blipfoto from your WordPress website.
