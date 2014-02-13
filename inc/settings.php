@@ -60,6 +60,7 @@ class blippress_settings {
 			'size'       => 'text',
 			'css'        => 'boolean',
 			'meta'       => 'boolean',
+			'rating'     => 'boolean',
 			'post-types' => 'array',
 			'show'       => 'text'
 			);
@@ -143,6 +144,7 @@ class blippress_settings {
 			'size'       => 'big',
 			'css'        => 1,
 			'meta'       => 1,
+			'rating'     => 1,
 			'post-types' => array( 'post' => 1 ),
 			'show'       => 'above'
 			);
@@ -245,6 +247,17 @@ class blippress_settings {
 							</tr>
 
 							<tr valign="top">
+								<th scope="row">Ratings</th>
+								<td>
+									<label for="<?php echo $this->option(); ?>[rating]">
+										<input name="<?php echo $this->option(); ?>[rating]" type="checkbox" value="1" <?php checked( $opts['rating'] ); ?>>
+										Show rating?
+									</label>
+									<p class="description">Untick this if you prefer not to display the rating.</p>
+								</td>
+							</tr>
+
+							<tr valign="top">
 								<th scope="row">Post types</th>
 								<td>
 									<fieldset>
@@ -275,7 +288,7 @@ class blippress_settings {
 											<input name="<?php echo $this->option(); ?>[show]" type="radio" value="none" <?php checked( $opts['show'], 'none' ); ?>>
 											<span>Do not show</span>
 										</label>
-									<p class="description">When showing a post from which you have created a blip, the blip can be automatically displayed above or below the post content.<br>If you disable it, you can use the [blippostdate] or [blip] shortcodes to show it anywhere in your post.</p>
+									<p class="description">When showing a post from which you have created a blip, the blipped photo can be automatically displayed above or below the post content.<br>If you disable it, you can use the [blippostdate] or [blip] shortcodes to show it anywhere in your post.</p>
 									<fieldset>
 								</td>
 							</tr>

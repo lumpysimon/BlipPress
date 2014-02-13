@@ -49,9 +49,10 @@ class blippress_latest_widget extends WP_Widget {
 		echo $before_title . $title . $after_title;
 
 		$args = array(
-			'user'      => $username,
-			'show_date' => false,
-			'show_meta' => false
+			'user'        => $username,
+			'show_date'   => false,
+			'show_meta'   => false,
+			'show_rating' => false
 			);
 
 		echo $blippress_shortcodes->single_latest( $args );

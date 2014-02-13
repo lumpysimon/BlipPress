@@ -47,9 +47,10 @@ class blippress_single_widget extends WP_Widget {
 		echo $before_title . $title . $after_title;
 
 		$args = array(
-			'id'        => $entry_id,
-			'show_date' => false,
-			'show_meta' => false
+			'id'          => $entry_id,
+			'show_date'   => false,
+			'show_meta'   => false,
+			'show_rating' => false
 			);
 
 		echo $blippress_shortcodes->single_id( $args );
