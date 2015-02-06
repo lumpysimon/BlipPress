@@ -2,7 +2,7 @@
 Contributors: lumpysimon
 Tags: blipfoto, blipfoto.com, blip, foto, journal, photography, photo, photos, diary, images, gallery, galleries
 Requires at least: 3.5
-Tested up to: 3.8.1
+Tested up to: 4.1
 Stable tag: trunk
 
 Display entries from your Blipfoto photography journal and post your photos to Blipfoto from your WordPress website.
@@ -73,7 +73,7 @@ Of course! You can find me at [blipfoto.com/lumpysimon](http://blipfoto.com/lump
 
 == Changelog ==
 
-= 0.2.3 = (?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?)
+= 0.2.3 = (13th Feb 2014 - not released, can't quite remember why not)
 * New setting to show rating
 
 = 0.2.2 = (3rd February 2014)
